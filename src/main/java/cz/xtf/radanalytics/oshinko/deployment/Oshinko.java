@@ -1,7 +1,7 @@
 package cz.xtf.radanalytics.oshinko.deployment;
 
-import cz.xtf.radanalytics.oshinko.api.OshinkoPoddedWebUI;
 import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
+import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
 import cz.xtf.radanalytics.util.TestHelper;
 import cz.xtf.radanalytics.util.waiters.SparkWaiters;
 
