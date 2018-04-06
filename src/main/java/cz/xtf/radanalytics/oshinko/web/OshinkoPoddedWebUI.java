@@ -11,7 +11,6 @@ import java.util.List;
 
 @Slf4j
 public class OshinkoPoddedWebUI extends _WebDriver implements OshinkoAPI {
-
 	private final String hostname;
 	private final Integer DEFAULT_CLUSTER_COUNT = -10;
 
