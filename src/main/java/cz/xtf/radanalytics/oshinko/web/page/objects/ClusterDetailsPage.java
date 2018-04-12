@@ -122,6 +122,7 @@ public class ClusterDetailsPage  extends _Page {
 	public SparkCluster setPodsFromTable(SparkCluster cluster) {
 		this.cluster = cluster;
 		List<SparkPod> sparkPods = new ArrayList<>();
+		WebWaiters.waitUntilElementIsVisible(thead, webDriver);
 		webDriver.findElements(podsTable).forEach(webElement -> {
 			String[] splittedRow = webElement.getText().split("\\n");
 			SparkPod pod = new SparkPod();
