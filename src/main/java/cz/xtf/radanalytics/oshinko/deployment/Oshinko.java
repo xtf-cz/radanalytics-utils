@@ -26,9 +26,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
@@ -39,6 +37,7 @@ import java.util.stream.Collectors;
 public class Oshinko {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	private static final String OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+	private static final String OSHINKO_WEBUI_REFRESH_INTERVAL = "10";  //Specifying interval for refreshing UI on Cluster page in sec.
 	@Getter
 	private static final String defaultServiceAccountName = "oshinko";
 	private static String OSHINKO_WEBUI_RESOURCES;
@@ -80,6 +79,8 @@ public class Oshinko {
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
 		log.info("Deploying WebUI Pod");
+		Map<String, String> mapParams = new HashMap<>();
+		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
 		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoWebuiResources(oshinkoWebUITemplate)))) {
 			log.debug("Deleting existing pod and creating or replacing Pod");
@@ -91,7 +92,7 @@ public class Oshinko {
 
 		log.debug("Creating template with name \"{}\"", templateName);
 		openshift.client().lists()
-				.create(openshift.client().templates().withName(templateName).process());
+				.create(openshift.client().templates().withParameters(mapParams).withName(templateName).process());
 		log.debug("Creating route \"{}\"", routeName);
 		RouteSpec route = openshift.client().routes().withName(routeName).get().getSpec();
 

@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.oshinko.web.webUtils;
+package cz.xtf.radanalytics.web;
 
 import lombok.Getter;
 import lombok.Setter;
