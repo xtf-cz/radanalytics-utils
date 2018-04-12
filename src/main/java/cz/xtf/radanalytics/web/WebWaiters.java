@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.webUtils;
+package cz.xtf.radanalytics.web;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

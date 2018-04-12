@@ -2,7 +2,7 @@ package cz.xtf.radanalytics.oshinko.web.page.objects;
 
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.entity.SparkPod;
-import cz.xtf.radanalytics.webUtils.WebWaiters;
+import cz.xtf.radanalytics.web.WebWaiters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;

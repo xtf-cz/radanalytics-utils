@@ -1,6 +1,6 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
-import cz.xtf.radanalytics.webUtils.WebWaiters;
+import cz.xtf.radanalytics.web.WebWaiters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

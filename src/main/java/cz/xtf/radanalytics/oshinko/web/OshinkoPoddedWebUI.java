@@ -4,7 +4,7 @@ import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.web.page.objects.ClusterDetailsPage;
 import cz.xtf.radanalytics.oshinko.web.page.objects.SparkClustersPage;
-import cz.xtf.radanalytics.webUtils.AbstractWebDriver;
+import cz.xtf.radanalytics.web.AbstractWebDriver;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

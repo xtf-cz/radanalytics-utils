@@ -1,17 +1,14 @@
-package cz.xtf.radanalytics.oshinko.web;
+package cz.xtf.radanalytics.web;
 
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.radanalytics.oshinko.web.webUtils.LocalWebDriverManager;
-import cz.xtf.radanalytics.oshinko.web.webUtils.WebDriverFactory;
-import cz.xtf.radanalytics.oshinko.web.webUtils.WebDriverPodBuilder;
 import org.openqa.selenium.WebDriver;
 
-public abstract class _WebDriver {
+public abstract class AbstractWebDriver {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	public WebDriver webDriver;
 
-	_WebDriver(){
+	protected AbstractWebDriver(){
 		String browserName = "headless-chrome";
 		new WebDriverPodBuilder(browserName);
 		webDriver = webDriverInstance(browserName);
@@ -21,7 +18,7 @@ public abstract class _WebDriver {
 	 * Choose browser from: headless-chrome, headless-firefox, headless-chrome-debug
 	 * @param browserName
 	 */
-	_WebDriver(String browserName){
+	protected AbstractWebDriver(String browserName){
 		new WebDriverPodBuilder(browserName);
 		webDriver = webDriverInstance(browserName);
 	}

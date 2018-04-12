@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.webUtils;
+package cz.xtf.radanalytics.web;
 
 import cz.xtf.TestConfiguration;
 import cz.xtf.openshift.OpenShiftUtil;
