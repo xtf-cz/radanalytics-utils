@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.oshinko.web.webUtils;
+package cz.xtf.radanalytics.webUtils;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;

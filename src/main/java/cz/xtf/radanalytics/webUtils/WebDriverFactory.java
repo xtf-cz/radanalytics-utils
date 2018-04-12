@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.oshinko.web.webUtils;
+package cz.xtf.radanalytics.webUtils;
 
 import cz.xtf.webdriver.GhostDriverService;
 import cz.xtf.webdriver.WebDriverService;

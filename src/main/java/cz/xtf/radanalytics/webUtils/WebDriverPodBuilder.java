@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.oshinko.web.webUtils;
+package cz.xtf.radanalytics.webUtils;
 
 import cz.xtf.TestConfiguration;
 import cz.xtf.openshift.OpenShiftUtil;

@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 public class Oshinko {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	private static final String OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+	private static final String OSHINKO_WEBUI_REFRESH_INTERVAL = "10";  //Specifying interval for refreshing UI on Cluster page in sec.
 	@Getter
 	private static final String defaultServiceAccountName = "oshinko";
 	private static String OSHINKO_WEBUI_RESOURCES;
@@ -79,7 +80,7 @@ public class Oshinko {
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
 		log.info("Deploying WebUI Pod");
 		Map<String, String> mapParams = new HashMap<>();
-		mapParams.put("OSHINKO_REFRESH_INTERVAL", "10");
+		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
 		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoWebuiResources(oshinkoWebUITemplate)))) {
 			log.debug("Deleting existing pod and creating or replacing Pod");

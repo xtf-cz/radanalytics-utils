@@ -1,6 +1,6 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
-import cz.xtf.radanalytics.oshinko.web.webUtils.WebWaiters;
+import cz.xtf.radanalytics.webUtils.WebWaiters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SparkClustersPage extends _Page {
+public class SparkClustersPage extends AbstractPage {
 
 	@FindBy(id = "startbutton")
 	private WebElement deployButton;
