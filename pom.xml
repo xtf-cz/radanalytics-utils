@@ -7,9 +7,10 @@
 
 	<name>XTF RadAnalytics Utils</name>
 
-        <properties>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.xtf.utilities>0.6</version.xtf.utilities>
+		
+		<version.xtf.utilities>0.7-SNAPSHOT</version.xtf.utilities>
 
 		<version.lombok>1.16.10</version.lombok>
 		<version.logback>1.1.3</version.logback>
@@ -44,7 +45,7 @@
 			<artifactId>utilities</artifactId>
 			<version>${version.xtf.utilities}</version>
 		</dependency>
-                
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -56,7 +57,7 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${version.logback}</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
@@ -68,7 +69,7 @@
 			<artifactId>selenium-remote-driver</artifactId>
 			<version>${version.selenium}</version>
 		</dependency>
-		
+
 		<!-- Junit 5 -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -115,7 +116,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
 			</plugin>
-                        
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -127,7 +128,7 @@
 
 		</plugins>
 	</build>
-        
+
 	<repositories>
 		<!-- XTF Utilities library repository -->
 		<repository>
@@ -141,6 +142,6 @@
 				<enabled>true</enabled>
 			</releases>
 		</repository>
-	</repositories>        
+	</repositories>
 
 </project>

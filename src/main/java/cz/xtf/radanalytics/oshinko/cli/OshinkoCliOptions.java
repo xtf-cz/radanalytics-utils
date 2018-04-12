@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.oshinko.entity;
+package cz.xtf.radanalytics.oshinko.cli;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OshinkoOptions {
+public class OshinkoCliOptions {
 	private String as = "--as=";
 	private String certificateAuthority = "--certificate-authority=";
 	private String clientCertificate = "--client-certificate=";
@@ -26,7 +26,7 @@ public class OshinkoOptions {
 	private String user = "--user=";
 
 	@Builder
-	public OshinkoOptions(String as,
+	public OshinkoCliOptions(String as,
 				String certificateAuthority,
 				String clientCertificate,
 				String clientKey,

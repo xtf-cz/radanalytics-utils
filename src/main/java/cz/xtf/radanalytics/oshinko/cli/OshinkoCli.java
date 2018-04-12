@@ -2,7 +2,6 @@ package cz.xtf.radanalytics.oshinko.cli;
 
 import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.cli.service.SparkClusterService;
-import cz.xtf.radanalytics.oshinko.entity.OshinkoOptions;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
@@ -21,7 +20,7 @@ public class OshinkoCli implements OshinkoAPI {
 
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 
-	private static final OshinkoOptions OSHINKO_OPTIONS = OshinkoOptions.builder()
+	private static final OshinkoCliOptions OSHINKO_OPTIONS = OshinkoCliOptions.builder()
 			.insecureSkipTlsVerify(true)
 			.token("")
 			.config("/opt/kube/config")
