@@ -1,23 +1,7 @@
 package cz.xtf.radanalytics.oshinko.deployment;
 
-import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
-import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
-import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.util.waiters.SparkWaiters;
-
-import cz.xtf.io.IOUtils;
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.openshift.PodService;
-import cz.xtf.openshift.imagestream.ImageRegistry;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodBuilder;
-import io.fabric8.kubernetes.api.model.ServiceAccount;
-import io.fabric8.kubernetes.api.model.ServiceAccountBuilder;
-import io.fabric8.openshift.api.model.RouteSpec;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+
 import org.assertj.core.api.Assertions;
 
 import java.io.File;
@@ -26,9 +10,30 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+
+import cz.xtf.io.IOUtils;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.openshift.PodService;
+import cz.xtf.openshift.imagestream.ImageRegistry;
+import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
+import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
+import cz.xtf.radanalytics.util.TestHelper;
+import cz.xtf.radanalytics.util.waiters.SparkWaiters;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodBuilder;
+import io.fabric8.kubernetes.api.model.ServiceAccount;
+import io.fabric8.kubernetes.api.model.ServiceAccountBuilder;
+import io.fabric8.openshift.api.model.RouteSpec;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class is taking care of Oshinko components deployment on OpenShift
@@ -83,16 +88,15 @@ public class Oshinko {
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
 		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoWebuiResources(oshinkoWebUITemplate)))) {
-			log.debug("Deleting existing pod and creating or replacing Pod");
-			openshift.client().load(is).deletingExisting().createOrReplace();
+			log.debug("Load Oshinko WebUI template");
+			openshift.loadResource(is);
 		} catch (IOException e) {
-			log.error("Exception during deleting or creating pod: {}", e.getMessage());
-			throw new IllegalStateException("Timeout expired while waiting for Oshinko server availability");
+			log.error("Exception during loading of Oshinko WebUI template: {}", e.getMessage());
+			throw new IllegalStateException("Wasn't able to load Oshinko WebUI template");
 		}
 
-		log.debug("Creating template with name \"{}\"", templateName);
-		openshift.client().lists()
-				.create(openshift.client().templates().withParameters(mapParams).withName(templateName).process());
+		log.debug("Process template with name \"{}\"", templateName);
+		openshift.processTemplate(templateName, mapParams);                                                        						
 		log.debug("Creating route \"{}\"", routeName);
 		RouteSpec route = openshift.client().routes().withName(routeName).get().getSpec();
 
