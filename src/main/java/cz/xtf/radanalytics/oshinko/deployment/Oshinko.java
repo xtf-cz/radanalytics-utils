@@ -96,7 +96,7 @@ public class Oshinko {
 		}
 
 		log.debug("Process template with name \"{}\"", templateName);
-		openshift.processAndDeployTemplate(templateName, mapParams);
+		openshift.createResources(openshift.processTemplate(templateName, mapParams));
 		log.debug("Creating route \"{}\"", routeName);
 		RouteSpec route = openshift.client().routes().withName(routeName).get().getSpec();
 
