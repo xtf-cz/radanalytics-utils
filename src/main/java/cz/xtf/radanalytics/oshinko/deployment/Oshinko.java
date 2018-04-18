@@ -1,13 +1,9 @@
 package cz.xtf.radanalytics.oshinko.deployment;
 
-import org.apache.commons.io.FileUtils;
-
 import org.assertj.core.api.Assertions;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -114,40 +110,6 @@ public class Oshinko {
 
 		return OshinkoPoddedWebUI.getInstance(route.getHost() + route.getPath());
 	}
-
-	/**
-	 * Downloads Oshinko Webui resources yaml file if it not present in local tmp directory
-	 *
-	 * @return path to Oshinko Webui resources yaml file
-	 */
-//	public static String getOshinkoResources(String workDir, String oshinkoTemplate, String oshinko_resources_url) {
-//		log.info("Getting Oshinko Resources from temp directory");
-//
-//		if (OSHINKO_WEBUI_RESOURCES == null) {
-//			try {
-//				log.debug("Trying to download resources and create yaml/json file");
-//				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(workDir).toFile();
-//
-//				if (WORKDIR.exists()) {
-//					FileUtils.deleteDirectory(WORKDIR);
-//				}
-//				if (!WORKDIR.mkdirs()) {
-//					throw new IOException("Cannot mkdirs " + WORKDIR);
-//				}
-//
-//				File resourcesFile = new File(WORKDIR, oshinkoTemplate);
-//
-//				URL requestUrl = new URL(oshinko_resources_url);
-//				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
-//
-//				OSHINKO_WEBUI_RESOURCES = resourcesFile.getPath();
-//			} catch (IOException e) {
-//				log.error("Was not able to download resources definition from {}. Exception: {}", oshinko_resources_url, e.getMessage());
-//				throw new IllegalStateException("Was not able to download resources definition from " + oshinko_resources_url, e);
-//			}
-//		}
-//		return OSHINKO_WEBUI_RESOURCES;
-//	}
 
 	/**
 	 * Will deploy custom build pod (docker image: zroubalik/oshinko-cli), which contains both Openshift CLI and Oshinko CLI installed
