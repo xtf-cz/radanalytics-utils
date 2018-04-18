@@ -36,7 +36,6 @@ public class TestHelper {
 
 	private static OpenShiftUtil openshiftBuildsProject;
 	private static GitLabUtil GITLAB;
-	private static String RESOURCES;
 
 	public static synchronized GitLabUtil gitlab() {
 		if (GITLAB == null) {
@@ -171,36 +170,37 @@ public class TestHelper {
 
 	public static String downloadAndGetResources(String localWorkDir, String templateFileName, String resourcesUrl) {
 		log.info("Downloading and getting Resources from {}", resourcesUrl);
-		if (RESOURCES == null) {
-			try {
-				if (!getResourceStatusCode(resourcesUrl)) {
-					throw new Exception("Resource is not available");
-				}
+		String resources = null;
 
-				log.debug("Trying to download resources and create yaml/json file");
-				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(localWorkDir).toFile();
-
-				if (WORKDIR.exists()) {
-					FileUtils.deleteDirectory(WORKDIR);
-				}
-				if (!WORKDIR.mkdirs()) {
-					throw new IOException("Cannot mkdirs " + WORKDIR);
-				}
-
-				File resourcesFile = new File(WORKDIR, templateFileName);
-
-				URL requestUrl = new URL(resourcesUrl);
-				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
-
-				RESOURCES = resourcesFile.getPath();
-			} catch (IOException e) {
-				log.error("Was not able to download resources definition from {}. Exception: {}", resourcesUrl, e.getMessage());
-				throw new IllegalStateException("Was not able to download resources definition from " + resourcesUrl, e);
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			if (!getResourceStatusCode(resourcesUrl)) {
+				throw new Exception("Resource is not available");
 			}
+
+			log.debug("Trying to download resources and create yaml/json file");
+			File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(localWorkDir).toFile();
+
+			if (WORKDIR.exists()) {
+				FileUtils.deleteDirectory(WORKDIR);
+			}
+			if (!WORKDIR.mkdirs()) {
+				throw new IOException("Cannot mkdirs " + WORKDIR);
+			}
+
+			File resourcesFile = new File(WORKDIR, templateFileName);
+
+			URL requestUrl = new URL(resourcesUrl);
+			FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
+
+			resources = resourcesFile.getPath();
+		} catch (IOException e) {
+			log.error("Was not able to download resources definition from {}. Exception: {}", resourcesUrl, e.getMessage());
+			throw new IllegalStateException("Was not able to download resources definition from " + resourcesUrl, e);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return RESOURCES;
+
+		return resources;
 	}
 
 	private static Boolean getResourceStatusCode(String url) {

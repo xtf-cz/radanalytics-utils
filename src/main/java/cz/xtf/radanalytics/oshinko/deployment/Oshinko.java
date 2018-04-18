@@ -38,7 +38,6 @@ import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 @Slf4j
 public class Oshinko {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
-	private static final String OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
 	private static final String OSHINKO_WEBUI_REFRESH_INTERVAL = "10";  //Specifying interval for refreshing UI on Cluster page in sec.
 	@Getter
 	private static final String defaultServiceAccountName = "oshinko";
@@ -87,7 +86,10 @@ public class Oshinko {
 		Map<String, String> mapParams = new HashMap<>();
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
-		try (InputStream is = Files.newInputStream(Paths.get(downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, resourcesUrl)))) {
+		if (OSHINKO_WEBUI_RESOURCES == null) {
+			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, resourcesUrl);
+		}
+		try (InputStream is = Files.newInputStream(Paths.get(OSHINKO_WEBUI_RESOURCES))) {
 			log.debug("Load Oshinko WebUI template");
 			openshift.loadResource(is);
 		} catch (IOException e) {
