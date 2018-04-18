@@ -83,11 +83,14 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
+		String oshinko_resources_url = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+		String workDir = "radanalyticsio";
+
 		log.info("Deploying WebUI Pod");
 		Map<String, String> mapParams = new HashMap<>();
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
-		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoWebuiResources(oshinkoWebUITemplate)))) {
+		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoResources(workDir, oshinkoWebUITemplate, oshinko_resources_url)))) {
 			log.debug("Load Oshinko WebUI template");
 			openshift.loadResource(is);
 		} catch (IOException e) {
@@ -116,13 +119,13 @@ public class Oshinko {
 	 *
 	 * @return path to Oshinko Webui resources yaml file
 	 */
-	private static String getOshinkoWebuiResources(String oshinkoWebUITemplate) {
-		log.info("Getting Oshinko Web UI Resources from temp directory");
+	public static String getOshinkoResources(String workDir, String oshinkoTemplate, String oshinko_resources_url) {
+		log.info("Getting Oshinko Resources from temp directory");
 
 		if (OSHINKO_WEBUI_RESOURCES == null) {
 			try {
-				log.debug("Trying to download resources and create yaml file");
-				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve("radanalyticsio").toFile();
+				log.debug("Trying to download resources and create yaml/json file");
+				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(workDir).toFile();
 
 				if (WORKDIR.exists()) {
 					FileUtils.deleteDirectory(WORKDIR);
@@ -131,18 +134,17 @@ public class Oshinko {
 					throw new IOException("Cannot mkdirs " + WORKDIR);
 				}
 
-				File resourcesFile = new File(WORKDIR, oshinkoWebUITemplate);
+				File resourcesFile = new File(WORKDIR, oshinkoTemplate);
 
-				URL requestUrl = new URL(OSHINKO_WEBUI_RESOURCES_URL);
+				URL requestUrl = new URL(oshinko_resources_url);
 				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
 
 				OSHINKO_WEBUI_RESOURCES = resourcesFile.getPath();
 			} catch (IOException e) {
-				log.error("Was not able to download resources definition from {}. Exception: {}", OSHINKO_WEBUI_RESOURCES_URL, e.getMessage());
-				throw new IllegalStateException("Was not able to download resources definition from " + OSHINKO_WEBUI_RESOURCES_URL, e);
+				log.error("Was not able to download resources definition from {}. Exception: {}", oshinko_resources_url, e.getMessage());
+				throw new IllegalStateException("Was not able to download resources definition from " + oshinko_resources_url, e);
 			}
 		}
-
 		return OSHINKO_WEBUI_RESOURCES;
 	}
 
