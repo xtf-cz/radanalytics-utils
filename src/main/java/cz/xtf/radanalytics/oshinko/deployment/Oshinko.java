@@ -35,6 +35,8 @@ import io.fabric8.openshift.api.model.RouteSpec;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
+
 /**
  * This class is taking care of Oshinko components deployment on OpenShift
  */
@@ -83,14 +85,14 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
-		String oshinko_resources_url = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
-		String workDir = "radanalyticsio";
+		String resourcesUrl = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+		String localWorkDir = "radanalyticsio";
 
 		log.info("Deploying WebUI Pod");
 		Map<String, String> mapParams = new HashMap<>();
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
-		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoResources(workDir, oshinkoWebUITemplate, oshinko_resources_url)))) {
+		try (InputStream is = Files.newInputStream(Paths.get(downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, resourcesUrl)))) {
 			log.debug("Load Oshinko WebUI template");
 			openshift.loadResource(is);
 		} catch (IOException e) {
@@ -119,34 +121,34 @@ public class Oshinko {
 	 *
 	 * @return path to Oshinko Webui resources yaml file
 	 */
-	public static String getOshinkoResources(String workDir, String oshinkoTemplate, String oshinko_resources_url) {
-		log.info("Getting Oshinko Resources from temp directory");
-
-		if (OSHINKO_WEBUI_RESOURCES == null) {
-			try {
-				log.debug("Trying to download resources and create yaml/json file");
-				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(workDir).toFile();
-
-				if (WORKDIR.exists()) {
-					FileUtils.deleteDirectory(WORKDIR);
-				}
-				if (!WORKDIR.mkdirs()) {
-					throw new IOException("Cannot mkdirs " + WORKDIR);
-				}
-
-				File resourcesFile = new File(WORKDIR, oshinkoTemplate);
-
-				URL requestUrl = new URL(oshinko_resources_url);
-				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
-
-				OSHINKO_WEBUI_RESOURCES = resourcesFile.getPath();
-			} catch (IOException e) {
-				log.error("Was not able to download resources definition from {}. Exception: {}", oshinko_resources_url, e.getMessage());
-				throw new IllegalStateException("Was not able to download resources definition from " + oshinko_resources_url, e);
-			}
-		}
-		return OSHINKO_WEBUI_RESOURCES;
-	}
+//	public static String getOshinkoResources(String workDir, String oshinkoTemplate, String oshinko_resources_url) {
+//		log.info("Getting Oshinko Resources from temp directory");
+//
+//		if (OSHINKO_WEBUI_RESOURCES == null) {
+//			try {
+//				log.debug("Trying to download resources and create yaml/json file");
+//				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(workDir).toFile();
+//
+//				if (WORKDIR.exists()) {
+//					FileUtils.deleteDirectory(WORKDIR);
+//				}
+//				if (!WORKDIR.mkdirs()) {
+//					throw new IOException("Cannot mkdirs " + WORKDIR);
+//				}
+//
+//				File resourcesFile = new File(WORKDIR, oshinkoTemplate);
+//
+//				URL requestUrl = new URL(oshinko_resources_url);
+//				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
+//
+//				OSHINKO_WEBUI_RESOURCES = resourcesFile.getPath();
+//			} catch (IOException e) {
+//				log.error("Was not able to download resources definition from {}. Exception: {}", oshinko_resources_url, e.getMessage());
+//				throw new IllegalStateException("Was not able to download resources definition from " + oshinko_resources_url, e);
+//			}
+//		}
+//		return OSHINKO_WEBUI_RESOURCES;
+//	}
 
 	/**
 	 * Will deploy custom build pod (docker image: zroubalik/oshinko-cli), which contains both Openshift CLI and Oshinko CLI installed

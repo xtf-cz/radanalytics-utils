@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.util;
 
+import cz.xtf.io.IOUtils;
 import cz.xtf.radanalytics.driver.deployment.Driver;
 import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
 import cz.xtf.TestConfiguration;
@@ -12,8 +13,15 @@ import cz.xtf.wait.Waiter;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.openshift.api.model.Build;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -29,6 +37,7 @@ public class TestHelper {
 
 	private static OpenShiftUtil openshiftBuildsProject;
 	private static GitLabUtil GITLAB;
+	private static String RESOURCES;
 
 	public static synchronized GitLabUtil gitlab() {
 		if (GITLAB == null) {
@@ -160,4 +169,50 @@ public class TestHelper {
 		return pods -> pods.stream().count() == 0L;
 	}
 	////////// =================
+
+	public static String downloadAndGetResources(String localWorkDir, String templateFileName, String resourcesUrl) {
+		log.info("Downloading and getting Resources from {}", resourcesUrl);
+		if (RESOURCES == null) {
+			try {
+				if (!getResourceStatusCode(resourcesUrl)) {
+					throw new Exception("Resource is not available");
+				}
+
+				log.debug("Trying to download resources and create yaml/json file");
+				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(localWorkDir).toFile();
+
+				if (WORKDIR.exists()) {
+					FileUtils.deleteDirectory(WORKDIR);
+				}
+				if (!WORKDIR.mkdirs()) {
+					throw new IOException("Cannot mkdirs " + WORKDIR);
+				}
+
+				File resourcesFile = new File(WORKDIR, templateFileName);
+
+				URL requestUrl = new URL(resourcesUrl);
+				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
+
+				RESOURCES = resourcesFile.getPath();
+			} catch (IOException e) {
+				log.error("Was not able to download resources definition from {}. Exception: {}", resourcesUrl, e.getMessage());
+				throw new IllegalStateException("Was not able to download resources definition from " + resourcesUrl, e);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return RESOURCES;
+	}
+
+	private static Boolean getResourceStatusCode(String url) {
+		Integer status = 404;
+		try {
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet request = new HttpGet(url);
+			status = client.execute(request).getStatusLine().getStatusCode();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status == 200;
+	}
 }
