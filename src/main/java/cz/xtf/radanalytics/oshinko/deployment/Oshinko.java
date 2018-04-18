@@ -1,13 +1,9 @@
 package cz.xtf.radanalytics.oshinko.deployment;
 
-import org.apache.commons.io.FileUtils;
-
 import org.assertj.core.api.Assertions;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,7 +14,6 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
-import cz.xtf.io.IOUtils;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
@@ -35,14 +30,16 @@ import io.fabric8.openshift.api.model.RouteSpec;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
+
 /**
  * This class is taking care of Oshinko components deployment on OpenShift
  */
 @Slf4j
 public class Oshinko {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
-	private static final String OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
 	private static final String OSHINKO_WEBUI_REFRESH_INTERVAL = "10";  //Specifying interval for refreshing UI on Cluster page in sec.
+	private static String OSHINKO_WEBUI_RESOURCES_URL;
 	@Getter
 	private static final String defaultServiceAccountName = "oshinko";
 	private static String OSHINKO_WEBUI_RESOURCES;
@@ -83,11 +80,17 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
+		OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+		String localWorkDir = "radanalyticsio";
+
 		log.info("Deploying WebUI Pod");
 		Map<String, String> mapParams = new HashMap<>();
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
-		try (InputStream is = Files.newInputStream(Paths.get(getOshinkoWebuiResources(oshinkoWebUITemplate)))) {
+		if (OSHINKO_WEBUI_RESOURCES == null) {
+			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, OSHINKO_WEBUI_RESOURCES_URL);
+		}
+		try (InputStream is = Files.newInputStream(Paths.get(OSHINKO_WEBUI_RESOURCES))) {
 			log.debug("Load Oshinko WebUI template");
 			openshift.loadResource(is);
 		} catch (IOException e) {
@@ -109,41 +112,6 @@ public class Oshinko {
 		}
 
 		return OshinkoPoddedWebUI.getInstance(route.getHost() + route.getPath());
-	}
-
-	/**
-	 * Downloads Oshinko Webui resources yaml file if it not present in local tmp directory
-	 *
-	 * @return path to Oshinko Webui resources yaml file
-	 */
-	private static String getOshinkoWebuiResources(String oshinkoWebUITemplate) {
-		log.info("Getting Oshinko Web UI Resources from temp directory");
-
-		if (OSHINKO_WEBUI_RESOURCES == null) {
-			try {
-				log.debug("Trying to download resources and create yaml file");
-				File WORKDIR = IOUtils.TMP_DIRECTORY.resolve("radanalyticsio").toFile();
-
-				if (WORKDIR.exists()) {
-					FileUtils.deleteDirectory(WORKDIR);
-				}
-				if (!WORKDIR.mkdirs()) {
-					throw new IOException("Cannot mkdirs " + WORKDIR);
-				}
-
-				File resourcesFile = new File(WORKDIR, oshinkoWebUITemplate);
-
-				URL requestUrl = new URL(OSHINKO_WEBUI_RESOURCES_URL);
-				FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
-
-				OSHINKO_WEBUI_RESOURCES = resourcesFile.getPath();
-			} catch (IOException e) {
-				log.error("Was not able to download resources definition from {}. Exception: {}", OSHINKO_WEBUI_RESOURCES_URL, e.getMessage());
-				throw new IllegalStateException("Was not able to download resources definition from " + OSHINKO_WEBUI_RESOURCES_URL, e);
-			}
-		}
-
-		return OSHINKO_WEBUI_RESOURCES;
 	}
 
 	/**
