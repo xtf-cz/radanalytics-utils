@@ -39,6 +39,7 @@ import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 public class Oshinko {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	private static final String OSHINKO_WEBUI_REFRESH_INTERVAL = "10";  //Specifying interval for refreshing UI on Cluster page in sec.
+	private static String OSHINKO_WEBUI_RESOURCES_URL;
 	@Getter
 	private static final String defaultServiceAccountName = "oshinko";
 	private static String OSHINKO_WEBUI_RESOURCES;
@@ -79,7 +80,7 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
-		String resourcesUrl = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+		OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
 		String localWorkDir = "radanalyticsio";
 
 		log.info("Deploying WebUI Pod");
@@ -87,7 +88,7 @@ public class Oshinko {
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
 		if (OSHINKO_WEBUI_RESOURCES == null) {
-			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, resourcesUrl);
+			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, OSHINKO_WEBUI_RESOURCES_URL);
 		}
 		try (InputStream is = Files.newInputStream(Paths.get(OSHINKO_WEBUI_RESOURCES))) {
 			log.debug("Load Oshinko WebUI template");
