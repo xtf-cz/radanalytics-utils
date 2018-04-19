@@ -16,10 +16,10 @@ import java.util.List;
 public class SparkCluster {
 	@JsonProperty("name")
 	private String clusterName;
-	@JsonProperty("mastersCount")
-	private int mastersCount;
-	@JsonProperty("workersCount")
-	private int workersCount;
+	@JsonProperty("masterCount")
+	private int masterCount;
+	@JsonProperty("workerCount")
+	private int workerCount;
 
 	@JsonProperty("namespace")
 	private String namespace;

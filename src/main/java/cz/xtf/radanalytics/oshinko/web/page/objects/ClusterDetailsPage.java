@@ -108,8 +108,8 @@ public class ClusterDetailsPage  extends AbstractPage {
 		cluster.setClusterName(clusterDetailsName.getText());
 		cluster.setStatus(clusterDetailsStatus.getText());
 		cluster.setMasterUrl(clusterDetailsMaster.getText());
-		cluster.setMastersCount(Integer.parseInt(clusterDetailsMasterCount.getText()));
-		cluster.setWorkersCount(Integer.parseInt(clusterDetailsWorkersCount.getText()));
+		cluster.setMasterCount(Integer.parseInt(clusterDetailsMasterCount.getText()));
+		cluster.setWorkerCount(Integer.parseInt(clusterDetailsWorkersCount.getText()));
 		return cluster;
 	}
 
@@ -134,7 +134,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 			sparkPods.add(pod);
 		});
 		cluster.setSparkPods(sparkPods);
-//		cluster.setMastersCount(((int) sparkPods.stream().filter(x -> x.getType().equals("master")).count()));
+//		cluster.setMasterCount(((int) sparkPods.stream().filter(x -> x.getType().equals("master")).count()));
 		return cluster;
 	}
 }
