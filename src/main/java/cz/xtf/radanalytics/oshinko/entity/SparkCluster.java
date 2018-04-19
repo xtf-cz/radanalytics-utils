@@ -16,9 +16,9 @@ import java.util.List;
 public class SparkCluster {
 	@JsonProperty("name")
 	private String clusterName;
-	@JsonProperty("mastersCount")
+	@JsonProperty("masterCount")
 	private int mastersCount;
-	@JsonProperty("workersCount")
+	@JsonProperty("workerCount")
 	private int workersCount;
 
 	@JsonProperty("namespace")
