@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.web;
+package cz.xtf.radanalytics.web.webdriver;
 
 import cz.xtf.webdriver.GhostDriverService;
 import cz.xtf.webdriver.WebDriverService;

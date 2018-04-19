@@ -1,15 +1,15 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
-import cz.xtf.radanalytics.web.WebWaiters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 
 public class SparkClustersPage extends AbstractPage {
 
@@ -47,18 +47,11 @@ public class SparkClustersPage extends AbstractPage {
 	//</editor-fold>
 
 	public SparkClustersPage(WebDriver webDriver, String hostname, boolean navigateToPage) {
-		super(webDriver, hostname);
-		PageFactory.initElements(webDriver, this);
-		if(navigateToPage) {
-			String url = "http://" + hostname + "/#/clusters";
-			if(!Objects.equals(webDriver.getCurrentUrl(), url)) {
-				webDriver.get(url);
-			}
-		}
+		super(webDriver, hostname, navigateToPage, "http://" + hostname + "/#/clusters");
 	}
 
 	public SparkClustersPage clickOnDeployButton() {
-		WebWaiters.waitUntilElementIsVisible(deployButton,webDriver);
+		WebWaiters.waitUntilElementIsVisible(deployButton, webDriver);
 		deployButton.click();
 		return this;
 	}
@@ -113,5 +106,4 @@ public class SparkClustersPage extends AbstractPage {
 		webDriver.findElements(podsTable).forEach(x -> clusterNames.add(x.findElement(nameTableCell).getText()));
 		return clusterNames;
 	}
-
 }

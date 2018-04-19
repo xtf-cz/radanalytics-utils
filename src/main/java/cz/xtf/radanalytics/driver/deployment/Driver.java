@@ -1,7 +1,7 @@
 package cz.xtf.radanalytics.driver.deployment;
 
 import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.util.waiters.SparkWaiters;
+import cz.xtf.radanalytics.waiters.SparkWaiters;
 import cz.xtf.TestConfiguration;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;

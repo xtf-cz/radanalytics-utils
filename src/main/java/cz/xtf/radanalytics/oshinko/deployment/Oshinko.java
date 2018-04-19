@@ -1,5 +1,7 @@
 package cz.xtf.radanalytics.oshinko.deployment;
 
+import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
+
 import org.assertj.core.api.Assertions;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ import cz.xtf.openshift.imagestream.ImageRegistry;
 import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
 import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
 import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.util.waiters.SparkWaiters;
+import cz.xtf.radanalytics.waiters.SparkWaiters;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.ServiceAccount;
@@ -29,8 +31,6 @@ import io.fabric8.kubernetes.api.model.ServiceAccountBuilder;
 import io.fabric8.openshift.api.model.RouteSpec;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-
-import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 
 /**
  * This class is taking care of Oshinko components deployment on OpenShift
@@ -101,17 +101,17 @@ public class Oshinko {
 		log.debug("Process template with name \"{}\"", templateName);
 		openshift.processAndDeployTemplate(templateName, mapParams);
 		log.debug("Creating route \"{}\"", routeName);
-		RouteSpec route = openshift.client().routes().withName(routeName).get().getSpec();
+		RouteSpec routeSpec = openshift.getRoute(routeName).getSpec();
 
 		try {
-			log.debug("Waiting for that Pod is ready");
+			log.debug("Waiting for Oshinko WebUI Pod to be ready");
 			openshift.waiters().areExactlyNPodsReady(1, "name", routeName).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception during creating Pod: {}", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Oshinko server availability");
 		}
 
-		return OshinkoPoddedWebUI.getInstance(route.getHost() + route.getPath());
+		return OshinkoPoddedWebUI.getInstance(routeSpec.getHost() + routeSpec.getPath());
 	}
 
 	/**

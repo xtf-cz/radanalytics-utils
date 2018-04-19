@@ -2,18 +2,17 @@ package cz.xtf.radanalytics.oshinko.web.page.objects;
 
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.entity.SparkPod;
-import cz.xtf.radanalytics.web.WebWaiters;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 public class ClusterDetailsPage  extends AbstractPage {
@@ -62,15 +61,8 @@ public class ClusterDetailsPage  extends AbstractPage {
 	private By podsTable = By.xpath("//tbody[@class='ng-scope']");
 
 	public ClusterDetailsPage(WebDriver webDriver, String hostname, String clusterName, boolean navigateToPage) {
-		super(webDriver, hostname);
-		PageFactory.initElements(webDriver, this);
+		super(webDriver, hostname, navigateToPage, "http://" + hostname + "/#/clusters/" + clusterName);
 		this.clusterName = clusterName;
-		if(navigateToPage) {
-			String url = "http://" + hostname + "/#/clusters/" + clusterName;
-			if(!Objects.equals(webDriver.getCurrentUrl(), url)) {
-				webDriver.get(url);
-			}
-		}
 	}
 
 	public ClusterDetailsPage clickOnActionsButton() {
