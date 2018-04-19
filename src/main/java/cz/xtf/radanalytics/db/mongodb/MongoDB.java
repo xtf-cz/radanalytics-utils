@@ -2,7 +2,6 @@ package cz.xtf.radanalytics.db.mongodb;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -27,11 +26,10 @@ public class MongoDB {
 	private static String MONGODB_EPHEMERAL_TEMPLATE = null;
 	private static final String MONGODB_EPHEMERAL_TEMPLATE_URL = "https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mongodb-ephemeral-template.json";
 
-
 	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase) {
 
-		if (MONGODB_EPHEMERAL_TEMPLATE == null){
-			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR,"mongodb-ephemeral-template.json", MONGODB_EPHEMERAL_TEMPLATE_URL);
+		if (MONGODB_EPHEMERAL_TEMPLATE == null) {
+			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR, "mongodb-ephemeral-template.json", MONGODB_EPHEMERAL_TEMPLATE_URL);
 		}
 
 		return deployMongoDB(MONGODB_EPHEMERAL_TEMPLATE, null, null, null,
