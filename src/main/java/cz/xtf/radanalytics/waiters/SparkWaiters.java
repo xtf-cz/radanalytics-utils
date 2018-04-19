@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.util.waiters;
+package cz.xtf.radanalytics.waiters;
 
 import cz.xtf.openshift.logs.LogCheckerUtils;
 import cz.xtf.wait.SimpleWaiter;
