@@ -17,9 +17,9 @@ public class SparkCluster {
 	@JsonProperty("name")
 	private String clusterName;
 	@JsonProperty("masterCount")
-	private int mastersCount;
+	private int masterCount;
 	@JsonProperty("workerCount")
-	private int workersCount;
+	private int workerCount;
 
 	@JsonProperty("namespace")
 	private String namespace;
