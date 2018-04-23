@@ -13,25 +13,32 @@ import java.util.List;
 public class SparkClusterService {
 
 	private static List<SparkCluster> sparkClustersFromText(String text, String type) {
-		log.debug("Start search Spark Cluster in {} file : {}", type, text);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-		SparkCluster[] clusters = null;
+		List<SparkCluster> listOfSparkClusters;
 
-		try {
-			clusters = mapper.readValue(text, SparkCluster[].class);
-		} catch (IOException e) {
-			log.error("Can't parse {} file to array of SparkCluster.class", type, e);
-			throw new IllegalStateException("Can't parse file to array of SparkCluster.class", e);
+		if (isTextValid(text)) {
+			log.debug("Start search Spark Cluster in {} file : {}", type, text);
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+			SparkCluster[] clusters;
+
+			try {
+				clusters = mapper.readValue(text, SparkCluster[].class);
+			} catch (IOException e) {
+				log.error("Can't parse {} file to array of SparkCluster.class", type, e);
+				throw new IllegalStateException("Can't parse file to array of SparkCluster.class", e);
+			}
+			if (clusters == null) {
+				log.debug("Spark Cluster was not found.");
+				return null;
+			}
+			log.debug("Spark Cluster was found : {}.", clusters.toString());
+			listOfSparkClusters = Arrays.asList(clusters);
+		} else {
+			listOfSparkClusters = Arrays.asList();
 		}
-
-		if (clusters == null) {
-			log.debug("Spark Cluster was not found.");
-			return null;
-		}
-		log.debug("Spark Cluster was found : {}.", clusters.toString());
-		return Arrays.asList(clusters);
+		return listOfSparkClusters;
 	}
 
 	public static List<SparkCluster> sparkClustersFromJson(String json) {
@@ -42,4 +49,11 @@ public class SparkClusterService {
 		return sparkClustersFromText(yaml, "YAML");
 	}
 
+	private static boolean isTextValid(String text) {
+		boolean result = true;
+		if (text.contains("There are no clusters in any projects.")) {
+			result = false;
+		}
+		return result;
+	}
 }
