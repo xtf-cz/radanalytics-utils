@@ -50,10 +50,6 @@ public class SparkClusterService {
 	}
 
 	private static boolean isTextValid(String text) {
-		boolean result = true;
-		if (text.contains("There are no clusters in any projects.")) {
-			result = false;
-		}
-		return result;
+		return !text.contains("There are no clusters in any projects.");
 	}
 }
