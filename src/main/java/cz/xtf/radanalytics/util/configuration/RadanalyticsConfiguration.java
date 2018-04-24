@@ -13,6 +13,9 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String IMAGE_OSHINKO_WEBUI = "rad.oshinko.webui";
 	private static final String SHOULD_BUILD_ALL_DRIVER_APPLICATION = "rad.build.all.drivers";
 
+	public static final String OSHINKO_WEBUI_RESOURCES_URL="https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+	public static final String MONGODB_EPHEMERAL_TEMPLATE_URL = "https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mongodb-ephemeral-template.json";
+
 	private RadanalyticsConfiguration() {
 		super();
 	}
@@ -37,5 +40,6 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	public static boolean shouldBuildAll(){
 		return Boolean.parseBoolean(get().readValue(SHOULD_BUILD_ALL_DRIVER_APPLICATION));
 	}
+
 }
 

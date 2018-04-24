@@ -12,6 +12,7 @@ import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.db.OpenshiftDB;
 import cz.xtf.radanalytics.util.TestHelper;
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import io.fabric8.openshift.api.model.Template;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,12 +25,12 @@ public class MongoDB {
 	private static final String RESOURCES_WORKDIR = "mongodb";
 
 	private static String MONGODB_EPHEMERAL_TEMPLATE = null;
-	private static final String MONGODB_EPHEMERAL_TEMPLATE_URL = "https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mongodb-ephemeral-template.json";
+
 
 	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase) {
 
 		if (MONGODB_EPHEMERAL_TEMPLATE == null) {
-			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR, "mongodb-ephemeral-template.json", MONGODB_EPHEMERAL_TEMPLATE_URL);
+			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR, "mongodb-ephemeral-template.json", RadanalyticsConfiguration.MONGODB_EPHEMERAL_TEMPLATE_URL);
 		}
 
 		return deployMongoDB(MONGODB_EPHEMERAL_TEMPLATE, null, null, null,
