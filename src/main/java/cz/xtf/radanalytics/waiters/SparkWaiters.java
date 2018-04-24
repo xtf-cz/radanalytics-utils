@@ -36,7 +36,7 @@ public class SparkWaiters {
 	 * @return Waiter instance
 	 */
 	public static Waiter waitForPatternFound(Pod pod, Pattern patternInLogs) {
-		return new SimpleWaiter(() -> isPatternFound(pod, patternInLogs), TimeUnit.MINUTES, 3L);
+		return new SimpleWaiter(() -> isPatternFound(pod, patternInLogs), TimeUnit.MINUTES, 5L);
 	}
 
 	/**
