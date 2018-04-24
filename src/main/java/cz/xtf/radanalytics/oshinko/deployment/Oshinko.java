@@ -2,6 +2,7 @@ package cz.xtf.radanalytics.oshinko.deployment;
 
 import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import org.assertj.core.api.Assertions;
 
 import java.io.IOException;
@@ -140,7 +141,7 @@ public class Oshinko {
 		oshinkoCliPod = new PodBuilder()
 				.withNewMetadata().withName(appCLI).addToLabels("name", appCLI).endMetadata()
 				.withNewSpec()
-				.addNewContainer().withName(appCLI).withImage(ImageRegistry.get().oshinkoCli()).endContainer()
+				.addNewContainer().withName(appCLI).withImage(RadanalyticsConfiguration.oshinkoCli()).endContainer()
 				.endSpec().build();
 
 		log.debug("Creating Pod \"{}\"", oshinkoCliPod.getMetadata().getName());
