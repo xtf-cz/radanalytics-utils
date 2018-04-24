@@ -6,9 +6,7 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String IMAGE_PY_SPARK = "rad.driver.python";
 	private static final String IMAGE_JAVA_SPARK = "rad.driver.java";
 	private static final String IMAGE_SCALA_SPARK = "rad.driver.scala";
-	private static final String IMAGE_OSHINKO_REST = "rad.oshinko.rest";
 	private static final String IMAGE_OSHINKO_CLI = "rad.oshinko.cli";
-	private static final String IMAGE_OSHINKO_WEBUI = "rad.oshinko.webui";
 	private static final String SHOULD_BUILD_ALL_DRIVER_APPLICATION = "rad.build.all.drivers";
 
 	private static final String TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL = "rad.oshinko.web.ui.resources.url";
