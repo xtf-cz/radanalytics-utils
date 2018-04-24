@@ -80,7 +80,7 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
-		OSHINKO_WEBUI_RESOURCES_URL = RadanalyticsConfiguration.OSHINKO_WEBUI_RESOURCES_URL;
+		OSHINKO_WEBUI_RESOURCES_URL = RadanalyticsConfiguration.TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL;
 		String localWorkDir = "radanalyticsio";
 
 		log.info("Deploying WebUI Pod");
