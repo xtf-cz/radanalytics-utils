@@ -140,7 +140,7 @@ public class Oshinko {
 		oshinkoCliPod = new PodBuilder()
 				.withNewMetadata().withName(appCLI).addToLabels("name", appCLI).endMetadata()
 				.withNewSpec()
-				.addNewContainer().withName(appCLI).withImage(RadanalyticsConfiguration.oshinkoCli()).endContainer()
+				.addNewContainer().withName(appCLI).withImage(RadanalyticsConfiguration.imageOshinkoCli()).endContainer()
 				.endSpec().build();
 
 		log.debug("Creating Pod \"{}\"", oshinkoCliPod.getMetadata().getName());

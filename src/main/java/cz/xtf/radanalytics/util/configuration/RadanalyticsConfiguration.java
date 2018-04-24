@@ -32,7 +32,7 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 		return get().readValue(IMAGE_SCALA_SPARK);
 	}
 
-	public static String oshinkoCli() {
+	public static String imageOshinkoCli() {
 		return get().readValue(IMAGE_OSHINKO_CLI);
 	}
 
