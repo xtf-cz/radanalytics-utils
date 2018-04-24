@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
-import cz.xtf.openshift.imagestream.ImageRegistry;
 import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
 import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
 import cz.xtf.radanalytics.util.TestHelper;

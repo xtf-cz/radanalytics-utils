@@ -1,6 +1,6 @@
 package cz.xtf.radanalytics.driver.build;
 
-import cz.xtf.openshift.imagestream.ImageRegistry;
+
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import lombok.AllArgsConstructor;
 
