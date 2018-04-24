@@ -30,7 +30,7 @@ public class MongoDB {
 	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase) {
 
 		if (MONGODB_EPHEMERAL_TEMPLATE == null) {
-			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR, "mongodb-ephemeral-template.json", RadanalyticsConfiguration.TEMPLATE_MONGODB_EPHEMERAL_URL);
+			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR, "mongodb-ephemeral-template.json", RadanalyticsConfiguration.templateMongodbEphemeralUrl());
 		}
 
 		return deployMongoDB(MONGODB_EPHEMERAL_TEMPLATE, null, null, null,

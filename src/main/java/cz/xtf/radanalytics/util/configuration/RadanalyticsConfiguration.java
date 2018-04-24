@@ -11,23 +11,24 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String IMAGE_OSHINKO_WEBUI = "rad.oshinko.webui";
 	private static final String SHOULD_BUILD_ALL_DRIVER_APPLICATION = "rad.build.all.drivers";
 
-	public static final String TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL = "rad.oshinko.web.ui.resources.url";
-	public static final String TEMPLATE_MONGODB_EPHEMERAL_URL = "rad.mongodb.ephemeral.template.json";
+	private static final String TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL = "rad.oshinko.web.ui.resources.url";
+	private static final String TEMPLATE_MONGODB_EPHEMERAL_URL = "rad.mongodb.ephemeral.template.json";
+
 
 	private RadanalyticsConfiguration() {
 		super();
 	}
 
 
-	public static String pySpark() {
+	public static String imagePySpark() {
 		return get().readValue(IMAGE_PY_SPARK);
 	}
 
-	public static String javaSpark() {
+	public static String imageJavaSpark() {
 		return get().readValue(IMAGE_JAVA_SPARK);
 	}
 
-	public static String scalaSpark() {
+	public static String imageScalaSpark() {
 		return get().readValue(IMAGE_SCALA_SPARK);
 	}
 
@@ -39,5 +40,12 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 		return Boolean.parseBoolean(get().readValue(SHOULD_BUILD_ALL_DRIVER_APPLICATION));
 	}
 
+	public static String templateOshinkoWebUiResourcesUrl() {
+		return get().readValue(TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL);
+	}
+
+	public static String templateMongodbEphemeralUrl() {
+		return get().readValue(TEMPLATE_MONGODB_EPHEMERAL_URL);
+	}
 }
 

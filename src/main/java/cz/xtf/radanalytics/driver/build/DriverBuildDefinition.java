@@ -41,9 +41,8 @@ public class DriverBuildDefinition {
 		this.imageName = imageName;
 		this.appFile = appFile;
 
-		// TODO - we can create all builds immediately when starting the testsuite or create specific build on demand(current situation),
-		// probably need to implement a config option for this
-		// createBuilds();
+		//we can create all builds immediately when starting the testsuite
+		// or create specific build on demand
 		if(RadanalyticsConfiguration.shouldBuildAll()){
 			createBuilds();
 		}
