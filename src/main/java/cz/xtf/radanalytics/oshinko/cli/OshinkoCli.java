@@ -100,23 +100,19 @@ public class OshinkoCli implements OshinkoAPI {
 	}
 
 	@Override
-	// FIXME getCluster doesn't return JSON on empty result
 	public SparkCluster getCluster(String clusterName) {
+		SparkCluster sparkCluster = null;
 		String result = performOshinkoCmd("get", clusterName, "-o", "json");
-
-		List<SparkCluster> sparkClusters = SparkClusterService.sparkClustersFromJson(result);
-
-		/*if (sparkClusters == null || sparkClusters.size() == 0) {
-			throw new IllegalStateException("There is not Spark cluster with name: " + clusterName);
-		} else if (sparkClusters.size() > 1) {
-			throw new IllegalStateException("There are multiple Spark clusters with specified name: " + clusterName);
-		}   */
-
-		return sparkClusters.get(0);
+		if (result.isEmpty()) {
+			sparkCluster = null;
+		} else {
+			List<SparkCluster> sparkClusters = SparkClusterService.sparkClustersFromJson(result);
+			sparkCluster = sparkClusters.get(0);
+		}
+		return sparkCluster;
 	}
 
 	@Override
-	// FIXME listClusters doesn't return JSON on empty result
 	public List<SparkCluster> listClusters() {
 		String result = performOshinkoCmd("get", "-o", "json");
 		log.debug("oshinko get -o json. return: {} ", result);
