@@ -6,6 +6,7 @@ import cz.xtf.radanalytics.util.TestHelper;
 
 import cz.xtf.git.GitProject;
 import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import io.fabric8.openshift.api.model.BuildConfig;
 import io.fabric8.openshift.api.model.ImageStream;
 import lombok.Getter;
@@ -40,9 +41,11 @@ public class DriverBuildDefinition {
 		this.imageName = imageName;
 		this.appFile = appFile;
 
-		// TODO - we can create all builds immediately when starting the testsuite or create specific build on demand(current situation),
-		// probably need to implement a config option for this
-		// createBuilds();
+		//we can create all builds immediately when starting the testsuite
+		// or create specific build on demand
+		if(RadanalyticsConfiguration.shouldBuildAll()){
+			createBuilds();
+		}
 	}
 
 

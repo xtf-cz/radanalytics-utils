@@ -2,6 +2,7 @@ package cz.xtf.radanalytics.oshinko.deployment;
 
 import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import org.assertj.core.api.Assertions;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
-import cz.xtf.openshift.imagestream.ImageRegistry;
 import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
 import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
 import cz.xtf.radanalytics.util.TestHelper;
@@ -80,7 +80,7 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
-		OSHINKO_WEBUI_RESOURCES_URL = "https://raw.githubusercontent.com/radanalyticsio/oshinko-webui/master/tools/ui-template.yaml";
+		OSHINKO_WEBUI_RESOURCES_URL = RadanalyticsConfiguration.templateOshinkoWebUiResourcesUrl();
 		String localWorkDir = "radanalyticsio";
 
 		log.info("Deploying WebUI Pod");
@@ -140,7 +140,7 @@ public class Oshinko {
 		oshinkoCliPod = new PodBuilder()
 				.withNewMetadata().withName(appCLI).addToLabels("name", appCLI).endMetadata()
 				.withNewSpec()
-				.addNewContainer().withName(appCLI).withImage(ImageRegistry.get().oshinkoCli()).endContainer()
+				.addNewContainer().withName(appCLI).withImage(RadanalyticsConfiguration.imageOshinkoCli()).endContainer()
 				.endSpec().build();
 
 		log.debug("Creating Pod \"{}\"", oshinkoCliPod.getMetadata().getName());
