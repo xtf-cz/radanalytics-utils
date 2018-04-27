@@ -211,9 +211,8 @@ public class Oshinko {
 		String clusterTypeKey = "oshinko-type";
 
 		try {
-			// FIXME replace with XTF utilities method
 			log.debug("Verifying there are not Pods present");
-			TestHelper.areNoPodsPresent("oshinko-cluster", clusterName).execute();
+			openshift.waiters().areNoPodsPresent("oshinko-cluster", clusterName).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception while waiting for Spark cluster to be destroyed. Exception: {}", e);
 			throw new IllegalStateException("Timeout expired while waiting for Spark cluster to be destroyed", e);

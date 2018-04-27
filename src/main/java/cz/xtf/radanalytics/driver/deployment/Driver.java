@@ -59,14 +59,13 @@ public class Driver {
 
 	private Build getCurrentBuild() {
 		try {
-			//FIXME replace with method form XTF, once it is present
 			if (fromDriverBuildDefinition) {
 				log.debug("Wait on latest build in namespace: '{}'", TestConfiguration.buildNamespace());
-				TestHelper.isLatestBuildPresent(buildConfigName, TestConfiguration.buildNamespace()).execute();
+				openshiftBuildsProject.waiters().isLatestBuildPresent(buildConfigName).execute();
 				return openshiftBuildsProject.getLatestBuild(buildConfigName);
 			} else {
 				log.debug("Wait on latest build in namespace: default-namespace");
-				TestHelper.isLatestBuildPresent(buildConfigName).execute();
+				openshift.waiters().isLatestBuildPresent(buildConfigName).execute();
 				return openshift.getLatestBuild(buildConfigName);
 			}
 		} catch (TimeoutException e) {
