@@ -81,8 +81,24 @@ public class MongoDB {
 		db.setAdminUsername(DEFAULT_MONGODB_ADMIN_USERNAME);
 		db.setAdminPassword(mongoDbAdminPassword);
 		db.setDbName(mongoDbDatabase);
+		db.setDeploymentConfigName(databaseServiceName);
 		db.setConnectionUrl("mongodb://" + mongoDbUser + ":" + mongoDbPassword + "@" + databaseServiceName + "/" + mongoDbDatabase);
 
 		return db;
+	}
+
+	public static void restartPod(String name) {
+
+		log.info("MongoDB restart Pod - killing the pod");
+		openshift.deletePods("name", name);
+
+		try {
+			log.debug("Waiting for MongoDB Pod to be ready");
+			openshift.waiters().areExactlyNPodsReady(1, "name", name).execute();
+		} catch (TimeoutException e) {
+			log.error("Timeout exception during creating Pod: {}", e.getMessage());
+			throw new IllegalStateException("Timeout expired while waiting for MongoDB availability");
+		}
+		log.info("MongoDB restart Pod - finished");
 	}
 }

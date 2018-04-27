@@ -13,5 +13,5 @@ public class OpenshiftDB {
 	private String adminPassword;
 	private String connectionUrl;
 	private String dbName;
-	
+	private String deploymentConfigName;
 }
