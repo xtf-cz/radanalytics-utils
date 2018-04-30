@@ -35,7 +35,7 @@ public class WebDriverPodBuilder {
 	}
 
 	public DeploymentConfig deploymentConfig(String podName) {
-		webdriverBy(podName);
+		getWebdriverBy(podName);
 		generateWebdriverImageStream(podName);
 		return new DeploymentConfigBuilder()
 				.withNewMetadata()
@@ -76,6 +76,10 @@ public class WebDriverPodBuilder {
 				.withName("webdriver")
 				.withProtocol("TCP")
 				.endPort()
+				.addNewPort()
+				.withContainerPort(5900)
+				.withName("vnc")
+				.endPort()
 				.withNewSecurityContext()
 				.withNewCapabilities()
 				.withDrop("KILL", "MKNOD", "SETGID", "SETUID")
@@ -102,7 +106,7 @@ public class WebDriverPodBuilder {
 				.build();
 	}
 
-	private void webdriverBy(String podName) {
+	private void getWebdriverBy(String podName) {
 		if (podName.equals("headless-chrome")) {
 			webdriver = "standalone-chrome";
 		} else if (podName.equals("headless-chrome-debug")) {
@@ -173,13 +177,20 @@ public class WebDriverPodBuilder {
 	}
 
 	private Pod generatePod() {
-
 		return new PodBuilder()
-				.withNewMetadata().withName(podName).addToLabels("name", podName).endMetadata()
+				.withNewMetadata()
+				.withName(podName)
+				.addToLabels("name", podName)
+				.endMetadata()
 				.withNewSpec()
 				.addNewContainer()
-				.addNewEnv().withName("IGNORE_SSL_ERRORS").withValue("true").endEnv()
-				.withImage(imageStreamBy(podName)).withImagePullPolicy("Always").withName(podName)
+				.addNewEnv()
+				.withName("IGNORE_SSL_ERRORS")
+				.withValue("true")
+				.endEnv()
+				.withImage(imageStreamBy(podName))
+				.withImagePullPolicy("Always")
+				.withName(podName)
 				.addNewPort().withContainerPort(4444).withName("webdriver").withProtocol("TCP").endPort()
 				.addNewPort().withContainerPort(5900).withName("vnc").endPort()
 				.withNewSecurityContext().withNewCapabilities().withDrop("KILL", "MKNOD", "SETGID", "SETUID").endCapabilities()
