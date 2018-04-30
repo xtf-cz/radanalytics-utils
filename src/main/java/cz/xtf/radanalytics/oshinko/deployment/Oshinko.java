@@ -2,7 +2,6 @@ package cz.xtf.radanalytics.oshinko.deployment;
 
 import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import org.assertj.core.api.Assertions;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
 import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
 import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
-import cz.xtf.radanalytics.util.TestHelper;
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.waiters.SparkWaiters;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
