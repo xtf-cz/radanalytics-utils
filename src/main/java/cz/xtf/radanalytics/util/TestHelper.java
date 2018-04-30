@@ -134,7 +134,7 @@ public class TestHelper {
 		return resources;
 	}
 
-	private static Boolean getResourceStatusCode(String url) {
+	public static Boolean getResourceStatusCode(String url) {
 		Integer status = 404;
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
