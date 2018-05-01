@@ -4,15 +4,14 @@ import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
 import io.fabric8.openshift.api.model.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeoutException;
 
-
+@Slf4j
 public class WebDriverPodBuilder {
 	private String webdriver;
 	private String podName;
@@ -20,6 +19,7 @@ public class WebDriverPodBuilder {
 
 	public WebDriverPodBuilder(String podName) {
 		this.podName = podName;
+		log.debug("Pod name is: {}", podName);
 		openshift.createService(this.generateService());
 		if (podName.contains("debug")) {
 			openshift.createService(this.generateVNCService());
@@ -30,7 +30,7 @@ public class WebDriverPodBuilder {
 		try {
 			openshift.waiters().areExactlyNPodsReady(1, "name", podName).execute();
 		} catch (TimeoutException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 	}
 
@@ -113,6 +113,9 @@ public class WebDriverPodBuilder {
 			webdriver = "standalone-chrome-debug";
 		} else if (podName.equals("headless-firefox")) {
 			webdriver = "standalone-firefox";
+		} else if (podName.isEmpty() || podName == null) {
+			log.error("Incorrect webdriver instance name.");
+			throw new IllegalArgumentException("Incorrect webdriver instance name.");
 		}
 	}
 
@@ -142,7 +145,7 @@ public class WebDriverPodBuilder {
 	}
 
 	private String imageStreamBy(String podName) {
-		String imageName = null;
+		String imageName;
 		String imageVersion = RadanalyticsConfiguration.webdriverDockerImageVersion();
 		switch (podName) {
 			case "headless-chrome":
@@ -154,6 +157,9 @@ public class WebDriverPodBuilder {
 			case "headless-chrome-debug":
 				imageName = RadanalyticsConfiguration.headlessChromeDebug() + ":" + imageVersion;
 				break;
+			default:
+				log.error("Webdriver image stream not found.");
+				throw new IllegalArgumentException("Webdriver image stream not found.");
 		}
 		return imageName;
 	}
@@ -174,31 +180,6 @@ public class WebDriverPodBuilder {
 				.addNewPort().withPort(5901).withNewTargetPort(5900).endPort()
 				.addToSelector("name", podName)
 				.endSpec().build();
-	}
-
-	private Pod generatePod() {
-		return new PodBuilder()
-				.withNewMetadata()
-				.withName(podName)
-				.addToLabels("name", podName)
-				.endMetadata()
-				.withNewSpec()
-				.addNewContainer()
-				.addNewEnv()
-				.withName("IGNORE_SSL_ERRORS")
-				.withValue("true")
-				.endEnv()
-				.withImage(imageStreamBy(podName))
-				.withImagePullPolicy("Always")
-				.withName(podName)
-				.addNewPort().withContainerPort(4444).withName("webdriver").withProtocol("TCP").endPort()
-				.addNewPort().withContainerPort(5900).withName("vnc").endPort()
-				.withNewSecurityContext().withNewCapabilities().withDrop("KILL", "MKNOD", "SETGID", "SETUID").endCapabilities()
-				.withPrivileged(false).endSecurityContext()
-				.endContainer()
-				.withDnsPolicy("ClusterFirst")
-				.endSpec()
-				.build();
 	}
 
 	private Route generateRoute() {
