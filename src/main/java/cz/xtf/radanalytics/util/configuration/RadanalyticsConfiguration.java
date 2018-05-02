@@ -39,6 +39,22 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 		return get().readValue(IMAGE_OSHINKO_CLI);
 	}
 
+	public static String imageHeadlessChromeDebug() {
+		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME_DEBUG);
+	}
+
+	public static String imageHeadlessChrome() {
+		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME);
+	}
+
+	public static String imageHeadlessFirefox() {
+		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_FIREFOX);
+	}
+
+	public static String imageVersionOfWebdriverDocker() {
+		return get().readValue(IMAGE_DOCKER_WEBDRIVER_VERSION);
+	}
+
 	public static boolean shouldBuildAll() {
 		return Boolean.parseBoolean(get().readValue(SHOULD_BUILD_ALL_DRIVER_APPLICATION));
 	}
@@ -49,22 +65,6 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static String templateMongodbEphemeralUrl() {
 		return get().readValue(TEMPLATE_MONGODB_EPHEMERAL_URL);
-	}
-
-	public static String headlessChromeDebug() {
-		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME_DEBUG);
-	}
-
-	public static String headlessChrome() {
-		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME);
-	}
-
-	public static String headlessFirefox() {
-		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_FIREFOX);
-	}
-
-	public static String webdriverDockerImageVersion() {
-		return get().readValue(IMAGE_DOCKER_WEBDRIVER_VERSION);
 	}
 }
 
