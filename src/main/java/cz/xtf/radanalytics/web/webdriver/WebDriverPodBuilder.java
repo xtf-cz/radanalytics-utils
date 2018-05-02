@@ -121,11 +121,11 @@ public class WebDriverPodBuilder {
 
 	private void generateWebdriverImageStream(String podName) {
 		if (podName.equals("headless-chrome")) {
-			generateImageStream("standalone-chrome", RadanalyticsConfiguration.headlessChrome());
+			generateImageStream("standalone-chrome", RadanalyticsConfiguration.imageHeadlessChrome());
 		} else if (podName.equals("headless-chrome-debug")) {
-			generateImageStream("standalone-chrome-debug", RadanalyticsConfiguration.headlessChromeDebug());
+			generateImageStream("standalone-chrome-debug", RadanalyticsConfiguration.imageHeadlessChromeDebug());
 		} else if (podName.equals("headless-firefox")) {
-			generateImageStream("standalone-firefox", RadanalyticsConfiguration.headlessFirefox());
+			generateImageStream("standalone-firefox", RadanalyticsConfiguration.imageHeadlessFirefox());
 		}
 	}
 
@@ -136,7 +136,7 @@ public class WebDriverPodBuilder {
 				.endMetadata()
 				.withNewSpec()
 				.addNewTag()
-				.withName(RadanalyticsConfiguration.webdriverDockerImageVersion())
+				.withName(RadanalyticsConfiguration.imageVersionOfWebdriverDocker())
 				.endTag()
 				.withDockerImageRepository(dockerImageRepository)
 				.endSpec()
@@ -146,16 +146,16 @@ public class WebDriverPodBuilder {
 
 	private String imageStreamBy(String podName) {
 		String imageName;
-		String imageVersion = RadanalyticsConfiguration.webdriverDockerImageVersion();
+		String imageVersion = RadanalyticsConfiguration.imageVersionOfWebdriverDocker();
 		switch (podName) {
 			case "headless-chrome":
-				imageName = RadanalyticsConfiguration.headlessChrome() + ":" + imageVersion;
+				imageName = RadanalyticsConfiguration.imageHeadlessChrome() + ":" + imageVersion;
 				break;
 			case "headless-firefox":
-				imageName = RadanalyticsConfiguration.headlessFirefox() + ":" + imageVersion;
+				imageName = RadanalyticsConfiguration.imageHeadlessFirefox() + ":" + imageVersion;
 				break;
 			case "headless-chrome-debug":
-				imageName = RadanalyticsConfiguration.headlessChromeDebug() + ":" + imageVersion;
+				imageName = RadanalyticsConfiguration.imageHeadlessChromeDebug() + ":" + imageVersion;
 				break;
 			default:
 				log.error("Webdriver image stream not found.");
