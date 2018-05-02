@@ -11,12 +11,13 @@ public abstract class AbstractWebDriver {
 	private static LocalWebDriverManager localWebDriverManager;
 	private static WebDriverFactory webDriverFactory;
 
-	protected AbstractWebDriver(){
+	protected AbstractWebDriver() {
 		initAbstractWebDriver("headless-chrome");
 	}
 
 	/**
 	 * Choose browser from: headless-chrome, headless-firefox, headless-chrome-debug
+	 *
 	 * @param browserName
 	 */
 	protected AbstractWebDriver(String browserName) {
@@ -24,7 +25,7 @@ public abstract class AbstractWebDriver {
 	}
 
 	private void initAbstractWebDriver(String browserName) {
-		if (webDriverPod == null){
+		if (webDriverPod == null) {
 			webDriverPod = new WebDriverPodBuilder(browserName);
 		}
 		webDriver = webDriverInstance(browserName);
@@ -35,10 +36,17 @@ public abstract class AbstractWebDriver {
 			localWebDriverManager = new LocalWebDriverManager();
 			webDriverFactory = new WebDriverFactory();
 		}
-		if (localWebDriverManager.getWebDriver() == null){
+		if (localWebDriverManager.getWebDriver() == null) {
+
 			localWebDriverManager.setWebDriver(webDriverFactory.setUpWebDriver(browserName,
-					openshift.client().pods().withName(browserName).portForward(4444).getLocalPort()));
+					openshift.client().pods().withName(getCurrentPodName(browserName)).portForward(4444).getLocalPort()));
 		}
 		return localWebDriverManager.getWebDriver();
+	}
+
+	private String getCurrentPodName(String browserName) {
+		return openshift.getPods().stream().
+				filter(i -> i.getMetadata().getName().contains(browserName)).findFirst()
+				.get().getMetadata().getName();
 	}
 }
