@@ -15,6 +15,7 @@ import io.fabric8.openshift.api.model.ImageStream;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -153,10 +154,10 @@ public class Driver {
 		try {
 			if (fromDriverBuildDefinition) {
 				log.debug("Waiting to prepare build. Namespace : '{}'.", TestConfiguration.buildNamespace());
-				openshiftBuildsProject.waiters().hasBuildCompleted(getCurrentBuild().getMetadata().getName()).execute();
+				openshiftBuildsProject.waiters().hasBuildCompleted(getCurrentBuild().getMetadata().getName()).timeout(TimeUnit.MINUTES, 15).execute();
 			} else {
 				log.debug("Waiting to prepare build in default namespace.", TestConfiguration.masterNamespace());
-				openshift.waiters().hasBuildCompleted(getCurrentBuild().getMetadata().getName()).execute();
+				openshift.waiters().hasBuildCompleted(getCurrentBuild().getMetadata().getName()).timeout(TimeUnit.MINUTES, 15).execute();
 			}
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for Driver build to be built", e.getMessage());
@@ -173,7 +174,7 @@ public class Driver {
 			if (version == 0) {
 				version = 1;
 			}
-			openshift.waiters().isDeploymentReady(appName, version).execute();
+			openshift.waiters().isDeploymentReady(appName, version).timeout(TimeUnit.MINUTES, 7L).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for Driver pod to be ready", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Driver pod to be ready", e);
