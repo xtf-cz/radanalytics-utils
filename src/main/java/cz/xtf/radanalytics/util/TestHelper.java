@@ -115,6 +115,7 @@ public class TestHelper {
 				FileUtils.deleteDirectory(WORKDIR);
 			}
 			if (!WORKDIR.mkdirs()) {
+				log.error("Cannot mkdirs {}", WORKDIR);
 				throw new IOException("Cannot mkdirs " + WORKDIR);
 			}
 
