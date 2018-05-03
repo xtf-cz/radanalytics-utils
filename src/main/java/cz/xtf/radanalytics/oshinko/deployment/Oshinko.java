@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
@@ -168,7 +169,7 @@ public class Oshinko {
 
 		try {
 			log.debug("Waiting for Spark Cluster \"{}\" is ready", clusterName);
-			openshift.waiters().areExactlyNPodsReady(workersCount + mastersCount, clusterNameKey, clusterName).execute();
+			openshift.waiters().areExactlyNPodsReady(workersCount + mastersCount, clusterNameKey, clusterName).timeout(TimeUnit.MINUTES, 7).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception during creating Spark Cluster \"{}\". Exception: {}", clusterName, e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Spark cluster to be ready", e);
@@ -176,7 +177,7 @@ public class Oshinko {
 
 		try {
 			log.debug("Waiting for Spark Cluster Pod is ready");
-			openshift.waiters().areExactlyNPodsRunning(workersCount + mastersCount, clusterNameKey, clusterName).execute();
+			openshift.waiters().areExactlyNPodsRunning(workersCount + mastersCount, clusterNameKey, clusterName).timeout(TimeUnit.MINUTES, 7).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception during creating Spark Cluster Pod. Exception: {}", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Spark cluster pods to be in \"running phase\"", e);
