@@ -1,5 +1,14 @@
 package cz.xtf.radanalytics.util;
 
+import cz.xtf.TestConfiguration;
+import cz.xtf.git.GitLabUtil;
+import cz.xtf.git.GitProject;
+import cz.xtf.io.IOUtils;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.driver.deployment.Driver;
+import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -14,16 +23,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import cz.xtf.TestConfiguration;
-import cz.xtf.git.GitLabUtil;
-import cz.xtf.git.GitProject;
-import cz.xtf.io.IOUtils;
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.radanalytics.driver.deployment.Driver;
-import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TestHelper {
@@ -72,6 +71,7 @@ public class TestHelper {
 		if (matchedFilesList.size() == 1) {
 			pathToFileToModify = matchedFilesList.get(0);
 		} else {
+			log.error("Exactly one file named '{}' should be found, but we've found {} files", fileToModify, matchedFilesList.size());
 			throw new IllegalStateException("Exactly one file named '" + fileToModify + "' should be found, but we've found " + matchedFilesList.size() + " files");
 		}
 
@@ -105,6 +105,7 @@ public class TestHelper {
 
 		try {
 			if (!getResourceStatusCode(resourcesUrl)) {
+				log.error("Resource is not available");
 				throw new Exception("Resource is not available");
 			}
 
@@ -115,6 +116,7 @@ public class TestHelper {
 				FileUtils.deleteDirectory(WORKDIR);
 			}
 			if (!WORKDIR.mkdirs()) {
+				log.error("Cannot mkdirs {}", WORKDIR);
 				throw new IOException("Cannot mkdirs " + WORKDIR);
 			}
 
@@ -128,7 +130,7 @@ public class TestHelper {
 			log.error("Was not able to download resources definition from {}. Exception: {}", resourcesUrl, e.getMessage());
 			throw new IllegalStateException("Was not able to download resources definition from " + resourcesUrl, e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
 		return resources;
@@ -141,7 +143,7 @@ public class TestHelper {
 			HttpGet request = new HttpGet(url);
 			status = client.execute(request).getStatusLine().getStatusCode();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 		return status == 200;
 	}
