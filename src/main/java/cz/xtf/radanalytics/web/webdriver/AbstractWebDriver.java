@@ -39,15 +39,12 @@ public abstract class AbstractWebDriver {
 		if (localWebDriverManager.getWebDriver() == null) {
 
 			localWebDriverManager.setWebDriver(webDriverFactory.setUpWebDriver(browserName,
-					openshift.client().pods().withName(getCurrentPodName(browserName, "name", browserName)).portForward(4444).getLocalPort()));
+					openshift.client().pods().withName(getCurrentPodName(browserName)).portForward(4444).getLocalPort()));
 		}
 		return localWebDriverManager.getWebDriver();
 	}
 
-	private String getCurrentPodName(String podName, String labelKey, String labelValue) {
-		return openshift.getPods().stream().
-				filter(pod -> pod.getMetadata().getName().contains(podName)
-						&& pod.getMetadata().getLabels().get(labelKey).equals(labelValue))
-				.findFirst().get().getMetadata().getName();
+	private String getCurrentPodName(String browserName) {
+		return openshift.getAnyPod(browserName).getMetadata().getName();
 	}
 }
