@@ -1,9 +1,9 @@
 package cz.xtf.radanalytics.driver.deployment;
 
+import cz.xtf.TestConfiguration;
 import cz.xtf.radanalytics.driver.build.DriverBuild;
 import cz.xtf.radanalytics.driver.build.DriverBuildDefinition;
 import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
-import cz.xtf.TestConfiguration;
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
@@ -29,6 +29,7 @@ public class DriverBuilder {
 	private DeploymentConfig deploymentConfig;
 	private Service service;
 	private ImageStream imageStream;
+	private Service headlessService;
 
 	private Map<String, String> dcEnvs = new HashMap<>();
 
@@ -47,6 +48,8 @@ public class DriverBuilder {
 		this.gitContextDir = gitContextDir;
 		this.imageName = imageName;
 		this.appFile = appFile;
+
+		dcEnvs.put("DRIVER_HOST", appName + "-headless");
 	}
 
 	public DriverBuilder(DriverBuild driverBuild, String appName) {
@@ -55,6 +58,8 @@ public class DriverBuilder {
 		this.appName = appName;
 
 		this.fromDriverBuildDefinition = true;
+
+		dcEnvs.put("DRIVER_HOST", appName + "-headless");
 	}
 
 	public DriverBuilder addEnv(String key, String value) {
@@ -113,8 +118,9 @@ public class DriverBuilder {
 		}
 		generateDeploymentConfig();
 		generateService();
+		generateHeadlessService();
 
-		return new Driver(buildConfig, deploymentConfig, imageStream, service, fromDriverBuildDefinition);
+		return new Driver(buildConfig, deploymentConfig, imageStream, service, fromDriverBuildDefinition, headlessService);
 	}
 
 	public BuildConfig GenerateBuildConfig() {
@@ -203,6 +209,17 @@ public class DriverBuilder {
 				.withNewMetadata().withName(appName).addToLabels("app", appName).endMetadata()
 				.withNewSpec()
 				.addNewPort().withName("8080-tcp").withPort(8080).withProtocol("TCP").withNewTargetPort(8080).endPort()
+				.addToSelector("deploymentConfig", appName)
+				.endSpec().build();
+	}
+
+	private void generateHeadlessService() {
+		this.headlessService = new ServiceBuilder()
+				.withNewMetadata().withName(appName + "-headless").addToLabels("app", appName).endMetadata()
+				.withNewSpec()
+				.withClusterIP("None")
+				.addNewPort().withName("driver-rpc-port").withPort(7078).withProtocol("TCP").withNewTargetPort(7078).endPort()
+				.addNewPort().withName("blockmanager").withPort(7079).withProtocol("TCP").withNewTargetPort(7079).endPort()
 				.addToSelector("deploymentConfig", appName)
 				.endSpec().build();
 	}
