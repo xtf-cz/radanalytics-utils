@@ -33,23 +33,25 @@ public class Driver {
 	private final String appName;
 	private final ImageStream imageStream;
 	private final Service service;
+	private final Service headlessService;
 
 	private final boolean fromDriverBuildDefinition;
 
 	private OpenShiftUtil openshift = OpenShiftUtils.master();
 	private OpenShiftUtil openshiftBuildsProject;
 
-	protected Driver(BuildConfig buildConfig, DeploymentConfig deploymentConfig, ImageStream imageStream, Service service) {
-		this(buildConfig, deploymentConfig, imageStream, service, false);
+	protected Driver(BuildConfig buildConfig, DeploymentConfig deploymentConfig, ImageStream imageStream, Service service, Service headlessService) {
+		this(buildConfig, deploymentConfig, imageStream, service, false, headlessService);
 	}
 
-	protected Driver(BuildConfig buildConfig, DeploymentConfig deploymentConfig, ImageStream imageStream, Service service, boolean fromDriverBuildDefinition) {
+	protected Driver(BuildConfig buildConfig, DeploymentConfig deploymentConfig, ImageStream imageStream, Service service, boolean fromDriverBuildDefinition, Service headlessService) {
 		this.buildConfig = buildConfig;
 		this.deploymentConfig = deploymentConfig;
 		this.imageStream = imageStream;
 		this.service = service;
 		this.buildConfigName = buildConfig.getMetadata().getName();
 		this.appName = deploymentConfig.getMetadata().getName();
+		this.headlessService = headlessService;
 
 		this.fromDriverBuildDefinition = fromDriverBuildDefinition;
 		if (fromDriverBuildDefinition) {
@@ -92,6 +94,7 @@ public class Driver {
 		}
 
 		openshift.createService(service);
+		openshift.createService(headlessService);
 		openshift.createDeploymentConfig(deploymentConfig);
 		log.debug("Build and deploy completed.");
 		return this;
