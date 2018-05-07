@@ -1,14 +1,15 @@
 package cz.xtf.radanalytics.oshinko.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.web.page.objects.ClusterDetailsPage;
 import cz.xtf.radanalytics.oshinko.web.page.objects.SparkClustersPage;
 import cz.xtf.radanalytics.web.webdriver.AbstractWebDriver;
+import cz.xtf.radanalytics.web.webdriver.WebDriverBrowser;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI {
@@ -16,7 +17,7 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 	private final Integer DEFAULT_CLUSTER_COUNT = -10;
 
 	private OshinkoPoddedWebUI(String hostname) {
-		super("headless-chrome");
+		super(WebDriverBrowser.HEADLESS_CHROME);
 		this.hostname = hostname;
 		log.info("Init OshinkoPoddedWebUI");
 	}

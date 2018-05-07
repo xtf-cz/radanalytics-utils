@@ -7,7 +7,6 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String IMAGE_JAVA_SPARK = "rad.driver.java";
 	private static final String IMAGE_SCALA_SPARK = "rad.driver.scala";
 	private static final String IMAGE_OSHINKO_CLI = "rad.oshinko.cli";
-	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME_DEBUG = "rad.web-driver.docker.image.chrome-debug";
 	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME = "rad.web-driver.docker.image.chrome";
 	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_FIREFOX = "rad.web-driver.docker.image.firefox";
 	private static final String IMAGE_DOCKER_WEBDRIVER_VERSION = "rad.web-driver.docker.image.version";
@@ -37,10 +36,6 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static String imageOshinkoCli() {
 		return get().readValue(IMAGE_OSHINKO_CLI);
-	}
-
-	public static String imageHeadlessChromeDebug() {
-		return get().readValue(IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME_DEBUG);
 	}
 
 	public static String imageHeadlessChrome() {
