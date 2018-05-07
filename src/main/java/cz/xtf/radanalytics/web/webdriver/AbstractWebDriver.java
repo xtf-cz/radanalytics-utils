@@ -1,50 +1,20 @@
 package cz.xtf.radanalytics.web.webdriver;
 
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
 import org.openqa.selenium.WebDriver;
 
 public abstract class AbstractWebDriver {
-	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	public WebDriver webDriver;
-	private static WebDriverPodBuilder webDriverPod;
-	private static LocalWebDriverManager localWebDriverManager;
-	private static WebDriverFactory webDriverFactory;
 
 	protected AbstractWebDriver() {
-		initAbstractWebDriver("headless-chrome");
+		this(WebDriverBrowser.HEADLESS_CHROME);
 	}
 
 	/**
-	 * Choose browser from: headless-chrome, headless-firefox, headless-chrome-debug
+	 * Choose browser from: headless-chrome, headless-firefox
 	 *
-	 * @param browserName
+	 * @param browser
 	 */
-	protected AbstractWebDriver(String browserName) {
-		initAbstractWebDriver(browserName);
-	}
-
-	private void initAbstractWebDriver(String browserName) {
-		if (webDriverPod == null) {
-			webDriverPod = new WebDriverPodBuilder(browserName);
-		}
-		webDriver = webDriverInstance(browserName);
-	}
-
-	private WebDriver webDriverInstance(String browserName) {
-		if (localWebDriverManager == null) {
-			localWebDriverManager = new LocalWebDriverManager();
-			webDriverFactory = new WebDriverFactory();
-		}
-		if (localWebDriverManager.getWebDriver() == null) {
-
-			localWebDriverManager.setWebDriver(webDriverFactory.setUpWebDriver(browserName,
-					openshift.client().pods().withName(getCurrentPodName(browserName)).portForward(4444).getLocalPort()));
-		}
-		return localWebDriverManager.getWebDriver();
-	}
-
-	private String getCurrentPodName(String browserName) {
-		return openshift.getAnyPod(browserName).getMetadata().getName();
+	protected AbstractWebDriver(WebDriverBrowser browser) {
+		webDriver = LocalWebDriverManager.getWebDriver(browser);
 	}
 }

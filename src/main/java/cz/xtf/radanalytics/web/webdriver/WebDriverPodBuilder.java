@@ -1,19 +1,23 @@
 package cz.xtf.radanalytics.web.webdriver;
 
+import java.util.concurrent.TimeoutException;
+
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
-import io.fabric8.openshift.api.model.*;
+import io.fabric8.openshift.api.model.DeploymentConfig;
+import io.fabric8.openshift.api.model.DeploymentConfigBuilder;
+import io.fabric8.openshift.api.model.ImageStream;
+import io.fabric8.openshift.api.model.ImageStreamBuilder;
+import io.fabric8.openshift.api.model.Route;
+import io.fabric8.openshift.api.model.RouteBuilder;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class WebDriverPodBuilder {
-	private String webdriver;
 	private String podName;
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 
@@ -35,7 +39,6 @@ public class WebDriverPodBuilder {
 	}
 
 	public DeploymentConfig deploymentConfig(String podName) {
-		getWebdriverBy(podName);
 		generateWebdriverImageStream(podName);
 		return new DeploymentConfigBuilder()
 				.withNewMetadata()
@@ -62,7 +65,7 @@ public class WebDriverPodBuilder {
 				.endMetadata()
 				.withNewSpec()
 				.addNewContainer()
-				.withName(webdriver)
+				.withName(podName)
 				.withImage(imageStreamBy(podName))
 				.addNewEnv()
 				.withName("IGNORE_SSL_ERRORS")
@@ -134,24 +137,9 @@ public class WebDriverPodBuilder {
 				.build();
 	}
 
-	private void getWebdriverBy(String podName) {
-		if (podName.equals("headless-chrome")) {
-			webdriver = "standalone-chrome";
-		} else if (podName.equals("headless-chrome-debug")) {
-			webdriver = "standalone-chrome-debug";
-		} else if (podName.equals("headless-firefox")) {
-			webdriver = "standalone-firefox";
-		} else if (podName.isEmpty() || podName == null) {
-			log.error("Incorrect webdriver instance name.");
-			throw new IllegalArgumentException("Incorrect webdriver instance name.");
-		}
-	}
-
 	private void generateWebdriverImageStream(String podName) {
 		if (podName.equals("headless-chrome")) {
 			generateImageStream("standalone-chrome", RadanalyticsConfiguration.imageHeadlessChrome());
-		} else if (podName.equals("headless-chrome-debug")) {
-			generateImageStream("standalone-chrome-debug", RadanalyticsConfiguration.imageHeadlessChromeDebug());
 		} else if (podName.equals("headless-firefox")) {
 			generateImageStream("standalone-firefox", RadanalyticsConfiguration.imageHeadlessFirefox());
 		}
@@ -181,9 +169,6 @@ public class WebDriverPodBuilder {
 				break;
 			case "headless-firefox":
 				imageName = RadanalyticsConfiguration.imageHeadlessFirefox() + ":" + imageVersion;
-				break;
-			case "headless-chrome-debug":
-				imageName = RadanalyticsConfiguration.imageHeadlessChromeDebug() + ":" + imageVersion;
 				break;
 			default:
 				log.error("Webdriver image stream not found.");
