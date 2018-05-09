@@ -177,7 +177,7 @@ public class Driver {
 			if (version == 0) {
 				version = 1;
 			}
-			openshift.waiters().isDeploymentReady(appName, version).timeout(TimeUnit.MINUTES, 7L).execute();
+			openshift.waiters().isDeploymentReady(appName, version).timeout(TimeUnit.MINUTES, 10L).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for Driver pod to be ready", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Driver pod to be ready", e);
