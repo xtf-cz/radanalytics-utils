@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.web.webdriver;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -13,6 +14,7 @@ import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.webdriver.GhostDriverService;
 import cz.xtf.webdriver.WebDriverService;
 
+@Slf4j
 public class LocalWebDriverManager {
 
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
@@ -74,7 +76,7 @@ public class LocalWebDriverManager {
 					"http://localhost:" + podLocalPort + "/wd/hub"),
 					options);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			return null;
 		}
 	}
@@ -87,7 +89,7 @@ public class LocalWebDriverManager {
 					"http://localhost:" + podLocalPort + "/wd/hub"),
 					options);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			return null;
 		}
 	}

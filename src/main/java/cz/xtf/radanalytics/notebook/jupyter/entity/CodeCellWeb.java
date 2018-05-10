@@ -24,16 +24,17 @@ public class CodeCellWeb implements CodeCell {
 
 	@Override
 	public char getInputPrompt() {
+		log.debug("Getting input code cell prompt");
 		return projectPage.getInputCodeCellPrompt(CELL);
 	}
 
 	@Override
 	public CodeCell runCell() {
+		log.debug("Executing code cell");
 		projectPage
 				.clickOnCell(CELL)
 				.clickOnRunButton();
-
-		// Input prompt updates to next execution count after code finishes executing
+		log.debug("Input prompt updates to next execution count after code finishes executing");
 		BooleanSupplier successCondition = () -> {
 			char inputPrompt = getInputPrompt();
 			if (Character.isDigit(inputPrompt)) {
@@ -61,11 +62,13 @@ public class CodeCellWeb implements CodeCell {
 
 	@Override
 	public String getOutput() {
+		log.debug("Getting output execution code cell without timeout");
 		return new ProjectPage(webDriver, false).getOutputArea(CELL);
 	}
 
 	@Override
 	public String getOutput(Long timeout) {
+		log.debug("Getting output execution code cell with timeout {}", timeout);
 		if (executionCount < 1) {
 			throw new RuntimeException("Code cell must be executed at least once to retrieve output.");
 		}
@@ -74,6 +77,7 @@ public class CodeCellWeb implements CodeCell {
 
 	@Override
 	public boolean outputHasErrors() {
+		log.debug("Checking if output has errors");
 		if (executionCount < 1) {
 			throw new RuntimeException("Code cell must be executed at least once to retrieve output.");
 		}
@@ -87,6 +91,7 @@ public class CodeCellWeb implements CodeCell {
 	 */
 	@Override
 	public WebElement getCodeLine(int lineNumber) {
+		log.debug("Getting current code line");
 		return new ProjectPage(webDriver, false).getCodeLineContent(CELL, lineNumber);
 	}
 
@@ -101,7 +106,7 @@ public class CodeCellWeb implements CodeCell {
 	 */
 	@Override
 	public boolean findAndReplaceInCell(String find, String replace) {
-		// Set search to this cell's scope
+		log.debug("Finding the required cell and replacing code in according cell");
 		try {
 			projectPage
 					.clickOnCell(CELL)

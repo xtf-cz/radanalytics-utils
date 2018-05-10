@@ -30,7 +30,6 @@ public abstract class AbstractPage {
 		if (navigateToPage) {
 
 			if (!Objects.equals(webDriver.getCurrentUrl(), navigateToPageUrl)) {
-				webDriver.get(navigateToPageUrl);
 				pageLoaded(2000L,webDriver, navigateToPageUrl, 3);
 			}
 		}
@@ -41,8 +40,8 @@ public abstract class AbstractPage {
 		try {
 			link = new URL(url);
 		} catch (MalformedURLException e) {
-//			LOGGER.error(String.format("The following url provided is malformed: %s", url));
-			e.printStackTrace();
+			log.error(String.format("The following url provided is malformed: %s", url));
+			log.error(e.getMessage());
 		}
 
 		URL finalLink = link;
@@ -54,7 +53,7 @@ public abstract class AbstractPage {
 				connection.connect();
 				return connection.getResponseCode() == 200;
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(e.getMessage());
 				return false;
 			}
 		};
@@ -65,7 +64,7 @@ public abstract class AbstractPage {
 			try {
 				Thread.sleep(interval);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 			if (countTries > countTimes) {
 				break;

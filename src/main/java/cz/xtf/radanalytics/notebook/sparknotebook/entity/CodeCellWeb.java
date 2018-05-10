@@ -1,11 +1,13 @@
 package cz.xtf.radanalytics.notebook.sparknotebook.entity;
 
 import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.ApplicationPage;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.regex.Pattern;
 
+@Slf4j
 public class CodeCellWeb implements CodeCell {
 	private static ApplicationPage applicationPage;
 	private final WebElement CELL;
@@ -19,6 +21,7 @@ public class CodeCellWeb implements CodeCell {
 
 	@Override
 	public CodeCell runCell() {
+		log.debug("Executing code cell");
 		applicationPage
 				.scrollToCell(CELL)
 				.clickOnDropDownMenuToggle(CELL)
@@ -30,11 +33,14 @@ public class CodeCellWeb implements CodeCell {
 
 	@Override
 	public String getOutput() {
+		log.debug("Getting output execution code cell without timeout");
 		return new ApplicationPage(webDriver, false).getOutputFromCell(CELL);
 	}
 
 	@Override
 	public boolean outputHasErrors() {
+		log.debug("Checking if output has errors");
+
 		// If there are errors we expect an execution time to be displayed of the format
 		// e.g. Took: 1.014s, at 2018-01-15 18:52
 
