@@ -38,7 +38,7 @@ public class Screenshotter implements AfterTestExecutionCallback {
 					FileUtils.copyFile(scrFile, new File(new File("log"), testId + ".png"));
 					log.info("*** Screenshot taken: {}.png ", testId );
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					log.error(e1.getMessage());
 				}
 			} catch (WebDriverException x) {
 				// ignore, we don't have a window to shoot, or any other problem with screenshotting

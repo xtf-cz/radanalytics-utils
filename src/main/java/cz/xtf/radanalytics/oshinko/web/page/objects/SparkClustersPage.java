@@ -1,5 +1,7 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
+import cz.xtf.radanalytics.web.extended.elements.elements.Button;
+import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,27 +25,27 @@ public class SparkClustersPage extends AbstractPage {
 
 	//<editor-fold desc="Deploy cluster form">
 	@FindBy(id = "cluster-new-name")
-	private WebElement clusterNameField;
+	private TextField clusterNameField;
 
 	@FindBy(id = "cluster-new-workers")
-	private WebElement clusterWorkersCountField;
+	private TextField clusterWorkersCountField;
 
 	@FindBy(id = "createbutton")
-	private WebElement createButton;
+	private Button createButton;
 	//</editor-fold>
 
 	//<editor-fold desc="Scale cluster form">
 	@FindBy(xpath = "//input[@name=\"nummasters\"]")
-	private WebElement mastersToScaleCountField;
+	private TextField mastersToScaleCountField;
 
 	@FindBy(xpath = "//input[@name=\"numworkers\"]")
-	private WebElement workersToScaleCountField;
+	private TextField workersToScaleCountField;
 
 	@FindBy(id = "scalebutton")
-	private WebElement scaleButton;
+	private Button scaleButton;
 
 	@FindBy(id = "cancelbutton")
-	private WebElement cancellButton;
+	private Button cancellButton;
 	//</editor-fold>
 
 	public SparkClustersPage(WebDriver webDriver, String hostname, boolean navigateToPage) {
@@ -53,6 +55,7 @@ public class SparkClustersPage extends AbstractPage {
 	public SparkClustersPage clickOnDeployButton() {
 		WebWaiters.waitUntilElementIsVisible(deployButton, webDriver);
 		deployButton.click();
+		WebWaiters.waitUntilJSReady();
 		return this;
 	}
 
