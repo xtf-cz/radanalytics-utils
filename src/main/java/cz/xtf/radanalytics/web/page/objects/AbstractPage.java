@@ -31,6 +31,7 @@ public abstract class AbstractPage {
 
 			if (!Objects.equals(webDriver.getCurrentUrl(), navigateToPageUrl)) {
 				pageLoaded(2000L,webDriver, navigateToPageUrl, 3);
+				webDriver.get(navigateToPageUrl);
 			}
 		}
 	}
@@ -70,6 +71,5 @@ public abstract class AbstractPage {
 				break;
 			}
 		}
-		webDriver.get(url);
 	}
 }
