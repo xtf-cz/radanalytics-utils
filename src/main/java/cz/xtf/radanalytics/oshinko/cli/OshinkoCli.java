@@ -1,11 +1,11 @@
 package cz.xtf.radanalytics.oshinko.cli;
 
-import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
-import cz.xtf.radanalytics.oshinko.cli.service.SparkClusterService;
-import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
+import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
+import cz.xtf.radanalytics.oshinko.cli.service.SparkClusterService;
+import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -153,9 +153,21 @@ public class OshinkoCli implements OshinkoAPI {
 		String masterUrl = openshift.client().getMasterUrl().toString();
 		log.debug("oc login -u {} -p {} to {}", username, password, masterUrl);
 
+		int retryCount = 0;
+		String result = null;
+		long interval = 5000L;
 
-		String result = podService.exec(OC_CMD, OSHINKO_OPTIONS.getConfig(), OSHINKO_OPTIONS.getInsecureSkipTlsVerify(), "login", masterUrl, "-u",
-				username, "-p", password);
+		while (retryCount < 5) {
+			retryCount++;
+			log.debug("Retry " + retryCount + " to login to the Openshift");
+			result = podService.exec(OC_CMD, OSHINKO_OPTIONS.getConfig(), OSHINKO_OPTIONS.getInsecureSkipTlsVerify(), "login", masterUrl, "-u",
+					username, "-p", password);
+			if (result.startsWith("Login successful")) {
+				break;
+			} else {
+				waitFor(interval);
+			}
+		}
 
 		if (!result.startsWith("Login successful")) {
 			log.error("There was a problem when login to Openshift. login return : {}", result);
@@ -207,5 +219,13 @@ public class OshinkoCli implements OshinkoAPI {
 		String exec = podService.exec(cmd.toArray(new String[cmd.size()]));
 		log.debug("Will be executed custom oshinko : {}", exec);
 		return exec;
+	}
+
+	private void waitFor(long interval) {
+		try {
+			Thread.sleep(interval);
+		} catch (InterruptedException e) {
+			log.debug(e.getMessage());
+		}
 	}
 }
