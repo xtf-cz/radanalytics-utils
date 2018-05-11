@@ -1,4 +1,4 @@
-package cz.xtf.radanalytics.db;
+package cz.xtf.radanalytics.db.entity;
 
 import lombok.Getter;
 import lombok.Setter;

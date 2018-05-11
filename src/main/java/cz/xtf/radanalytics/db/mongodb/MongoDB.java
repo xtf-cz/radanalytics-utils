@@ -1,23 +1,18 @@
 package cz.xtf.radanalytics.db.mongodb;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.db.BaseDBDeployment;
+import cz.xtf.radanalytics.db.entity.OpenshiftDB;
+import cz.xtf.radanalytics.util.TestHelper;
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.radanalytics.db.OpenshiftDB;
-import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
-import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
-import io.fabric8.openshift.api.model.Template;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
-public class MongoDB {
+public class MongoDB extends BaseDBDeployment {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 
 	private static final String DEFAULT_MONGODB_SERVICE_NAME = "mongodb";
@@ -29,15 +24,24 @@ public class MongoDB {
 	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase) {
 
 		if (MONGODB_EPHEMERAL_TEMPLATE == null) {
-			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR, "mongodb-ephemeral-template.json", RadanalyticsConfiguration.templateMongodbEphemeralUrl());
+			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR,
+					"mongodb-ephemeral-template.json",
+					RadanalyticsConfiguration.templateMongodbEphemeralUrl());
 		}
 
 		return deployMongoDB(MONGODB_EPHEMERAL_TEMPLATE, null, null, null,
 				mongoDbUser, mongoDbPassword, mongoDbDatabase, null, null);
 	}
 
-	private static OpenshiftDB deployMongoDB(String templatePath, String memoryLimit, String namespace, String databaseServiceName,
-			String mongoDbUser, String mongoDbPassword, String mongoDbDatabase, String mongoDbAdminPassword, String mongoDbVersion) {
+	private static OpenshiftDB deployMongoDB(String templatePath,
+				String memoryLimit,
+				String namespace,
+				String databaseServiceName,
+				String mongoDbUser,
+				String mongoDbPassword,
+				String mongoDbDatabase,
+				String mongoDbAdminPassword,
+				String mongoDbVersion) {
 
 		Map<String, String> params = new HashMap<>();
 		params.put("MEMORY_LIMIT", memoryLimit);
@@ -49,24 +53,11 @@ public class MongoDB {
 		params.put("MONGODB_ADMIN_PASSWORD", mongoDbAdminPassword);
 		params.put("MONGODB_VERSION", mongoDbVersion);
 
-		Template template;
-		try (InputStream is = Files.newInputStream(Paths.get(templatePath))) {
-			log.debug("MongoDB - loading template");
-			template = openshift.loadAndCreateTemplate(is);
-		} catch (IOException e) {
-			log.error("Exception during loading of MongoDB template: {}", e.getMessage());
-			throw new IllegalStateException("Wasn't able to load MongoDB template");
-		}
-
 		if (databaseServiceName == null) {
 			databaseServiceName = DEFAULT_MONGODB_SERVICE_NAME;
 		}
 
-		log.info("MongoDB - deploying");
-		openshift.processAndDeployTemplate(template.getMetadata().getName(), params);
-
-		OpenshiftAppsWaiters.waitForAppDeployment(databaseServiceName);
-		log.info("MongoDB - deployed");
+		deploy(databaseServiceName, templatePath, params);
 
 		OpenshiftDB db = new OpenshiftDB();
 		db.setUsername(mongoDbUser);
@@ -80,12 +71,11 @@ public class MongoDB {
 		return db;
 	}
 
-	public static void restartPod(String name) {
-
-		log.info("MongoDB restart Pod - killing the pod");
-		openshift.deletePods("name", name);
-
-		OpenshiftAppsWaiters.waitForAppDeployment(name);
-		log.info("MongoDB restart Pod - finished");
+	public static void restartMongoDb(String name) {
+		if (name == null || name.isEmpty()) {
+			restartPod(DEFAULT_MONGODB_SERVICE_NAME);
+		} else {
+			restartPod(name);
+		}
 	}
 }
