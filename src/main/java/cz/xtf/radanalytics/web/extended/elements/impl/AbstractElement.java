@@ -14,4 +14,14 @@ abstract class AbstractElement implements Element {
 	public boolean isDisplayed() {
 		return wrappedElement.isDisplayed();
 	}
+
+	@Override
+	public WebElement getElement() {
+		return wrappedElement;
+	}
+
+	@Override
+	public void getAttribute(String attribute) {
+		wrappedElement.getAttribute(attribute);
+	}
 }
