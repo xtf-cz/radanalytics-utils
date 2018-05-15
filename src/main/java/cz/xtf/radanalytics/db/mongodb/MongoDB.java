@@ -22,7 +22,7 @@ public class MongoDB {
 
 	private static final String DEFAULT_MONGODB_SERVICE_NAME = "mongodb";
 	private static final String DEFAULT_MONGODB_ADMIN_USERNAME = "admin";
-	private static final String RESOURCES_WORKDIR = "mongodb";
+	private static final String RESOURCES_WORKDIR = "db";
 
 	private static String MONGODB_EPHEMERAL_TEMPLATE = null;
 
