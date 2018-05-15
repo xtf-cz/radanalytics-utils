@@ -1,14 +1,5 @@
 package cz.xtf.radanalytics.util;
 
-import cz.xtf.TestConfiguration;
-import cz.xtf.git.GitLabUtil;
-import cz.xtf.git.GitProject;
-import cz.xtf.io.IOUtils;
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.radanalytics.driver.deployment.Driver;
-import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,6 +14,16 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import cz.xtf.TestConfiguration;
+import cz.xtf.git.GitLabUtil;
+import cz.xtf.git.GitProject;
+import cz.xtf.io.IOUtils;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.driver.deployment.Driver;
+import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TestHelper {
@@ -99,7 +100,7 @@ public class TestHelper {
 		log.info("Modified application is working successfully");
 	}
 
-	public static String downloadAndGetResources(String localWorkDir, String templateFileName, String resourcesUrl) {
+	public static String downloadAndGetResources(String localWorkDir, String rescourceFileName, String resourcesUrl) {
 		log.info("Downloading and getting Resources from {}", resourcesUrl);
 		String resources = null;
 
@@ -112,15 +113,18 @@ public class TestHelper {
 			log.debug("Trying to download resources and create yaml/json file");
 			File WORKDIR = IOUtils.TMP_DIRECTORY.resolve(localWorkDir).toFile();
 
-			if (WORKDIR.exists()) {
-				FileUtils.deleteDirectory(WORKDIR);
-			}
-			if (!WORKDIR.mkdirs()) {
-				log.error("Cannot mkdirs {}", WORKDIR);
-				throw new IOException("Cannot mkdirs " + WORKDIR);
+			if (!WORKDIR.exists()) {
+				if (!WORKDIR.mkdirs()) {
+					log.error("Cannot mkdirs {}", WORKDIR);
+					throw new IOException("Cannot mkdirs " + WORKDIR);
+				}
 			}
 
-			File resourcesFile = new File(WORKDIR, templateFileName);
+			File resourcesFile = new File(WORKDIR, rescourceFileName);
+
+			if(resourcesFile.exists()){
+				FileUtils.forceDelete(resourcesFile);
+			}
 
 			URL requestUrl = new URL(resourcesUrl);
 			FileUtils.copyURLToFile(requestUrl, resourcesFile, 20_000, 300_000);
