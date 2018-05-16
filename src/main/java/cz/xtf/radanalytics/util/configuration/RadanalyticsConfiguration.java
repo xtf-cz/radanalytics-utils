@@ -13,6 +13,7 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	private static final String SHOULD_BUILD_ALL_DRIVER_APPLICATION = "rad.build.all.drivers";
 
+	private static final String TEMPLATE_OSHINKO_ALL_RESOURCES_URL = "rad.oshinko.all.resources.url";
 	private static final String TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL = "rad.oshinko.web.ui.resources.url";
 	private static final String TEMPLATE_MONGODB_EPHEMERAL_URL = "rad.mongodb.ephemeral.template.json";
 
@@ -52,6 +53,10 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static boolean shouldBuildAll() {
 		return Boolean.parseBoolean(get().readValue(SHOULD_BUILD_ALL_DRIVER_APPLICATION));
+	}
+
+	public static String templateOshinkoAllResourcesUrl() {
+		return get().readValue(TEMPLATE_OSHINKO_ALL_RESOURCES_URL);
 	}
 
 	public static String templateOshinkoWebUiResourcesUrl() {
