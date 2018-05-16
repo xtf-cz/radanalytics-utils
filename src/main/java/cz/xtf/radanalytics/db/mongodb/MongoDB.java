@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
@@ -26,7 +25,6 @@ public class MongoDB {
 	private static final String RESOURCES_WORKDIR = "db";
 
 	private static String MONGODB_EPHEMERAL_TEMPLATE = null;
-
 
 	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase) {
 
