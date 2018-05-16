@@ -155,9 +155,9 @@ public class OshinkoCli implements OshinkoAPI {
 
 		int retryCount = 0;
 		String result = null;
-		long interval = 5000L;
+		long interval = 10 * 1000L;
 
-		while (retryCount < 5) {
+		while (retryCount < 10) {
 			retryCount++;
 			log.debug("Retry " + retryCount + " to login to the Openshift");
 			result = podService.exec(OC_CMD, OSHINKO_OPTIONS.getConfig(), OSHINKO_OPTIONS.getInsecureSkipTlsVerify(), "login", masterUrl, "-u",

@@ -105,7 +105,7 @@ public class Oshinko {
 
 		try {
 			log.debug("Waiting for Oshinko WebUI Pod to be ready");
-			openshift.waiters().areExactlyNPodsReady(1, "name", routeName).execute();
+			openshift.waiters().areExactlyNPodsReady(1, "name", routeName).timeout(TimeUnit.MINUTES, 10L).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception during creating Pod: {}", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Oshinko server availability");
@@ -169,7 +169,7 @@ public class Oshinko {
 
 		try {
 			log.debug("Waiting for Spark Cluster \"{}\" is ready", clusterName);
-			openshift.waiters().areExactlyNPodsReady(workersCount + mastersCount, clusterNameKey, clusterName).timeout(TimeUnit.MINUTES, 7).execute();
+			openshift.waiters().areExactlyNPodsReady(workersCount + mastersCount, clusterNameKey, clusterName).timeout(TimeUnit.MINUTES, 10).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception during creating Spark Cluster \"{}\". Exception: {}", clusterName, e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Spark cluster to be ready", e);
@@ -177,7 +177,7 @@ public class Oshinko {
 
 		try {
 			log.debug("Waiting for Spark Cluster Pod is ready");
-			openshift.waiters().areExactlyNPodsRunning(workersCount + mastersCount, clusterNameKey, clusterName).timeout(TimeUnit.MINUTES, 7).execute();
+			openshift.waiters().areExactlyNPodsRunning(workersCount + mastersCount, clusterNameKey, clusterName).timeout(TimeUnit.MINUTES, 10).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout exception during creating Spark Cluster Pod. Exception: {}", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for Spark cluster pods to be in \"running phase\"", e);
