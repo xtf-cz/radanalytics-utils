@@ -1,11 +1,10 @@
 package cz.xtf.radanalytics.web.webdriver;
 
-import java.util.concurrent.TimeoutException;
-
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
 import io.fabric8.openshift.api.model.DeploymentConfig;
@@ -31,11 +30,8 @@ public class WebDriverPodBuilder {
 		}
 		openshift.createDeploymentConfig(deploymentConfig(podName));
 		openshift.createRoute(this.generateRoute());
-		try {
-			openshift.waiters().areExactlyNPodsReady(1, "name", podName).execute();
-		} catch (TimeoutException e) {
-			log.error(e.getMessage());
-		}
+
+		OpenshiftAppsWaiters.waitForAppDeployment(podName);
 	}
 
 	public DeploymentConfig deploymentConfig(String podName) {

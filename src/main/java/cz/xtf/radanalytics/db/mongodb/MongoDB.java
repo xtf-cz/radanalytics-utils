@@ -13,6 +13,7 @@ import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.db.OpenshiftDB;
 import cz.xtf.radanalytics.util.TestHelper;
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
 import io.fabric8.openshift.api.model.Template;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,13 +67,7 @@ public class MongoDB {
 		log.info("MongoDB - deploying");
 		openshift.processAndDeployTemplate(template.getMetadata().getName(), params);
 
-		try {
-			log.debug("Waiting for MongoDB Pod to be ready");
-			openshift.waiters().areExactlyNPodsReady(1, "name", databaseServiceName).execute();
-		} catch (TimeoutException e) {
-			log.error("Timeout exception during creating Pod: {}", e.getMessage());
-			throw new IllegalStateException("Timeout expired while waiting for MongoDB availability");
-		}
+		OpenshiftAppsWaiters.waitForAppDeployment(databaseServiceName);
 		log.info("MongoDB - deployed");
 
 		OpenshiftDB db = new OpenshiftDB();
@@ -92,13 +87,7 @@ public class MongoDB {
 		log.info("MongoDB restart Pod - killing the pod");
 		openshift.deletePods("name", name);
 
-		try {
-			log.debug("Waiting for MongoDB Pod to be ready");
-			openshift.waiters().areExactlyNPodsReady(1, "name", name).execute();
-		} catch (TimeoutException e) {
-			log.error("Timeout exception during creating Pod: {}", e.getMessage());
-			throw new IllegalStateException("Timeout expired while waiting for MongoDB availability");
-		}
+		OpenshiftAppsWaiters.waitForAppDeployment(name);
 		log.info("MongoDB restart Pod - finished");
 	}
 }

@@ -23,6 +23,7 @@ import cz.xtf.openshift.PodService;
 import cz.xtf.radanalytics.oshinko.cli.OshinkoCli;
 import cz.xtf.radanalytics.oshinko.web.OshinkoPoddedWebUI;
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
 import cz.xtf.radanalytics.waiters.SparkWaiters;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
@@ -39,10 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 public class Oshinko {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	private static final String OSHINKO_WEBUI_REFRESH_INTERVAL = "10";  //Specifying interval for refreshing UI on Cluster page in sec.
-	private static String OSHINKO_WEBUI_RESOURCES_URL;
+	private static String OSHINKO_WEBUI_RESOURCES;
+
+	private static String OSHINKO_ALL_RESOURCES;
+
 	@Getter
 	private static final String defaultServiceAccountName = "oshinko";
-	private static String OSHINKO_WEBUI_RESOURCES;
 
 	public static ServiceAccount deployServiceAccount() {
 		return deployServiceAccount(getDefaultServiceAccountName());
@@ -64,6 +67,29 @@ public class Oshinko {
 	}
 
 	/**
+	 * Installs all Oshinko resources, usually specified in resources.yaml on radanalytics.io website
+	 * oshinko-webui templates, S2I templates, etc.
+	 */
+	public static void installOshinkoResources() {
+
+		log.info("Installing Oshinko resources");
+
+		if (OSHINKO_ALL_RESOURCES == null) {
+			OSHINKO_ALL_RESOURCES = downloadAndGetResources("radanalyticsio", "oshinko-all-resources.yaml", RadanalyticsConfiguration.templateOshinkoAllResourcesUrl());
+		}
+
+		try (InputStream is = Files.newInputStream(Paths.get(OSHINKO_ALL_RESOURCES))) {
+			log.debug("Load Oshinko resources");
+			openshift.loadResource(is);
+		} catch (IOException e) {
+			log.error("Exception during installing of Oshinko resources: {}", e.getMessage());
+			throw new IllegalStateException("Wasn't able to install Oshinko resource");
+		}
+
+		log.info("Oshinko resources installed");
+	}
+
+	/**
 	 * Will deploy webUI pod for Oshinko and waits till ready to handle requests.
 	 *
 	 * @return Configured UI api to work with deployed webUI
@@ -80,15 +106,12 @@ public class Oshinko {
 	}
 
 	private static OshinkoPoddedWebUI deployWebUIPodCommonLogic(String templateName, String routeName, String oshinkoWebUITemplate) {
-		OSHINKO_WEBUI_RESOURCES_URL = RadanalyticsConfiguration.templateOshinkoWebUiResourcesUrl();
-		String localWorkDir = "radanalyticsio";
-
 		log.info("Deploying WebUI Pod");
 		Map<String, String> mapParams = new HashMap<>();
 		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
 
 		if (OSHINKO_WEBUI_RESOURCES == null) {
-			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources(localWorkDir, oshinkoWebUITemplate, OSHINKO_WEBUI_RESOURCES_URL);
+			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources("radanalyticsio", oshinkoWebUITemplate, RadanalyticsConfiguration.templateOshinkoWebUiResourcesUrl());
 		}
 		try (InputStream is = Files.newInputStream(Paths.get(OSHINKO_WEBUI_RESOURCES))) {
 			log.debug("Load Oshinko WebUI template");
@@ -103,13 +126,7 @@ public class Oshinko {
 		log.debug("Creating route \"{}\"", routeName);
 		RouteSpec routeSpec = openshift.getRoute(routeName).getSpec();
 
-		try {
-			log.debug("Waiting for Oshinko WebUI Pod to be ready");
-			openshift.waiters().areExactlyNPodsReady(1, "name", routeName).timeout(TimeUnit.MINUTES, 10L).execute();
-		} catch (TimeoutException e) {
-			log.error("Timeout exception during creating Pod: {}", e.getMessage());
-			throw new IllegalStateException("Timeout expired while waiting for Oshinko server availability");
-		}
+		OpenshiftAppsWaiters.waitForAppDeployment(routeName);
 
 		return OshinkoPoddedWebUI.getInstance(routeSpec.getHost() + routeSpec.getPath());
 	}
