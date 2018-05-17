@@ -16,7 +16,8 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String TEMPLATE_OSHINKO_ALL_RESOURCES_URL = "rad.oshinko.all.resources.url";
 	private static final String TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL = "rad.oshinko.web.ui.resources.url";
 	private static final String TEMPLATE_MONGODB_EPHEMERAL_URL = "rad.mongodb.ephemeral.template.json";
-
+	private static final String TEMPLATE_POSTGRES_EPHEMERAL_URL = "rad.postgres.ephemeral.template.json";
+	private static final String TEMPLATE_POSTGRES_PERSISTENT_URL = "rad.postgres.persistent.template.json";
 
 	private RadanalyticsConfiguration() {
 		super();
@@ -65,6 +66,14 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static String templateMongodbEphemeralUrl() {
 		return get().readValue(TEMPLATE_MONGODB_EPHEMERAL_URL);
+	}
+
+	public static String templatePostgresEphemeralUrl() {
+		return get().readValue(TEMPLATE_POSTGRES_EPHEMERAL_URL);
+	}
+
+	public static String templatePostgresPersistentUrl() {
+		return get().readValue(TEMPLATE_POSTGRES_PERSISTENT_URL);
 	}
 }
 
