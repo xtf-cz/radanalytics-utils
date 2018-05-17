@@ -15,6 +15,7 @@ public abstract class AbstractWebDriver {
 	 * @param browser
 	 */
 	protected AbstractWebDriver(WebDriverBrowser browser) {
-		webDriver = LocalWebDriverManager.getWebDriver(browser);
+		LocalWebDriverManager.get().setWebDriver(browser);
+		webDriver = LocalWebDriverManager.get().getWebDriver();
 	}
 }

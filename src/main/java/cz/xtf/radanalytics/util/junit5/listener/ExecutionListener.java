@@ -2,7 +2,6 @@ package cz.xtf.radanalytics.util.junit5.listener;
 
 import cz.xtf.time.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
-
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;

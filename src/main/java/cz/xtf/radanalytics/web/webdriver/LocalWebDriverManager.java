@@ -1,5 +1,9 @@
 package cz.xtf.radanalytics.web.webdriver;
 
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.webdriver.GhostDriverService;
+import cz.xtf.webdriver.WebDriverService;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -9,25 +13,20 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.webdriver.GhostDriverService;
-import cz.xtf.webdriver.WebDriverService;
-
 @Slf4j
 public class LocalWebDriverManager {
+	private static LocalWebDriverManager localWebDriverManager;
 
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
-
-	private static WebDriver chromeWebDriver;
 	private static WebDriverPodBuilder chromePod;
-
-	private static WebDriver firefoxWebDriver;
 	private static WebDriverPodBuilder firefoxPod;
+	private ThreadLocal<WebDriver> webDriver = new ThreadLocal();
 
-	private static WebDriver phantomJsWebDriver;
+	public WebDriver getWebDriver() {
+		return webDriver.get();
+	}
 
-	public static synchronized WebDriver getWebDriver(WebDriverBrowser browser) {
+	public void setWebDriver(WebDriverBrowser browser) {
 
 		String browserName;
 
@@ -39,10 +38,10 @@ public class LocalWebDriverManager {
 					chromePod = new WebDriverPodBuilder(browserName);
 				}
 
-				if (chromeWebDriver == null) {
-					chromeWebDriver = setupRemoteChromeDriver(getLocalPortForBrowserInPod(browserName));
+				if (webDriver.get() == null) {
+					webDriver.set(setupRemoteChromeDriver(getLocalPortForBrowserInPod(browserName)));
 				}
-				return chromeWebDriver;
+				break;
 
 			case HEADLESS_FIREFOX:
 				browserName = "headless-firefox";
@@ -50,25 +49,33 @@ public class LocalWebDriverManager {
 					firefoxPod = new WebDriverPodBuilder(browserName);
 				}
 
-				if (firefoxWebDriver == null) {
-					firefoxWebDriver = setupRemoteFirefoxDriver(getLocalPortForBrowserInPod(browserName));
+				if (webDriver.get() == null) {
+					webDriver.set(setupRemoteFirefoxDriver(getLocalPortForBrowserInPod(browserName)));
 				}
-				return firefoxWebDriver;
+				break;
 
 			case PHANTOMJS:
-				if (phantomJsWebDriver == null) {
-					phantomJsWebDriver = setupPhantomJSDriver();
+				if (webDriver.get() == null) {
+					webDriver.set(setupPhantomJSDriver());
 				}
-				return phantomJsWebDriver;
+				break;
 		}
 	}
 
-	private static WebDriver setupPhantomJSDriver() {
+	public static synchronized LocalWebDriverManager get() {
+		if (localWebDriverManager == null) {
+			localWebDriverManager = new LocalWebDriverManager();
+		}
+
+		return localWebDriverManager;
+	}
+
+	private WebDriver setupPhantomJSDriver() {
 		GhostDriverService.get().start();
 		return WebDriverService.get().start();
 	}
 
-	private static WebDriver setupRemoteChromeDriver(int podLocalPort) {
+	private WebDriver setupRemoteChromeDriver(int podLocalPort) {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("window-size=1200x600");
 		try {
@@ -81,7 +88,7 @@ public class LocalWebDriverManager {
 		}
 	}
 
-	private static WebDriver setupRemoteFirefoxDriver(int podLocalPort) {
+	private WebDriver setupRemoteFirefoxDriver(int podLocalPort) {
 		FirefoxOptions options = new FirefoxOptions();
 		options.addPreference("network.proxy.type", 0);
 		try {
