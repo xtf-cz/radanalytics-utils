@@ -6,15 +6,6 @@ public abstract class AbstractWebDriver {
 	public WebDriver webDriver;
 
 	protected AbstractWebDriver() {
-		this(WebDriverBrowser.HEADLESS_CHROME);
-	}
-
-	/**
-	 * Choose browser from: headless-chrome, headless-firefox
-	 *
-	 * @param browser
-	 */
-	protected AbstractWebDriver(WebDriverBrowser browser) {
-		webDriver = LocalWebDriverManager.getWebDriver(browser);
+		webDriver = LocalWebDriverManager.getWebDriver();
 	}
 }
