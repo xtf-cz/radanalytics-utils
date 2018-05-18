@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.web.webdriver;
 
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -27,13 +28,17 @@ public class LocalWebDriverManager {
 
 	private static WebDriver phantomJsWebDriver;
 
-	public static synchronized WebDriver getWebDriver(WebDriverBrowser browser) {
+	public static synchronized WebDriver getWebDriver() {
+		return getWebDriver(RadanalyticsConfiguration.getWebDriverBrowserName());
+	}
+
+	public static WebDriver getWebDriver(String browser) {
 
 		String browserName;
 
 		switch (browser) {
 			default:
-			case HEADLESS_CHROME:
+			case "chrome":
 				browserName = "headless-chrome";
 				if (chromePod == null) {
 					chromePod = new WebDriverPodBuilder(browserName);
@@ -44,7 +49,7 @@ public class LocalWebDriverManager {
 				}
 				return chromeWebDriver;
 
-			case HEADLESS_FIREFOX:
+			case "firefox":
 				browserName = "headless-firefox";
 				if (firefoxPod == null) {
 					firefoxPod = new WebDriverPodBuilder(browserName);
@@ -55,7 +60,7 @@ public class LocalWebDriverManager {
 				}
 				return firefoxWebDriver;
 
-			case PHANTOMJS:
+			case "phantomjs":
 				if (phantomJsWebDriver == null) {
 					phantomJsWebDriver = setupPhantomJSDriver();
 				}
