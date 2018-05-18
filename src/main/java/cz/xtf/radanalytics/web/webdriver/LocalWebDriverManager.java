@@ -29,7 +29,7 @@ public class LocalWebDriverManager {
 	private static WebDriver phantomJsWebDriver;
 
 	public static synchronized WebDriver getWebDriver() {
-		return getWebDriver(RadanalyticsConfiguration.getBrowserName());
+		return getWebDriver(RadanalyticsConfiguration.getWebDriverBrowserName());
 	}
 
 	public static WebDriver getWebDriver(String browser) {

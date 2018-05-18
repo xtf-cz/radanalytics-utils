@@ -10,7 +10,7 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME = "rad.web-driver.docker.image.chrome";
 	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_FIREFOX = "rad.web-driver.docker.image.firefox";
 	private static final String IMAGE_DOCKER_WEBDRIVER_VERSION = "rad.web-driver.docker.image.version";
-	private static final String BROWSER_NAME = "rad.web-driver.browser.name";  //chrome, firefox, phantomjs
+	private static final String WEBDRIVER_BROWSER_NAME = "rad.web-driver.browser.name";  //chrome, firefox, phantomjs
 
 	private static final String SHOULD_BUILD_ALL_DRIVER_APPLICATION = "rad.build.all.drivers";
 
@@ -24,8 +24,8 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 		super();
 	}
 
-	public static String getBrowserName() {
-		return get().readValue(BROWSER_NAME);
+	public static String getWebDriverBrowserName() {
+		return get().readValue(WEBDRIVER_BROWSER_NAME);
 	}
 
 	public static String imagePySpark() {
