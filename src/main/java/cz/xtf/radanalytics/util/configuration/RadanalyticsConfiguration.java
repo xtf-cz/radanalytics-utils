@@ -19,6 +19,9 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String TEMPLATE_MONGODB_EPHEMERAL_URL = "rad.mongodb.ephemeral.template.json";
 	private static final String TEMPLATE_POSTGRES_EPHEMERAL_URL = "rad.postgres.ephemeral.template.json";
 	private static final String TEMPLATE_POSTGRES_PERSISTENT_URL = "rad.postgres.persistent.template.json";
+	private static final String TEMPLATE_OSHINKO_PYTHON_SPARK_JSON="rad.oshinko.python.spark.template.json";
+	private static final String TEMPLATE_OSHINKO_JAVA_SPARK_JSON="rad.oshinko.java.spark.template.json";
+	private static final String TEMPLATE_OSHINKO_SCALA_SPARK_JSON="rad.oshinko.scala.spark.template.json";
 
 	private RadanalyticsConfiguration() {
 		super();
@@ -78,6 +81,18 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static String templatePostgresPersistentUrl() {
 		return get().readValue(TEMPLATE_POSTGRES_PERSISTENT_URL);
+	}
+
+	public static String templateOshinkoJavaSpark() {
+		return get().readValue(TEMPLATE_OSHINKO_JAVA_SPARK_JSON);
+	}
+
+	public static String templateOshinkoPythonSpark() {
+		return get().readValue(TEMPLATE_OSHINKO_PYTHON_SPARK_JSON);
+	}
+
+	public static String templateOshinkoScalaSpark() {
+		return get().readValue(TEMPLATE_OSHINKO_SCALA_SPARK_JSON);
 	}
 }
 
