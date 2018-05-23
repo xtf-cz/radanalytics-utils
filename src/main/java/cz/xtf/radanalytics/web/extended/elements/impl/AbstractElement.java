@@ -1,7 +1,8 @@
 package cz.xtf.radanalytics.web.extended.elements.impl;
 
-import cz.xtf.radanalytics.web.extended.elements.elements.Element;
 import org.openqa.selenium.WebElement;
+
+import cz.xtf.radanalytics.web.extended.elements.elements.Element;
 
 abstract class AbstractElement implements Element {
 	protected final WebElement wrappedElement;
@@ -21,7 +22,7 @@ abstract class AbstractElement implements Element {
 	}
 
 	@Override
-	public void getAttribute(String attribute) {
-		wrappedElement.getAttribute(attribute);
+	public String getAttribute(String attribute) {
+		return wrappedElement.getAttribute(attribute);
 	}
 }
