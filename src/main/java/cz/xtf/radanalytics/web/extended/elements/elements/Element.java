@@ -4,6 +4,8 @@ import org.openqa.selenium.WebElement;
 
 public interface Element {
 	boolean isDisplayed();
+
 	WebElement getElement();
-	void getAttribute(String attribute);
+
+	String getAttribute(String attribute);
 }
