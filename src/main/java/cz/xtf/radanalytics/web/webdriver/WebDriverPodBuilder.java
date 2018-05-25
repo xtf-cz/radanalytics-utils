@@ -2,23 +2,17 @@ package cz.xtf.radanalytics.web.webdriver;
 
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
-import io.fabric8.openshift.api.model.DeploymentConfig;
-import io.fabric8.openshift.api.model.DeploymentConfigBuilder;
-import io.fabric8.openshift.api.model.ImageStream;
-import io.fabric8.openshift.api.model.ImageStreamBuilder;
-import io.fabric8.openshift.api.model.Route;
-import io.fabric8.openshift.api.model.RouteBuilder;
+import io.fabric8.openshift.api.model.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class WebDriverPodBuilder {
-	private String podName;
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
+	private String podName;
 
 	public WebDriverPodBuilder(String podName) {
 		this.podName = podName;
@@ -115,7 +109,6 @@ public class WebDriverPodBuilder {
 				.endSecurityContext()
 				.endContainer()
 				.withDnsPolicy("ClusterFirst")
-				.withServiceAccountName(Oshinko.getDefaultServiceAccountName())
 				.addNewVolume()
 				.withName("podinfo")
 				.withNewDownwardAPI()
