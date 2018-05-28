@@ -13,4 +13,10 @@ public class OshinkoPythonSpark extends BaseTemplateDeployment {
 	public static void deploy(Map<String, String> parameters) {
 		deploy(RESOURCES_URL, TEMPLATE_FILE_NAME, parameters);
 	}
+
+	public static void deploy(Map<String, String> parameters, Map<String, String> envars) {
+		deploy(RESOURCES_URL, TEMPLATE_FILE_NAME, parameters, envars);
+	}
+
+
 }
