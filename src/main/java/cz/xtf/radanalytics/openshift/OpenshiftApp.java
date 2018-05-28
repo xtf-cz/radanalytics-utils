@@ -28,6 +28,7 @@ public class OpenshiftApp {
 	private String gitUrl;
 	private Map<String, String> containerEnvVars;
 	private int containerPort;
+	private int exposedPort;
 
 	private BuildConfig buildConfig = null;
 	private DeploymentConfig deploymentConfig;
@@ -76,10 +77,25 @@ public class OpenshiftApp {
 	 * @param appName name of the application to be created
 	 * @param imageName base image name which should be used to create this application
 	 * @param containerEnvVars environment variables for the container
-	 * @param containerPort environment variables for specifying container port (by default it is 8080)
+	 * @param containerAndExposedPort environment variables for specifying container port (exposed port will be the same as container port)
 	 */
-	public OpenshiftApp(String appName, String imageName, Map<String, String> containerEnvVars, int containerPort) {
+	public OpenshiftApp(String appName, String imageName, Map<String, String> containerEnvVars, int containerAndExposedPort) {
+		this(appName, imageName, containerEnvVars, containerAndExposedPort, containerAndExposedPort);
+	}
+
+	/**
+	 * Creates the Openshift application from base image and container environment variables
+	 * Similar way it is done via: oc new-app [baseimage] -e [VARIABLE=value]
+	 *
+	 * @param appName name of the application to be created
+	 * @param imageName base image name which should be used to create this application
+	 * @param containerEnvVars environment variables for the container
+	 * @param containerPort environment variables for specifying container port (by default it is 8080)
+	 * @param exposedPort environment variables for specifying exposing port
+	 */
+	public OpenshiftApp(String appName, String imageName, Map<String, String> containerEnvVars, int containerPort, int exposedPort) {
 		this.containerPort = containerPort;
+		this.exposedPort = exposedPort;
 		this.appName = appName;
 		this.imageName = imageName;
 		if (containerEnvVars == null) {
@@ -167,7 +183,7 @@ public class OpenshiftApp {
 		this.service = new ServiceBuilder()
 				.withNewMetadata().withName(appName).addToLabels("app", appName).endMetadata()
 				.withNewSpec()
-				.addNewPort().withName("8080-tcp").withPort(8080).withProtocol("TCP").withNewTargetPort(containerPort).endPort()
+				.addNewPort().withName(exposedPort + "-tcp").withPort(exposedPort).withProtocol("TCP").withNewTargetPort(containerPort).endPort()
 				.addToSelector("app", appName)
 				.addToSelector("deploymentConfig", appName)
 				.endSpec().build();
