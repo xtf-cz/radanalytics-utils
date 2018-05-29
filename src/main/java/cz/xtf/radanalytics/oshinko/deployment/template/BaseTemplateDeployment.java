@@ -72,7 +72,8 @@ public class BaseTemplateDeployment {
 
 
 	/**
-	 * Creates the Openshift application from template and specified parameters
+	 * Creates the Openshift application from template with specified parameters and environment variables for container
+	 *
 	 * Similar way it is done via:
 	 * oc new-app --template=[your template] -p [one or multiple parameters] -e [one or multiple environment variables]
 	 *
