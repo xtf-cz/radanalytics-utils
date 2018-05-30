@@ -17,7 +17,7 @@ public class PostgresDB extends BaseDBDeployment {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
 	private static final String DEFAULT_POSTGRE_SERVICE_NAME = "postgresql";
 	private static final String POSTGRESQL_PERSISTENT_TEMPLATE_JSON = "postgresql-ephemeral-template.json";
-	private static final String RESOURCES_WORKDIR = "template";
+	private static final String RESOURCES_WORKDIR = "db";
 	private static String POSTGRES_PERSISTENT_TEMPLATE = null;
 
 	public static OpenshiftDB deployEphemeral(String postgresqlUser, String postgresqlPassword, String postgresqlDatabase) {
