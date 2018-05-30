@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
+import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -28,23 +29,27 @@ public class JupiterTreePage extends AbstractPage {
 	}
 
 	public JupiterTreePage clickOnFilesTab() {
+		WebWaiters.waitUntilElementIsVisible(filesTab, webDriver);
 		filesTab.click();
 		return this;
 	}
 
 	public JupiterTreePage clickOnRunningTab() {
+		WebWaiters.waitUntilElementIsVisible(runningTab, webDriver);
 		runningTab.click();
 		return this;
 	}
 
 	public JupiterTreePage clickOnClustersTab() {
+		WebWaiters.waitUntilElementIsVisible(clustersTab, webDriver);
 		clustersTab.click();
 		return this;
 	}
 
-	public JupiterTreePage chooseProjectInTree(String projectName) {
+	public ProjectPage chooseProjectInTree(String projectName) {
 		switch (getActiveTab.getText()) {
 			case "Files":
+				WebWaiters.waitUntilElementIsPresent(String.format(projectLink, "notebooks", projectName), webDriver);
 				webDriver.findElement(By.xpath(String.format(projectLink, "notebooks", projectName))).click();
 				break;
 			case "Running":
@@ -57,7 +62,7 @@ public class JupiterTreePage extends AbstractPage {
 				log.error("The project was not found in Tree");
 				break;
 		}
-		return this;
+		return new ProjectPage(webDriver, false);
 	}
 
 }

@@ -10,4 +10,8 @@ public interface SparkNotebookAPI {
 	CodeCell getNthCodeCell(int n);
 
 	void webDriverCleanup();
+
+	void assertCodeCellSpark(int cellIndex);
+
+	void assertCodeCellRangeSpark(int start, int end);
 }

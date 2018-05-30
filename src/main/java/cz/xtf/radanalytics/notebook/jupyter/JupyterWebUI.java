@@ -6,6 +6,7 @@ import cz.xtf.radanalytics.notebook.jupyter.page.objects.JupiterTreePage;
 import cz.xtf.radanalytics.notebook.jupyter.page.objects.LoginPage;
 import cz.xtf.radanalytics.notebook.jupyter.page.objects.ProjectPage;
 import cz.xtf.radanalytics.web.WebHelpers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -54,6 +55,24 @@ public class JupyterWebUI implements JupyterAPI {
 	@Override
 	public void webDriverCleanup() {
 		webDriver.quit();
+	}
+
+	@Override
+	public void assertCodeCell(int cellIndex){
+		assertCodeCellRange(cellIndex, cellIndex);
+	}
+
+	@Override
+	public void assertCodeCellRange(int start, int end){
+		boolean outputHasErrors;
+		for(int n = start; n <= end; n++){
+			try {
+				outputHasErrors = this.getNthCodeCell(n).runCell().outputHasErrors();
+				Assertions.assertThat(outputHasErrors).as("Check output status of cell %s", n).isFalse();
+			} catch (AssertionError e) {
+				Assertions.assertThat(e).hasMessage(String.format("Expected:<false> but was <%s>. With outputmessage: %s", false, this.getNthCodeCell(n).runCell().getOutput()));
+			}
+		}
 	}
 
 	private List<WebElement> getAllCodeCells() {

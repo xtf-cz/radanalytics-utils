@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -20,11 +19,6 @@ public class ApplicationPage extends AbstractPage {
 	@FindBy(xpath = "//div[@id=\"notebook-container\"]")
 	private WebElement notebookConteiner;
 
-	@FindAll({
-			@FindBy(xpath = "//div[@id=\"notebook-container\"]//div[contains(@class, \"code_cell\")]")
-	})
-	private List<WebElement> inputPrompt;
-
 	private By dropdownToggle = By.cssSelector("div.cell-context-buttons > div > a.btn.dropdown-toggle");
 	private By dropDownMenu = By.xpath(".//ul[contains(@class, \"dropdown-menu-right\")]");
 	private By subMenuClear = By.xpath(".//li[@data-menu-command='clear_current_output']");
@@ -33,6 +27,7 @@ public class ApplicationPage extends AbstractPage {
 	private By outputAreaField = By.className("output_area");
 	private By byOutput = By.xpath(".//div[contains(@class, \"output_subarea output_text\")]/pre");
 	private By byTimeOutput = By.cssSelector("small");
+	private String inputPrompt = "//div[@id=\"notebook-container\"]//div[contains(@class, \"code_cell\")]";
 
 	public ApplicationPage(WebDriver webDriver, boolean navigateToPage) {
 		super(webDriver, "", navigateToPage, "");
@@ -99,7 +94,8 @@ public class ApplicationPage extends AbstractPage {
 	}
 
 	public List<WebElement> getAllCodeCells() {
-		WebWaiters.waitUntilElementIsVisible(inputPrompt.get(0), webDriver);
-		return inputPrompt;
+		WebWaiters.waitUntilJSReady();
+		WebWaiters.waitUntilElementIsPresent(inputPrompt, webDriver);
+		return webDriver.findElements(By.xpath(inputPrompt));
 	}
 }
