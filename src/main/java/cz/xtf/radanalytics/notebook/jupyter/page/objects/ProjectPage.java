@@ -19,11 +19,6 @@ import java.util.function.BooleanSupplier;
 
 @Slf4j
 public class ProjectPage extends AbstractPage {
-	@FindAll({
-			@FindBy(xpath = "//div[@id=\"notebook-container\"]//div[contains(@class, \"code_cell\")]")
-	})
-	private List<WebElement> inputPrompt;
-
 	@FindBy(xpath = "//i[contains(@class, \"fa-step-forward\")]/..")
 	private Button runButton;
 
@@ -55,6 +50,7 @@ public class ProjectPage extends AbstractPage {
 	private By outPutAreas = By.xpath(".//div[@class=\"output_area\"]");
 	private By outPutValue = By.xpath(".//div[contains(@class, \"output_text\")]/pre");
 	private By codeLine = By.xpath(".//pre[@class=\" CodeMirror-line \"]");
+	private String inputPrompt = "//div[@id=\"notebook-container\"]//div[contains(@class, \"code_cell\")]";
 
 
 	public ProjectPage(WebDriver webDriver, boolean navigateToPage) {
@@ -66,8 +62,9 @@ public class ProjectPage extends AbstractPage {
 	}
 
 	public List<WebElement> getAllCodeCells() {
-		WebWaiters.waitUntilElementIsVisible(inputPrompt.get(0), webDriver);
-		return inputPrompt;
+		WebWaiters.waitUntilJSReady();
+		WebWaiters.waitUntilElementIsPresent(inputPrompt, webDriver);
+		return webDriver.findElements(By.xpath(inputPrompt));
 	}
 
 	public ProjectPage clickOnCell(WebElement cell) {
