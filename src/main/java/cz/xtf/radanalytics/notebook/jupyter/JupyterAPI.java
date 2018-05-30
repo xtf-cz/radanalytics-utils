@@ -14,4 +14,8 @@ public interface JupyterAPI {
 	CodeCell getNthCodeCell(int n);
 
 	void webDriverCleanup();
+
+	void assertCodeCell(int cellIndex);
+
+	void assertCodeCellRange(int start, int end);
 }
