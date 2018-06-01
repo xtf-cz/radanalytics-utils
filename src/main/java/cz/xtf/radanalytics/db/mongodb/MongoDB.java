@@ -34,14 +34,14 @@ public class MongoDB extends BaseDBDeployment {
 	}
 
 	private static OpenshiftDB deployMongoDB(String templatePath,
-	                                         String memoryLimit,
-	                                         String namespace,
-	                                         String databaseServiceName,
-	                                         String mongoDbUser,
-	                                         String mongoDbPassword,
-	                                         String mongoDbDatabase,
-	                                         String mongoDbAdminPassword,
-	                                         String mongoDbVersion) {
+							String memoryLimit,
+							String namespace,
+							String databaseServiceName,
+							String mongoDbUser,
+							String mongoDbPassword,
+							String mongoDbDatabase,
+							String mongoDbAdminPassword,
+							String mongoDbVersion) {
 
 		Map<String, String> params = new HashMap<>();
 		params.put("MEMORY_LIMIT", memoryLimit);
