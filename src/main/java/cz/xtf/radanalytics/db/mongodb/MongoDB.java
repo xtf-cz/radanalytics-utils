@@ -14,34 +14,34 @@ import java.util.Map;
 @Slf4j
 public class MongoDB extends BaseDBDeployment {
 	private static final OpenShiftUtil openshift = OpenShiftUtils.master();
-
 	private static final String DEFAULT_MONGODB_SERVICE_NAME = "mongodb";
 	private static final String DEFAULT_MONGODB_ADMIN_USERNAME = "admin";
 	private static final String RESOURCES_WORKDIR = "db";
-
 	private static String MONGODB_EPHEMERAL_TEMPLATE = null;
 
 	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase) {
+		return deployEphemeral(mongoDbUser, mongoDbPassword, mongoDbDatabase, null);
+	}
 
+	public static OpenshiftDB deployEphemeral(String mongoDbUser, String mongoDbPassword, String mongoDbDatabase, String mongoDbAdminPassword) {
 		if (MONGODB_EPHEMERAL_TEMPLATE == null) {
 			MONGODB_EPHEMERAL_TEMPLATE = TestHelper.downloadAndGetResources(RESOURCES_WORKDIR,
 					"mongodb-ephemeral-template.json",
 					RadanalyticsConfiguration.templateMongodbEphemeralUrl());
 		}
-
 		return deployMongoDB(MONGODB_EPHEMERAL_TEMPLATE, null, null, null,
-				mongoDbUser, mongoDbPassword, mongoDbDatabase, null, null);
+				mongoDbUser, mongoDbPassword, mongoDbDatabase, mongoDbAdminPassword, null);
 	}
 
 	private static OpenshiftDB deployMongoDB(String templatePath,
-				String memoryLimit,
-				String namespace,
-				String databaseServiceName,
-				String mongoDbUser,
-				String mongoDbPassword,
-				String mongoDbDatabase,
-				String mongoDbAdminPassword,
-				String mongoDbVersion) {
+							String memoryLimit,
+							String namespace,
+							String databaseServiceName,
+							String mongoDbUser,
+							String mongoDbPassword,
+							String mongoDbDatabase,
+							String mongoDbAdminPassword,
+							String mongoDbVersion) {
 
 		Map<String, String> params = new HashMap<>();
 		params.put("MEMORY_LIMIT", memoryLimit);

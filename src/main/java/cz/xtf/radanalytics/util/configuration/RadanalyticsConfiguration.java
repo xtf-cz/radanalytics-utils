@@ -17,8 +17,8 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String TEMPLATE_OSHINKO_ALL_RESOURCES_URL = "rad.oshinko.all.resources.url";
 	private static final String TEMPLATE_OSHINKO_WEBUI_RESOURCES_URL = "rad.oshinko.web.ui.resources.url";
 	private static final String TEMPLATE_MONGODB_EPHEMERAL_URL = "rad.mongodb.ephemeral.template.json";
-	private static final String TEMPLATE_POSTGRES_EPHEMERAL_URL = "rad.postgres.ephemeral.template.json";
-	private static final String TEMPLATE_POSTGRES_PERSISTENT_URL = "rad.postgres.persistent.template.json";
+	private static final String TEMPLATE_POSTGRES_EPHEMERAL_URL = "rad.postgresql.ephemeral.template.json";
+	private static final String TEMPLATE_POSTGRES_PERSISTENT_URL = "rad.postgresql.persistent.template.json";
 	private static final String TEMPLATE_OSHINKO_PYTHON_SPARK_JSON="rad.oshinko.python.spark.template.json";
 	private static final String TEMPLATE_OSHINKO_JAVA_SPARK_JSON="rad.oshinko.java.spark.template.json";
 	private static final String TEMPLATE_OSHINKO_SCALA_SPARK_JSON="rad.oshinko.scala.spark.template.json";
