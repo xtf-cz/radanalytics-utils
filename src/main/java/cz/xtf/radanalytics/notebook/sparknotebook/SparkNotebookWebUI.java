@@ -3,6 +3,7 @@ package cz.xtf.radanalytics.notebook.sparknotebook;
 import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCell;
 import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCellWeb;
 import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.ApplicationPage;
+import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.MainPage;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,6 +17,12 @@ public class SparkNotebookWebUI implements SparkNotebookAPI {
 	public SparkNotebookWebUI(WebDriver webDriver, String hostname) {
 		this.webDriver = webDriver;
 		this.HOSTNAME = hostname;
+	}
+
+	@Override
+	public void loadProject(String projectName) {
+		new MainPage(webDriver, HOSTNAME, true)
+				.clickOnProjectInList(projectName);
 	}
 
 	@Override

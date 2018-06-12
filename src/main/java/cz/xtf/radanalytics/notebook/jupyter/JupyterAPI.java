@@ -18,4 +18,6 @@ public interface JupyterAPI {
 	void assertCodeCell(int cellIndex);
 
 	void assertCodeCellRange(int start, int end);
+
+	void closeProject();
 }

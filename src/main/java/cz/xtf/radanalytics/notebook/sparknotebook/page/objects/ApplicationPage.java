@@ -34,7 +34,7 @@ public class ApplicationPage extends AbstractPage {
 	}
 
 	public ApplicationPage(WebDriver webDriver, String hostname, boolean navigateToPage, String projectName) {
-		super(webDriver, hostname, navigateToPage, "http://" + hostname + "/notebooks/" + projectName);
+		super(webDriver, hostname, navigateToPage, "http://" + hostname + "/notebooks/" + projectName + ".snb.ipynb");
 		WebWaiters.waitUntilElementIsVisible(notebookConteiner, webDriver);
 	}
 
@@ -71,7 +71,7 @@ public class ApplicationPage extends AbstractPage {
 		};
 
 		try {
-			WebWaiters.waitFor(successCondition, null, 3000L, 900000L);
+			WebWaiters.waitFor(successCondition, null, 50000L, 900000L);
 		} catch (InterruptedException | TimeoutException e) {
 			log.error(e.getMessage());
 		}

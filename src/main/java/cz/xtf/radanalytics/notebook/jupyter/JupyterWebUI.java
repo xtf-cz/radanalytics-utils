@@ -75,6 +75,11 @@ public class JupyterWebUI implements JupyterAPI {
 		}
 	}
 
+	@Override
+	public void closeProject() {
+		new ProjectPage(webDriver, false).closeAndHalt();
+	}
+
 	private List<WebElement> getAllCodeCells() {
 		return new ProjectPage(webDriver, false).getAllCodeCells();
 	}

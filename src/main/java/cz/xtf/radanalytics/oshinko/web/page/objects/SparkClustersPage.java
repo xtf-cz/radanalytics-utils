@@ -60,6 +60,7 @@ public class SparkClustersPage extends AbstractPage {
 	}
 
 	public SparkClustersPage fillDeployClusterName(String clusterName) {
+		WebWaiters.waitUntilElementIsVisible(clusterNameField.getElement(), webDriver);
 		clusterNameField.sendKeys(clusterName);
 		return this;
 	}
