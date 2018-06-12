@@ -1,6 +1,8 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
+import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.MainPage;
 import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.WebHelpers;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
 import cz.xtf.radanalytics.web.extended.elements.elements.SelectElement;
@@ -8,6 +10,7 @@ import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,8 +30,21 @@ public class ProjectPage extends AbstractPage {
 	@FindBy(xpath = "//a[@class=\"dropdown-toggle\" and contains(text(), \"Edit\")]")
 	private Button editTab;
 
+	@FindBy(xpath = "//a[@class=\"dropdown-toggle\" and contains(text(), \"File\")]")
+	private Button fileTab;
+
 	@FindBy(xpath = "//ul[@id=\"edit_menu\"]")
 	private DropDownMenu dropDownMenu;
+
+	@FindBy(xpath = "//li[@id='kill_and_exit']/a")
+	private Button closeAndHalt;
+
+	@FindBy(xpath = "//button[@title=\"interrupt kernel\"]")
+	private Button interruptKernelButton;
+
+	@FindBy(xpath = "//div[@id='notification_kernel']/span[text()=\"Interrupting kernel\"]")
+	private Button interruptKernelNotification;
+
 
 	//<editor-fold desc="Find And Replace Modal">
 	@FindBy(xpath = "//form[@id=\"find-and-replace\"]")
@@ -128,6 +144,24 @@ public class ProjectPage extends AbstractPage {
 		return this;
 	}
 
+	public ProjectPage clickOnFileTab() {
+		fileTab.click();
+		return this;
+	}
+
+	public ProjectPage clickOnInterruptButton() {
+		interruptKernelButton.click();
+		BooleanSupplier successCondition = () ->
+				interruptKernelNotification.getAttribute("style")
+						.contains("display: none;");
+		try {
+			WebWaiters.waitFor(successCondition, null, 1000L, 1000L);
+		} catch (InterruptedException | TimeoutException e) {
+			log.error(e.getMessage());
+		}
+		return this;
+	}
+
 	public ProjectPage chooseItemInDropDownMenu(String item) {
 		dropDownMenu.clickOnItem(item);
 		WebWaiters.waitUntilElementIsVisible(findAndReplaceModal, webDriver);
@@ -148,5 +182,17 @@ public class ProjectPage extends AbstractPage {
 		replaceAllButton.click();
 		WebWaiters.waitUntilElementIsInvisible(findAndReplaceModal, webDriver);
 		return this;
+	}
+
+	public MainPage closeAndHalt() {
+		clickOnInterruptButton().clickOnFileTab();
+		closeAndHalt.click();
+		try {
+			WebHelpers.acceptAlert(webDriver);
+		} catch (NoSuchWindowException e) {
+			log.error("The page has not a alert window ", e.getMessage());
+		}
+		WebHelpers.switchToLastOpenedTab(webDriver);
+		return new MainPage(webDriver, false);
 	}
 }

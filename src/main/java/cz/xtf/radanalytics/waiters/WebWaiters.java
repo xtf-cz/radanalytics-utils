@@ -24,21 +24,23 @@ public class WebWaiters {
 	private static WebDriverWait jsWait;
 	private static final long DEFAULT_WAIT_INTERVAL = 1000L; // one second
 	private static final long DEFAULT_WAIT_TIMEOUT = 15 * 60 * 1000L;
+	private static Integer timeForWaiting = 30;
+
 
 	public static void waitUntilElementIsVisible(WebElement webElement, WebDriver webDriver, int timeOutInSeconds) {
 		new WebDriverWait(webDriver, timeOutInSeconds).until(ExpectedConditions.visibilityOf(webElement));
 	}
 
 	public static void waitUntilElementIsVisible(WebElement webElement, WebDriver webDriver) {
-		waitUntilElementIsVisible(webElement, webDriver, 30);
+		waitUntilElementIsVisible(webElement, webDriver, timeForWaiting);
 	}
 
 	public static void waitUntilElementIsInvisible(WebElement webElement, WebDriver webDriver, int timeOutInSeconds) {
-		waitUntilElementIsInvisible(webElement, webDriver, 30);
+		waitUntilElementIsInvisible(webElement, webDriver, timeForWaiting);
 	}
 
 	public static void waitUntilElementIsInvisible(WebElement webElement, WebDriver webDriver) {
-		new WebDriverWait(webDriver, 30).until(ExpectedConditions.invisibilityOf(webElement));
+		new WebDriverWait(webDriver, timeForWaiting).until(ExpectedConditions.invisibilityOf(webElement));
 	}
 
 	public static void waitUntilElementIsPresent(String xpath, WebDriver webDriver, int timeOutInSeconds) {
@@ -46,11 +48,11 @@ public class WebWaiters {
 	}
 
 	public static void waitUntilElementIsPresent(String xpath, WebDriver webDriver) {
-		waitUntilElementIsPresent(xpath, webDriver, 30);
+		waitUntilElementIsPresent(xpath, webDriver, timeForWaiting);
 	}
 
 	public static void waitUntilElementIsNotPresent(String xpath, WebDriver webDriver) {
-		new WebDriverWait(webDriver, 30).until(ExpectedConditions.numberOfElementsToBe(By.xpath(xpath), 0));
+		new WebDriverWait(webDriver, timeForWaiting).until(ExpectedConditions.numberOfElementsToBe(By.xpath(xpath), 0));
 	}
 
 	public static boolean waitFor(BooleanSupplier condition, BooleanSupplier failCondition, long interval, long timeout) throws InterruptedException, TimeoutException {
@@ -143,5 +145,9 @@ public class WebWaiters {
 		} else {
 			log.debug("jQuery is not defined on this site!");
 		}
+	}
+
+	public static void waitUntilAlertPresent(WebDriver driver){
+		new WebDriverWait(driver, timeForWaiting).until(ExpectedConditions.alertIsPresent());
 	}
 }

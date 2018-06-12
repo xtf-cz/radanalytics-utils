@@ -5,6 +5,8 @@ import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCell;
 
 public interface SparkNotebookAPI {
 
+	void loadProject(String projectName);
+
 	void loadProjectByURL(String projectName);
 
 	CodeCell getNthCodeCell(int n);
