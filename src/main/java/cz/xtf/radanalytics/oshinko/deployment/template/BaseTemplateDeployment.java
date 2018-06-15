@@ -46,10 +46,10 @@ public class BaseTemplateDeployment {
 
 		Template oshinkoSparkTemplate = createTemplate(templateResourcePath, templateResourceFileName);
 
-		log.info("{}- start deploying", oshinkoSparkTemplate.getMetadata().getName());
+		log.info("{} - start deploying", oshinkoSparkTemplate.getMetadata().getName());
 		openshift.processAndDeployTemplate(oshinkoSparkTemplate.getMetadata().getName(), params);
 		OpenshiftAppsWaiters.waitForAppBuildAndDeployment(params.get("APPLICATION_NAME"));
-		log.info("{}- deployed");
+		log.info("{} - deployed", oshinkoSparkTemplate.getMetadata().getName());
 	}
 
 
