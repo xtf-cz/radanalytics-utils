@@ -26,6 +26,7 @@ public class WebDriverPodBuilder {
 		openshift.createRoute(this.generateRoute());
 
 		OpenshiftAppsWaiters.waitForAppDeployment(podName);
+		OpenshiftAppsWaiters.waitForPodStatus(podName, "Running");
 	}
 
 	public DeploymentConfig deploymentConfig(String podName) {

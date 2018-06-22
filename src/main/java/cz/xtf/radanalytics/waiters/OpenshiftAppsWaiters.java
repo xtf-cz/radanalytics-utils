@@ -2,8 +2,10 @@ package cz.xtf.radanalytics.waiters;
 
 import static java.lang.StrictMath.toIntExact;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.BooleanSupplier;
 
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
@@ -44,6 +46,19 @@ public class OpenshiftAppsWaiters {
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for Deployment " + appName + " be ready", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for " + appName + " to be ready", e);
+		}
+	}
+
+	public static void waitForPodStatus(String podName, String status) {
+		int version = toIntExact(openshift.getDeploymentConfig(podName).getStatus().getLatestVersion());
+		BooleanSupplier successCondition = () -> {
+			return Objects.equals(openshift.getPods(podName, version).get(0).getStatus().getPhase(), status);
+		};
+
+		try {
+			WebWaiters.waitFor(successCondition);
+		} catch (InterruptedException | TimeoutException e) {
+			log.error(e.getMessage());
 		}
 	}
 }
