@@ -1,17 +1,15 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
+import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 
 public class SparkClustersPage extends AbstractPage {
 
