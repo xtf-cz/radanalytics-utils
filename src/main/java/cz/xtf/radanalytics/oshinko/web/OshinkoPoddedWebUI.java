@@ -40,12 +40,12 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 		log.info("OshinkoPoddedWebUI create cluster with name :{}, worker count : {},  master config : {}, worker config : {}, stored config: {}, spark image : {}",
 				clusterName, workersCount, masterConfig, workerConfig, storedConfig, sparkImage);
 
-		new SparkClustersPage(webDriver, hostname, true)
+		return new SparkClustersPage(webDriver, hostname, true)
 				.clickOnDeployButton()
 				.fillDeployClusterName(clusterName)
 				.fillNumberOfWorkers(workersCount)
-				.submitDeployClusterForm();
-		return true;
+				.submitDeployClusterForm()
+				.isClusterExist();
 	}
 
 	@Override

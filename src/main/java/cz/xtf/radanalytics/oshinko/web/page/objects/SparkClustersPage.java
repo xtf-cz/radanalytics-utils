@@ -1,17 +1,17 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
+import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 
 public class SparkClustersPage extends AbstractPage {
 
@@ -32,6 +32,8 @@ public class SparkClustersPage extends AbstractPage {
 
 	@FindBy(id = "createbutton")
 	private Button createButton;
+
+	private String errorMessageClusterAlreadyExist = "//*[@class='alert alert-danger dialog-error']";
 	//</editor-fold>
 
 	//<editor-fold desc="Scale cluster form">
@@ -109,5 +111,16 @@ public class SparkClustersPage extends AbstractPage {
 		List<String> clusterNames = new ArrayList<>();
 		webDriver.findElements(podsTable).forEach(x -> clusterNames.add(x.findElement(nameTableCell).getText()));
 		return clusterNames;
+	}
+
+	public boolean isClusterExist() {
+		boolean result = false;
+		try {
+			WebWaiters.waitUntilElementIsPresent(errorMessageClusterAlreadyExist, webDriver, 5);
+			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("configmaps \"create-create-metrics\" already exists");
+		} catch (NoSuchElementException e) {
+			result = true;
+		}
+		return result;
 	}
 }
