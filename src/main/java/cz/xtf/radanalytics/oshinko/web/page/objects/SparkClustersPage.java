@@ -15,9 +15,8 @@ import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 
 public class SparkClustersPage extends AbstractPage {
 
-	@FindBy(id = "startbutton")
-	private WebElement deployButton;
 
+	private String deployButton = "//button[@id='startbutton']";
 	private String actionsButton = "//button[@id=\"%s-actions\"]";
 	private String scaleClusterDD = "//a[@id=\"%s-scalebutton\"]";  //DD - it's drop down
 	private By podsTable = By.xpath("//tbody[@class='ng-scope']");
@@ -53,8 +52,9 @@ public class SparkClustersPage extends AbstractPage {
 	}
 
 	public SparkClustersPage clickOnDeployButton() {
-		WebWaiters.waitUntilElementIsVisible(deployButton, webDriver);
-		deployButton.click();
+		WebWaiters.waitUntilJSReady();
+		WebWaiters.waitUntilElementIsPresent(deployButton, webDriver);
+		webDriver.findElement(By.xpath(deployButton)).click();
 		WebWaiters.waitUntilJSReady();
 		return this;
 	}
