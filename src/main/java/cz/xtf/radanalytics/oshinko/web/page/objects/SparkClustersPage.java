@@ -115,7 +115,6 @@ public class SparkClustersPage extends AbstractPage {
 	public boolean isClusterExist() {
 		boolean result = false;
 		try {
-			WebWaiters.waitUntilElementIsPresent(errorMessageClusterAlreadyExist, webDriver, 5);
 			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("configmaps \"create-create-metrics\" already exists");
 		} catch (NoSuchElementException e) {
 			result = true;
