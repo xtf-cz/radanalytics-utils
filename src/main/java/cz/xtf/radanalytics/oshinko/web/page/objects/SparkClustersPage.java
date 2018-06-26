@@ -6,6 +6,7 @@ import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -112,12 +113,12 @@ public class SparkClustersPage extends AbstractPage {
 		return clusterNames;
 	}
 
-	public boolean isClusterExist() {
+	public boolean isClusterSuccessfullyCreated(String clusterName) {
 		boolean result = false;
 		try {
 			WebWaiters.waitUntilElementIsPresent(errorMessageClusterAlreadyExist, webDriver, 5);
-			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("configmaps \"create-create-metrics\" already exists");
-		} catch (NoSuchElementException e) {
+			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("deploymentconfigs \"" + clusterName + "-m\" already exists");
+		} catch (NoSuchElementException | TimeoutException e) {
 			result = true;
 		}
 		return result;
