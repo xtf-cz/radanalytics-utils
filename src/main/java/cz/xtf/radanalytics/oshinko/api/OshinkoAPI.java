@@ -19,4 +19,8 @@ public interface OshinkoAPI {
 	boolean scaleCluster(String clusterName, int workersCount);
 
 	boolean deleteCluster(String clusterName);
+
+	default String getClusterStatus(String status, String clusterName) {
+		return "";
+	}
 }

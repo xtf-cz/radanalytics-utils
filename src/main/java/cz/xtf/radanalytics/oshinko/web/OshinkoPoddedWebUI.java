@@ -45,7 +45,7 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 				.fillDeployClusterName(clusterName)
 				.fillNumberOfWorkers(workersCount)
 				.submitDeployClusterForm()
-				.isClusterExist();
+				.isClusterSuccessfullyCreated(clusterName);
 	}
 
 	@Override
@@ -96,5 +96,13 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 				.clickOnDeleteButtonPopUp();
 		return true;
 	}
-}
 
+	@Override
+	public String getClusterStatus(String status, String clusterName) {
+		if (new SparkClustersPage(webDriver, hostname, true).isStatusClusterExist(status, clusterName)) {
+			return status;
+		} else {
+			return "Current cluster does not exist";
+		}
+	}
+}

@@ -4,14 +4,18 @@ import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
+@Slf4j
 public class SparkClustersPage extends AbstractPage {
 
 
@@ -20,6 +24,7 @@ public class SparkClustersPage extends AbstractPage {
 	private String scaleClusterDD = "//a[@id=\"%s-scalebutton\"]";  //DD - it's drop down
 	private By podsTable = By.xpath("//tbody[@class='ng-scope']");
 	private By nameTableCell = By.xpath("./tr/td[@data-title=\"Name\"]");
+	private String clusterStatus = "//a[text()=\"%s\"]/../..//td[@data-title=\"Status\"]/span[@class=\"ng-binding\"]";
 
 	//<editor-fold desc="Deploy cluster form">
 	@FindBy(id = "cluster-new-name")
@@ -112,14 +117,42 @@ public class SparkClustersPage extends AbstractPage {
 		return clusterNames;
 	}
 
-	public boolean isClusterExist() {
+	public boolean isClusterSuccessfullyCreated(String clusterName) {
 		boolean result = false;
 		try {
 			WebWaiters.waitUntilElementIsPresent(errorMessageClusterAlreadyExist, webDriver, 5);
-			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("configmaps \"create-create-metrics\" already exists");
-		} catch (NoSuchElementException e) {
+			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("deploymentconfigs \"" + clusterName + "-m\" already exists");
+		} catch (NoSuchElementException | TimeoutException e) {
 			result = true;
 		}
 		return result;
+	}
+
+	public boolean isStatusClusterExist(String status, String clusterName) {
+		BooleanSupplier successCondition = () -> {
+			boolean statusResult = false;
+			try {
+				try {
+					Thread.sleep(3000L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				webDriver.navigate().refresh();
+				WebWaiters.waitUntilElementIsPresent(String.format(clusterStatus, clusterName), webDriver, 8);
+				if (webDriver.findElement(By.xpath(String.format(clusterStatus, clusterName))).getText().trim().equals(status)) {
+					statusResult = true;
+				}
+				return statusResult;
+			} catch (java.util.NoSuchElementException | TimeoutException e) {
+				return statusResult;
+			}
+		};
+
+		try {
+			WebWaiters.waitFor(successCondition, null, 50000L, 90000L);
+		} catch (InterruptedException | java.util.concurrent.TimeoutException e) {
+			log.error(e.getMessage());
+		}
+		return successCondition.getAsBoolean();
 	}
 }
