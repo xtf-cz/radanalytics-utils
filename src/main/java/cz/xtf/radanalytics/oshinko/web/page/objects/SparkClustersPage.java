@@ -4,9 +4,7 @@ import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -14,8 +12,9 @@ import java.util.List;
 
 public class SparkClustersPage extends AbstractPage {
 
+	@FindBy(id = "startbutton")
+	private WebElement deployButton;
 
-	private String deployButton = "//button[@id='startbutton']";
 	private String actionsButton = "//button[@id=\"%s-actions\"]";
 	private String scaleClusterDD = "//a[@id=\"%s-scalebutton\"]";  //DD - it's drop down
 	private By podsTable = By.xpath("//tbody[@class='ng-scope']");
@@ -53,9 +52,8 @@ public class SparkClustersPage extends AbstractPage {
 	}
 
 	public SparkClustersPage clickOnDeployButton() {
-		WebWaiters.waitUntilJSReady();
-		WebWaiters.waitUntilElementIsPresent(deployButton, webDriver);
-		webDriver.findElement(By.xpath(deployButton)).click();
+		WebWaiters.waitUntilElementIsVisible(deployButton, webDriver);
+		deployButton.click();
 		WebWaiters.waitUntilJSReady();
 		return this;
 	}
@@ -112,11 +110,12 @@ public class SparkClustersPage extends AbstractPage {
 		return clusterNames;
 	}
 
-	public boolean isClusterExist() {
+	public boolean isClusterSuccessfullyCreated(String clusterName) {
 		boolean result = false;
 		try {
-			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("configmaps \"create-create-metrics\" already exists");
-		} catch (NoSuchElementException e) {
+			WebWaiters.waitUntilElementIsPresent(errorMessageClusterAlreadyExist, webDriver, 5);
+			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("deploymentconfigs \"" + clusterName + "-m\" already exists");
+		} catch (NoSuchElementException | TimeoutException e) {
 			result = true;
 		}
 		return result;

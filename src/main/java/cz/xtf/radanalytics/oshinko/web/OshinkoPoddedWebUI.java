@@ -45,7 +45,7 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 				.fillDeployClusterName(clusterName)
 				.fillNumberOfWorkers(workersCount)
 				.submitDeployClusterForm()
-				.isClusterExist();
+				.isClusterSuccessfullyCreated(clusterName);
 	}
 
 	@Override
