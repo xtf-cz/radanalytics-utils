@@ -98,7 +98,8 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 	}
 
 	@Override
-	public String getClusterStatus(String status, String clusterName) {
+	public String checkClusterStatus(String status, String clusterName) {
+		log.info("Checking cluster status...");
 		if (new SparkClustersPage(webDriver, hostname, true).isStatusClusterExist(status, clusterName)) {
 			return status;
 		} else {

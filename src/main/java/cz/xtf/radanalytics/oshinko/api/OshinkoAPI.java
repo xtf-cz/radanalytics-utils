@@ -20,7 +20,7 @@ public interface OshinkoAPI {
 
 	boolean deleteCluster(String clusterName);
 
-	default String getClusterStatus(String status, String clusterName) {
+	default String checkClusterStatus(String status, String clusterName) {
 		return "";
 	}
 }
