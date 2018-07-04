@@ -96,5 +96,14 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 				.clickOnDeleteButtonPopUp();
 		return true;
 	}
-}
 
+	@Override
+	public String checkClusterStatus(String status, String clusterName) {
+		log.info("Checking cluster status...");
+		if (new SparkClustersPage(webDriver, hostname, true).isStatusClusterExist(status, clusterName)) {
+			return status;
+		} else {
+			return "Current cluster does not exist";
+		}
+	}
+}
