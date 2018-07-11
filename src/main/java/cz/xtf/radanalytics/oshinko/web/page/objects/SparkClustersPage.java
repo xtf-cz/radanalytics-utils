@@ -132,6 +132,11 @@ public class SparkClustersPage extends AbstractPage {
 		BooleanSupplier successCondition = () -> {
 			boolean statusResult = false;
 			try {
+				try {
+					Thread.sleep(6 * 1000L);
+				} catch (InterruptedException e) {
+					log.error(e.getMessage());
+				}
 				webDriver.navigate().refresh();
 				WebWaiters.waitUntilElementIsPresent(String.format(clusterStatus, clusterName), webDriver, 6);
 				if (webDriver.findElement(By.xpath(String.format(clusterStatus, clusterName))).getText().trim().equals(status)) {
