@@ -45,6 +45,8 @@ public class ProjectPage extends AbstractPage {
 	@FindBy(xpath = "//div[@id='notification_kernel']/span[text()=\"Interrupting kernel\"]")
 	private Button interruptKernelNotification;
 
+	@FindBy(xpath = "//div[@id='insert_above_below']/button")
+	private Button addCellBellowButton;
 
 	//<editor-fold desc="Find And Replace Modal">
 	@FindBy(xpath = "//form[@id=\"find-and-replace\"]")
@@ -58,6 +60,9 @@ public class ProjectPage extends AbstractPage {
 
 	@FindBy(xpath = "//button[@data-dismiss=\"modal\" and contains(text(), \"Replace All\")]")
 	private Button replaceAllButton;
+
+	@FindBy(xpath = "//div[contains(@class, \"rendered selected\")]")
+	private TextField selectedCell;
 	//</editor-fold>
 
 	private By inputPromptValue = By.xpath(".//div[contains(@class, \"input_prompt\")]");
@@ -65,6 +70,7 @@ public class ProjectPage extends AbstractPage {
 	private By outPutAreas = By.xpath(".//div[@class=\"output_area\"]");
 	private By outPutValue = By.xpath(".//div[contains(@class, \"output_text\")]/pre");
 	private By codeLine = By.xpath(".//pre[@class=\" CodeMirror-line \"]");
+	private By textAreaCell = By.xpath(".//div[@class='input_area']//textarea");
 	private String inputPrompt = "//div[@id=\"notebook-container\"]//div[contains(@class, \"code_cell\")]";
 
 
@@ -173,8 +179,8 @@ public class ProjectPage extends AbstractPage {
 		return this;
 	}
 
-	public ProjectPage fillReplaceFielsInFindAndReplaceModal(String replaceText) {
-		fillFindFieldInFindAndReplaceModal(replaceText);
+	public ProjectPage fillReplaceFieldInFindAndReplaceModal(String replaceText) {
+		findAndReplaceModalReplaceField.sendKeys(replaceText);
 		return this;
 	}
 
@@ -194,5 +200,16 @@ public class ProjectPage extends AbstractPage {
 		}
 		WebHelpers.switchToLastOpenedTab(webDriver);
 		return new MainPage(webDriver, false);
+	}
+
+	public ProjectPage addCellBellow() {
+		addCellBellowButton.click();
+		return this;
+	}
+
+	public ProjectPage insertCodeIntoSelectedCell(String code) {
+		selectedCell.getElement().click();
+		selectedCell.getElement().findElement(textAreaCell).sendKeys(code);
+		return this;
 	}
 }
