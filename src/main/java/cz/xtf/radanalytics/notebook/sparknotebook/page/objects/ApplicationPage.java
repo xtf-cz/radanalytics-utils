@@ -80,7 +80,7 @@ public class ApplicationPage extends AbstractPage {
 		};
 
 		try {
-			WebWaiters.waitFor(successCondition, null, 1000L,  5*60*1000L);
+			WebWaiters.waitFor(successCondition, null, 1000L,  10*60*1000L);
 		} catch (InterruptedException | TimeoutException e) {
 			log.error(e.getMessage());
 		}
