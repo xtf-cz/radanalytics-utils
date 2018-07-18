@@ -5,6 +5,7 @@ import cz.xtf.radanalytics.web.WebHelpers;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -66,12 +67,20 @@ public class ApplicationPage extends AbstractPage {
 	public ApplicationPage isExecutionComlete(WebElement cell) {
 		// Execution is complete when progress bar's cancel button goes hidden
 		BooleanSupplier successCondition = () -> {
-			WebElement cancelButton = cell.findElement(cancelButtonElement);
-			return cancelButton.getAttribute("style").equals("display: none;");
+			boolean isCancelButtonPresent = false;
+			try {
+				if (cell.findElement(this.cancelButtonElement).getAttribute("style").equals("display: none;")) {
+					isCancelButtonPresent = true;
+				}
+			} catch (StaleElementReferenceException e) {
+				log.debug("Cancel button locator refreshed");
+			}
+
+			return isCancelButtonPresent;
 		};
 
 		try {
-			WebWaiters.waitFor(successCondition, null, 50000L, 9000000L);
+			WebWaiters.waitFor(successCondition, null, 1000L,  5*60*1000L);
 		} catch (InterruptedException | TimeoutException e) {
 			log.error(e.getMessage());
 		}

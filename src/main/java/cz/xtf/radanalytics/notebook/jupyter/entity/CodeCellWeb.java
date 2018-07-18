@@ -113,9 +113,38 @@ public class CodeCellWeb implements CodeCell {
 					.clickOnEditTab()
 					.chooseItemInDropDownMenu("Find and Replace")
 					.fillFindFieldInFindAndReplaceModal(find)
-					.fillReplaceFielsInFindAndReplaceModal(replace)
+					.fillReplaceFieldInFindAndReplaceModal(replace)
 					.clickOnReplaceAllButton();
 
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean addBelowCellAndInsertCode(String code) {
+		log.debug("Adding new cell bellow and inserting code into it");
+		try {
+			projectPage
+					.addCellBellow()
+					.insertCodeIntoSelectedCell(code);
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean mergeCellAbove() {
+		log.debug("Marge cell above");
+		try {
+			projectPage
+					.clickOnCell(CELL)
+					.clickOnEditTab()
+					.chooseItemInDropDownMenu("Merge Cell Above");
 		} catch (Exception e) {
 			return false;
 		}

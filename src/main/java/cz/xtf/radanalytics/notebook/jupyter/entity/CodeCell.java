@@ -20,4 +20,8 @@ public interface CodeCell {
 
 	boolean findAndReplaceInCell(String find, String Replace);
 
+	boolean addBelowCellAndInsertCode(String code);
+
+	boolean mergeCellAbove();
+
 }
