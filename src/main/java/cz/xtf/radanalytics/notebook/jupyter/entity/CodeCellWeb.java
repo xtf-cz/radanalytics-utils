@@ -124,7 +124,7 @@ public class CodeCellWeb implements CodeCell {
 	}
 
 	@Override
-	public boolean addBellowCellAndInsertCode(String code) {
+	public boolean addBelowCellAndInsertCode(String code) {
 		log.debug("Adding new cell bellow and inserting code into it");
 		try {
 			projectPage
