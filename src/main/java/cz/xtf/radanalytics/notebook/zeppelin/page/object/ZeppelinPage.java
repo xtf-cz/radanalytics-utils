@@ -1,17 +1,25 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
+import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
-public class ZeppelinPage {
+public class ZeppelinPage extends AbstractPage {
 
 	// Navigation bar $x('//div[@ng-controller="NavCtrl as navbar"]')
 	@FindBy(xpath = "//div[@class=\"navbar-header\"]")
 	private Button zeppelinLogoButton;
 
-	@FindBy(xpath = "//li[@class=\"dropdown notebook-list-dropdown open\"]")
+	@FindBy(xpath = "//span[text()=\"Notebook\"]/..")
+	private Button notebookMenuBtr;
+
+	private final String notebookDropDownMenuXpath = "//li[@class=\"dropdown notebook-list-dropdown open\"]";
+
+	@FindBy(xpath = "notebookDropDownMenuXpath")
 	private DropDownMenu dropDownMenu;
 
 	@FindBy(xpath = "//span[text()=\"Job\"]")
@@ -62,4 +70,22 @@ public class ZeppelinPage {
 
 	@FindBy(xpath = "//*[text()=\" Create new note\"]")
 	private Button createNewNotebookHomeController;
+
+
+	public ZeppelinPage(WebDriver webDriver, String hostname, boolean navigateToPage, String navigateToPageUrl) {
+		super(webDriver, hostname, navigateToPage, new StringBuilder().append("http://").append(navigateToPageUrl).toString());
+	}
+
+	public ZeppelinPage pressHomeBtr(){
+		zeppelinLogoButton.click();
+		return this;
+	}
+
+	public ZeppelinPage openNotebookDDl(){
+		notebookMenuBtr.click();
+		WebWaiters.waitForAngularLoad();
+		WebWaiters.waitUntilElementIsPresent(notebookDropDownMenuXpath, webDriver);
+		return this;
+	}
+
 }
