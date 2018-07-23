@@ -10,15 +10,12 @@ import org.openqa.selenium.support.FindBy;
 
 public class ZeppelinPage extends AbstractPage {
 
+	private final String notebookDropDownMenuXpath = "//li[@class=\"dropdown notebook-list-dropdown open\"]";
 	// Navigation bar $x('//div[@ng-controller="NavCtrl as navbar"]')
 	@FindBy(xpath = "//div[@class=\"navbar-header\"]")
 	private Button zeppelinLogoButton;
-
 	@FindBy(xpath = "//span[text()=\"Notebook\"]/..")
 	private Button notebookMenuBtr;
-
-	private final String notebookDropDownMenuXpath = "//li[@class=\"dropdown notebook-list-dropdown open\"]";
-
 	@FindBy(xpath = "notebookDropDownMenuXpath")
 	private DropDownMenu dropDownMenu;
 
@@ -76,16 +73,20 @@ public class ZeppelinPage extends AbstractPage {
 		super(webDriver, hostname, navigateToPage, new StringBuilder().append("http://").append(navigateToPageUrl).toString());
 	}
 
-	public ZeppelinPage pressHomeBtr(){
+	public ZeppelinPage pressHomeBtr() {
 		zeppelinLogoButton.click();
 		return this;
 	}
 
-	public ZeppelinPage openNotebookDDl(){
+	public ZeppelinPage openNotebookDDl() {
 		notebookMenuBtr.click();
 		WebWaiters.waitForAngularLoad();
 		WebWaiters.waitUntilElementIsPresent(notebookDropDownMenuXpath, webDriver);
 		return this;
 	}
 
+	public ZeppelinPage pressJobButton() {
+		jobButton.click();
+		return this;
+	}
 }
