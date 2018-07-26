@@ -3,13 +3,16 @@ package cz.xtf.radanalytics.web.page.objects;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.ExtendedFieldDecorator;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
@@ -25,34 +28,44 @@ public abstract class AbstractPage {
 		WebWaiters.setDriver(webDriver);
 		if (navigateToPage) {
 			if (!Objects.equals(webDriver.getCurrentUrl(), navigateToPageUrl)) {
-				pageLoaded(2000L, navigateToPageUrl, 3);
+				pageLoaded(60 * 1000L, navigateToPageUrl, 3);
 				webDriver.get(navigateToPageUrl);
 			}
 		}
 	}
 
-	private static void pageLoaded(Long interval, String url, int countTimes) {
+	private void pageLoaded(Long interval, String url, int countTimes) {
 		URL link = null;
+		URLConnection conn = null;
 		try {
 			link = new URL(url);
-		} catch (MalformedURLException e) {
+			conn = link.openConnection();
+		} catch (IOException e) {
 			log.error(String.format("The following url provided is malformed: %s", url));
 			log.error(e.getMessage());
 		}
 		URL finalLink = link;
+		URLConnection finalConn = conn;
 		BooleanSupplier successConditionForConnection = () -> {
 			try {
-				HttpURLConnection connection = (HttpURLConnection) finalLink.openConnection();
+				HttpURLConnection connection;
+				if (finalConn instanceof HttpsURLConnection){
+					connection = (HttpsURLConnection) finalLink.openConnection();
+				} else {
+					connection = (HttpURLConnection) finalLink.openConnection();
+				}
 				connection.setRequestMethod("GET");
 				connection.connect();
+				System.out.println(connection.getResponseCode());
 				return connection.getResponseCode() == 200;
 			} catch (IOException e) {
 				log.error(e.getMessage());
 				return false;
 			}
 		};
+		BooleanSupplier successConditionForPageReady = () -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString().equals("complete");
 		int countTries = 0;
-		while (!successConditionForConnection.getAsBoolean()) {
+		while (!successConditionForConnection.getAsBoolean() && !successConditionForPageReady.getAsBoolean()) {
 			countTries++;
 			try {
 				Thread.sleep(interval);

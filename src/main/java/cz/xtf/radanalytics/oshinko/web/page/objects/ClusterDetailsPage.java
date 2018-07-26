@@ -61,7 +61,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 	private By podsTable = By.xpath("//tbody[@class='ng-scope']");
 
 	public ClusterDetailsPage(WebDriver webDriver, String hostname, String clusterName, boolean navigateToPage) {
-		super(webDriver, hostname, navigateToPage, "http://" + hostname + "/#/clusters/" + clusterName);
+		super(webDriver, hostname, navigateToPage, hostname + "/#/clusters/" + clusterName);
 		this.clusterName = clusterName;
 	}
 

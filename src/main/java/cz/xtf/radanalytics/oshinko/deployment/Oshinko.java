@@ -2,6 +2,7 @@ package cz.xtf.radanalytics.oshinko.deployment;
 
 import static cz.xtf.radanalytics.util.TestHelper.downloadAndGetResources;
 
+import cz.xtf.radanalytics.openshift.openshift.web.OpenshiftWebUI;
 import org.assertj.core.api.Assertions;
 
 import java.io.IOException;
@@ -128,7 +129,7 @@ public class Oshinko {
 
 		OpenshiftAppsWaiters.waitForAppDeployment(routeName);
 
-		return OshinkoPoddedWebUI.getInstance(routeSpec.getHost() + routeSpec.getPath());
+		return OshinkoPoddedWebUI.getInstance("http://" + routeSpec.getHost() + routeSpec.getPath());
 	}
 
 	/**
@@ -244,5 +245,48 @@ public class Oshinko {
 		Assertions.assertThat(masterPods).isEmpty();
 		Assertions.assertThat(workerPods).isEmpty();
 		Assertions.assertThat(clusterPods).isEmpty();
+	}
+
+	/**
+	 * Will deploy webUI secure pod for Oshinko and waits till ready to handle requests.
+	 *
+	 * @return Configured UI api to work with deployed webUI
+	 */
+	public static OpenshiftWebUI deployWebUISecurePod() {
+		String templateName = "oshinko-webui-secure";
+		String routeName = "oshinko-web-oaproxy";
+		String appName = "oshinko-web";
+		String oshinkoWebUISecureTemplate = "oshinko-webui-secure-template.yaml";
+		return deployWebUISecurePodCommonLogic(templateName, routeName, oshinkoWebUISecureTemplate, appName);
+	}
+
+	public static OpenshiftWebUI deployWebUISecurePod(String templateName, String routeName, String oshinkoWebUISecureTemplate, String appName) {
+		return deployWebUISecurePodCommonLogic(templateName, routeName, oshinkoWebUISecureTemplate, appName);
+	}
+
+	private static OpenshiftWebUI deployWebUISecurePodCommonLogic(String templateName, String routeName, String oshinkoWebUISecureTemplate, String appName) {
+		log.info("Deploying WebUI Secure Pod");
+		Map<String, String> mapParams = new HashMap<>();
+		mapParams.put("OSHINKO_REFRESH_INTERVAL", OSHINKO_WEBUI_REFRESH_INTERVAL);
+
+		if (OSHINKO_WEBUI_RESOURCES == null) {
+			OSHINKO_WEBUI_RESOURCES = downloadAndGetResources("radanalyticsio", oshinkoWebUISecureTemplate, RadanalyticsConfiguration.templateOshinkoAllResourcesUrl());
+		}
+		try (InputStream is = Files.newInputStream(Paths.get(OSHINKO_WEBUI_RESOURCES))) {
+			log.debug("Load Oshinko WebUI Secure template");
+			openshift.loadResource(is);
+		} catch (IOException e) {
+			log.error("Exception during loading of Oshinko WebUI Secure template: {}", e.getMessage());
+			throw new IllegalStateException("Wasn't able to load Oshinko WebUI Secure template");
+		}
+
+		log.debug("Process template with name \"{}\"", templateName);
+		openshift.processAndDeployTemplate(templateName, mapParams);
+		log.debug("Creating route \"{}\"", routeName);
+		RouteSpec routeSpec = openshift.getRoute(routeName).getSpec();
+
+		OpenshiftAppsWaiters.waitForAppDeployment(appName);
+
+		return OpenshiftWebUI.getInstance("https://" + routeSpec.getHost() + routeSpec.getPath());
 	}
 }

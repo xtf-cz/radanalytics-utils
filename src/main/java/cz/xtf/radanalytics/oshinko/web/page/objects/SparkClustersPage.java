@@ -54,7 +54,7 @@ public class SparkClustersPage extends AbstractPage {
 	//</editor-fold>
 
 	public SparkClustersPage(WebDriver webDriver, String hostname, boolean navigateToPage) {
-		super(webDriver, hostname, navigateToPage, "http://" + hostname + "/#/clusters");
+		super(webDriver, hostname, navigateToPage, hostname + "/#/clusters");
 	}
 
 	public SparkClustersPage clickOnDeployButton() {
