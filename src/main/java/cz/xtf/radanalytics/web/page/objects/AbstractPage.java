@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
