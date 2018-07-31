@@ -55,7 +55,7 @@ public abstract class AbstractPage {
 				}
 				connection.setRequestMethod("GET");
 				connection.connect();
-				System.out.println(connection.getResponseCode());
+				log.debug("Code response is ", connection.getResponseCode());
 				return connection.getResponseCode() == 200;
 			} catch (IOException e) {
 				log.error(e.getMessage());
@@ -64,7 +64,7 @@ public abstract class AbstractPage {
 		};
 		BooleanSupplier successConditionForPageReady = () -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString().equals("complete");
 		int countTries = 0;
-		while (!successConditionForConnection.getAsBoolean() && !successConditionForPageReady.getAsBoolean()) {
+		while (!(successConditionForConnection.getAsBoolean() && successConditionForPageReady.getAsBoolean())) {
 			countTries++;
 			try {
 				Thread.sleep(interval);
