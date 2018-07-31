@@ -1,15 +1,15 @@
 package cz.xtf.radanalytics.waiters;
 
-import static java.lang.StrictMath.toIntExact;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import lombok.extern.slf4j.Slf4j;
+import static java.lang.StrictMath.toIntExact;
 
 @Slf4j
 public class OpenshiftAppsWaiters {
@@ -27,7 +27,7 @@ public class OpenshiftAppsWaiters {
 		try {
 			openshift.waiters().isLatestBuildPresent(appName).execute();
 			buildName = openshift.getLatestBuild(appName).getMetadata().getName();
-			openshift.waiters().hasBuildCompleted(buildName).timeout(TimeUnit.MINUTES, 15).execute();
+			openshift.waiters().hasBuildCompleted(buildName).timeout(TimeUnit.MINUTES, 20).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for " + buildName + " build to be built", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for " + buildName + " build to be built", e);
@@ -42,7 +42,7 @@ public class OpenshiftAppsWaiters {
 			if (version == 0) {
 				version = 1;
 			}
-			openshift.waiters().isDeploymentReady(appName, version).timeout(TimeUnit.MINUTES, 10L).execute();
+			openshift.waiters().isDeploymentReady(appName, version).timeout(TimeUnit.MINUTES, 15L).execute();
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for Deployment " + appName + " be ready", e.getMessage());
 			throw new IllegalStateException("Timeout expired while waiting for " + appName + " to be ready", e);
