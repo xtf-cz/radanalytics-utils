@@ -21,7 +21,7 @@ public class WebHelpers {
 		Thread.sleep(500);
 	}
 
-	public static void switchWindowTab(WebDriver driver, int windowInQueue){
+	public static void switchWindowTab(WebDriver driver, int windowInQueue) {
 		List<String> listWindows = new ArrayList<>(driver.getWindowHandles());
 		driver.switchTo().window(listWindows.get(windowInQueue));
 	}
@@ -32,11 +32,15 @@ public class WebHelpers {
 		driver.switchTo().window(allTab.get(lastTab));
 	}
 
-	public static String acceptAlert(WebDriver driver){
+	public static String acceptAlert(WebDriver driver) {
 		WebWaiters.waitUntilAlertPresent(driver);
 		Alert alert = driver.switchTo().alert();
 		String alertText = alert.getText();
 		alert.accept();
 		return alertText;
+	}
+
+	public static void refreshPage(WebDriver webDriver) {
+		webDriver.navigate().refresh();
 	}
 }

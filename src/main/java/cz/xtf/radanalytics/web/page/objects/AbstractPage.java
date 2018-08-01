@@ -27,7 +27,7 @@ public abstract class AbstractPage {
 		WebWaiters.setDriver(webDriver);
 		if (navigateToPage) {
 			if (!Objects.equals(webDriver.getCurrentUrl(), navigateToPageUrl)) {
-				pageLoaded(60 * 1000L, navigateToPageUrl, 3);
+				pageLoaded(60 * 1000L, navigateToPageUrl, 4);
 				webDriver.get(navigateToPageUrl);
 			}
 		}
@@ -55,7 +55,8 @@ public abstract class AbstractPage {
 				}
 				connection.setRequestMethod("GET");
 				connection.connect();
-				log.debug("Code response is ", connection.getResponseCode());
+				log.debug("URL response is {}", finalLink);
+				log.debug("Code response is {}", connection.getResponseCode());
 				return connection.getResponseCode() == 200;
 			} catch (IOException e) {
 				log.error(e.getMessage());
