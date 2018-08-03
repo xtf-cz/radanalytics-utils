@@ -41,10 +41,12 @@ public class LocalWebDriverManager {
 			case "chrome":
 				browserName = "headless-chrome";
 				if (chromePod == null) {
+					log.info("Creating WebDriverPodBuilder");
 					chromePod = new WebDriverPodBuilder(browserName);
 				}
 
 				if (chromeWebDriver == null) {
+					log.info("Setting up RemoteChromeDriver");
 					chromeWebDriver = setupRemoteChromeDriver(getLocalPortForBrowserInPod(browserName));
 				}
 				return chromeWebDriver;
@@ -77,6 +79,7 @@ public class LocalWebDriverManager {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("window-size=1200x600");
 		try {
+			log.info("Creating instance of RemoteWebDriver");
 			return new RemoteWebDriver(new URL(
 					"http://localhost:" + podLocalPort + "/wd/hub"),
 					options);
