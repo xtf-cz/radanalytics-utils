@@ -1,14 +1,19 @@
 package cz.xtf.radanalytics.web.webdriver;
 
 import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.waiters.WebWaiters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeoutException;
+import java.util.function.BooleanSupplier;
 
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
@@ -76,12 +81,18 @@ public class LocalWebDriverManager {
 	}
 
 	private static WebDriver setupRemoteChromeDriver(int podLocalPort) {
+		String gridUrl = "http://localhost:" + podLocalPort + "/wd/hub";
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("window-size=1200x600");
 		try {
+			isRemoteHostReady(gridUrl);
+		} catch (TimeoutException | InterruptedException e) {
+			log.error("Remote host of grid WebDriver is not ready {}", e.getMessage());
+		}
+		try {
 			log.info("Creating instance of RemoteWebDriver");
 			return new RemoteWebDriver(new URL(
-					"http://localhost:" + podLocalPort + "/wd/hub"),
+					gridUrl),
 					options);
 		} catch (MalformedURLException e) {
 			log.error(e.getMessage());
@@ -90,11 +101,17 @@ public class LocalWebDriverManager {
 	}
 
 	private static WebDriver setupRemoteFirefoxDriver(int podLocalPort) {
+		String gridUrl = "http://localhost:" + podLocalPort + "/wd/hub";
 		FirefoxOptions options = new FirefoxOptions();
 		options.addPreference("network.proxy.type", 0);
 		try {
+			isRemoteHostReady(gridUrl);
+		} catch (TimeoutException | InterruptedException e) {
+			log.error("Remote host of grid WebDriver is not ready {}", e.getMessage());
+		}
+		try {
 			return new RemoteWebDriver(new URL(
-					"http://localhost:" + podLocalPort + "/wd/hub"),
+					gridUrl),
 					options);
 		} catch (MalformedURLException e) {
 			log.error(e.getMessage());
@@ -104,6 +121,34 @@ public class LocalWebDriverManager {
 
 	private static int getLocalPortForBrowserInPod(String deploymentConfigName) {
 		String podName = openshift.getAnyPod(deploymentConfigName).getMetadata().getName();
-		return openshift.client().pods().withName(podName).portForward(4444).getLocalPort();
+		int localPort = openshift.client().pods().withName(podName).portForward(4444).getLocalPort();
+		log.info("Local port for remote webDriver {}", localPort);
+		return localPort;
+	}
+
+	private static boolean isRemoteHostReady(String gridUrl) throws TimeoutException, InterruptedException {
+		log.debug("Trying to get response code from {}", gridUrl);
+		URL link = null;
+		try {
+			link = new URL(gridUrl);
+		} catch (IOException e) {
+			log.error("The following url provided is malformed: {}", gridUrl);
+			log.error(e.getMessage());
+		}
+		URL finalLink = link;
+		BooleanSupplier successConditionForConnection = () -> {
+			try {
+				HttpURLConnection connection;
+				connection = (HttpURLConnection) finalLink.openConnection();
+				connection.setRequestMethod("GET");
+				connection.connect();
+				log.debug("Code response of grid webDriver is {}", connection.getResponseCode());
+				return connection.getResponseCode() == 200;
+			} catch (IOException e) {
+				log.error("Request for response code is failed {}", e.getMessage());
+				return false;
+			}
+		};
+		return WebWaiters.waitFor(successConditionForConnection, null, 1000L, 60 * 1000L);
 	}
 }
