@@ -149,6 +149,6 @@ public class LocalWebDriverManager {
 				return false;
 			}
 		};
-		return WebWaiters.waitFor(successConditionForConnection, null, 1000L, 60 * 1000L);
+		return WebWaiters.waitFor(successConditionForConnection, null, 2 * 1000L, 60 * 1000L);
 	}
 }
