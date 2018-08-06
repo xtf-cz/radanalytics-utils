@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 @Slf4j
+@WebUITests
 public class ZeppelinNotebookPage extends AbstractPage {
 
 	//	private final String paragraphContentXpath ="//div[contains(@class,\"notebookContent\")]//div[@ng-controller=\"ParagraphCtrl\" and not(contains(text(),\"+ Add Paragraph\"))]";

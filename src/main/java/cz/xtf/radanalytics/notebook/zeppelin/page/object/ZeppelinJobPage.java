@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
@@ -12,6 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@WebUITests
 public class ZeppelinJobPage extends AbstractPage {
 
 	private final String jobsXpath = "//div[contains(@class,\"paragraph-col\")]";

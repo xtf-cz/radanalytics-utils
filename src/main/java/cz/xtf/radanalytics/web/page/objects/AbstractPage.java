@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.web.page.objects;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.ExtendedFieldDecorator;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +14,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
 @Slf4j
+@WebUITests
 public abstract class AbstractPage {
 	public final String hostname;
 	public final WebDriver webDriver;
@@ -28,6 +31,7 @@ public abstract class AbstractPage {
 		if (navigateToPage) {
 			if (!Objects.equals(webDriver.getCurrentUrl(), navigateToPageUrl)) {
 				pageLoaded(60 * 1000L, navigateToPageUrl, 4);
+				webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 				webDriver.get(navigateToPageUrl);
 			}
 		}
@@ -63,7 +67,11 @@ public abstract class AbstractPage {
 				return false;
 			}
 		};
-		BooleanSupplier successConditionForPageReady = () -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString().equals("complete");
+		BooleanSupplier successConditionForPageReady = () -> {
+			String statusDocument = ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString();
+			log.debug("Status of document is \"{}\"", statusDocument);
+			return (statusDocument.equals("complete"));
+		};
 		int countTries = 0;
 		while (!(successConditionForConnection.getAsBoolean() && successConditionForPageReady.getAsBoolean())) {
 			countTries++;

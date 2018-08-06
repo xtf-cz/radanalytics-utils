@@ -1,11 +1,13 @@
 package cz.xtf.radanalytics.notebook.sparknotebook.page.objects;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.WebHelpers;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@WebUITests
 public class MainPage extends AbstractPage {
 	private String projectInList = "//div[@id=\"notebook_list\"]//span[@class=\"item_name\" and text()=\"%s\"]";
 
