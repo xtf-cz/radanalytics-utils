@@ -34,6 +34,7 @@ public abstract class AbstractPage {
 	}
 
 	private void pageLoaded(Long interval, String url, int countTimes) {
+		log.debug("Trying to get response code from {}", url);
 		URL link = null;
 		URLConnection conn = null;
 		try {
@@ -55,16 +56,16 @@ public abstract class AbstractPage {
 				}
 				connection.setRequestMethod("GET");
 				connection.connect();
-				System.out.println(connection.getResponseCode());
+				log.debug("Code response is {}", connection.getResponseCode());
 				return connection.getResponseCode() == 200;
 			} catch (IOException e) {
-				log.error(e.getMessage());
+				log.error("Request for response code is failed {}", e.getMessage());
 				return false;
 			}
 		};
 		BooleanSupplier successConditionForPageReady = () -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString().equals("complete");
 		int countTries = 0;
-		while (!successConditionForConnection.getAsBoolean() && !successConditionForPageReady.getAsBoolean()) {
+		while (!(successConditionForConnection.getAsBoolean() && successConditionForPageReady.getAsBoolean())) {
 			countTries++;
 			try {
 				Thread.sleep(interval);
