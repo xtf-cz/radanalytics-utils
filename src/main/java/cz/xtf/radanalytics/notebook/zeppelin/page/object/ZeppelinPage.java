@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
@@ -8,6 +9,7 @@ import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+@WebUITests
 public class ZeppelinPage extends AbstractPage {
 
 	private final String notebookDropDownMenuXpath = "//li[@class=\"dropdown notebook-list-dropdown open\"]";

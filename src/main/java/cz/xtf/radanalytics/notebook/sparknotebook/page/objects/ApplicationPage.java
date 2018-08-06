@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.notebook.sparknotebook.page.objects;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.WebHelpers;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 
 @Slf4j
+@WebUITests
 public class ApplicationPage extends AbstractPage {
 
 	@FindBy(xpath = "//div[@id=\"notebook-container\"]")

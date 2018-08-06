@@ -1,6 +1,7 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
 import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.MainPage;
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.WebHelpers;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 
 @Slf4j
+@WebUITests
 public class ProjectPage extends AbstractPage {
 	@FindBy(xpath = "//i[contains(@class, \"fa-step-forward\")]/..")
 	private Button runButton;

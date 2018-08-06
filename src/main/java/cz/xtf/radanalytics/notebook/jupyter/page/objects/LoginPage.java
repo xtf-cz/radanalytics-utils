@@ -1,11 +1,13 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+@WebUITests
 public class LoginPage extends AbstractPage {
 	@FindBy(xpath = "//input[@id='password_input']")
 	private TextField passwordField;

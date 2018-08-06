@@ -1,5 +1,6 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @Slf4j
+@WebUITests
 public class JupiterTreePage extends AbstractPage {
 	@FindBy(xpath = "//ul[@id=\"tabs\"]//a[contains(text(), \"Files\")]")
 	private WebElement filesTab;
