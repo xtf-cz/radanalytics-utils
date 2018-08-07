@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 
@@ -54,6 +55,7 @@ public class LocalWebDriverManager {
 					log.info("Setting up RemoteChromeDriver");
 					chromeWebDriver = setupRemoteChromeDriver(getLocalPortForBrowserInPod(browserName));
 				}
+				chromeWebDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 				return chromeWebDriver;
 
 			case "firefox":
@@ -65,6 +67,7 @@ public class LocalWebDriverManager {
 				if (firefoxWebDriver == null) {
 					firefoxWebDriver = setupRemoteFirefoxDriver(getLocalPortForBrowserInPod(browserName));
 				}
+				firefoxWebDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 				return firefoxWebDriver;
 
 			case "phantomjs":

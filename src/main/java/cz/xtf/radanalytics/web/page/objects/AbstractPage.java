@@ -2,6 +2,7 @@ package cz.xtf.radanalytics.web.page.objects;
 
 import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.WebHelpers;
 import cz.xtf.radanalytics.web.extended.elements.ExtendedFieldDecorator;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
@@ -14,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
 @Slf4j
@@ -30,9 +30,9 @@ public abstract class AbstractPage {
 		WebWaiters.setDriver(webDriver);
 		if (navigateToPage) {
 			if (!Objects.equals(webDriver.getCurrentUrl(), navigateToPageUrl)) {
-				pageLoaded(60 * 1000L, navigateToPageUrl, 4);
-				webDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+				pageLoaded(60 * 1000L, navigateToPageUrl, 5);
 				webDriver.get(navigateToPageUrl);
+				WebHelpers.refreshPage(webDriver);
 			}
 		}
 	}
