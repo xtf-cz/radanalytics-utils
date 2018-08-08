@@ -81,8 +81,11 @@ public class WebWaiters {
 
 	public static void setDriver(WebDriver driver) {
 		log.debug("Setting driver session for waiters");
+		log.debug("Setting jsWaitDriver");
 		jsWaitDriver = driver;
+		log.debug("Setting jsWait");
 		jsWait = new WebDriverWait(jsWaitDriver, 10);
+		log.debug("Setting jsExec");
 		jsExec = (JavascriptExecutor) jsWaitDriver;
 	}
 
