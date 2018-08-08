@@ -47,12 +47,10 @@ public class LocalWebDriverManager {
 			case "chrome":
 				browserName = "headless-chrome";
 				if (chromePod == null) {
-					log.info("Creating WebDriverPodBuilder");
 					chromePod = new WebDriverPodBuilder(browserName);
 				}
 
 				if (chromeWebDriver == null) {
-					log.info("Setting up RemoteChromeDriver");
 					chromeWebDriver = setupRemoteChromeDriver(getLocalPortForBrowserInPod(browserName));
 				}
 				chromeWebDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
