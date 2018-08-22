@@ -121,7 +121,7 @@ public class SparkClustersPage extends AbstractPage {
 		boolean result = false;
 		try {
 			WebWaiters.waitUntilElementIsPresent(errorMessageClusterAlreadyExist, webDriver, 5);
-			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).getText().equals("deploymentconfigs \"" + clusterName + "-m\" already exists");
+			webDriver.findElement(By.xpath(errorMessageClusterAlreadyExist)).isDisplayed();
 		} catch (NoSuchElementException | TimeoutException e) {
 			result = true;
 		}
