@@ -66,6 +66,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 	}
 
 	public ClusterDetailsPage clickOnActionsButton() {
+		WebWaiters.waitUntilElementIsVisible(actionsButton, webDriver);
 		actionsButton.click();
 		return this;
 	}
@@ -81,6 +82,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 	}
 
 	public ClusterDetailsPage clickOnDeleteButtonPopUp() {
+		WebWaiters.waitUntilElementIsVisible(deleteButtonPopUp, webDriver);
 		deleteButtonPopUp.click();
 		return this;
 	}
