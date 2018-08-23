@@ -4,6 +4,7 @@ import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.web.page.objects.ClusterDetailsPage;
 import cz.xtf.radanalytics.oshinko.web.page.objects.SparkClustersPage;
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.web.webdriver.AbstractWebDriver;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +33,7 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 
 	@Override
 	public boolean createCluster(String clusterName, int workersCount) {
-		return createCluster("", "", clusterName, workersCount, DEFAULT_CLUSTER_COUNT, null, null, null, null);
+		return createCluster("", "", clusterName, workersCount, DEFAULT_CLUSTER_COUNT, null, null, null, RadanalyticsConfiguration.openshiftSparkImage());
 	}
 
 	@Override

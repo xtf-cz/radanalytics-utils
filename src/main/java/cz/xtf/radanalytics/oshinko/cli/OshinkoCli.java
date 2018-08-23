@@ -6,6 +6,7 @@ import cz.xtf.openshift.PodService;
 import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.cli.service.SparkClusterService;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
+import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class OshinkoCli implements OshinkoAPI {
 
 	@Override
 	public boolean createCluster(String clusterName, int workersCount) {
-		return createCluster("", "", clusterName, workersCount, -10, null, null, null, null);
+		return createCluster("", "", clusterName, workersCount, -10, null, null, null, RadanalyticsConfiguration.openshiftSparkImage());
 	}
 
 	@Override
