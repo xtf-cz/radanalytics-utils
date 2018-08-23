@@ -23,6 +23,7 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String TEMPLATE_OSHINKO_JAVA_SPARK_JSON="rad.oshinko.java.spark.template.json";
 	private static final String TEMPLATE_OSHINKO_SCALA_SPARK_JSON="rad.oshinko.scala.spark.template.json";
 	private static final String OPENSHIFT_INSTANCE_HOSTNAME_SUFFIX = "rad.openshift.instance.hostname.suffix";
+	private static final String OPENSHIFT_SPARK_IMAGE = "rad.openshift.spark.image";
 
 	private RadanalyticsConfiguration() {
 		super();
@@ -98,6 +99,10 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static String openshiftInstanceHostNameSuffix() {
 		return get().readValue(OPENSHIFT_INSTANCE_HOSTNAME_SUFFIX);
+	}
+
+	public static String openshiftSparkImage() {
+		return get().readValue(OPENSHIFT_SPARK_IMAGE);
 	}
 }
 
