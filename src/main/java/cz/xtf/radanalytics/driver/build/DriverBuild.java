@@ -1,7 +1,7 @@
 package cz.xtf.radanalytics.driver.build;
 
 
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

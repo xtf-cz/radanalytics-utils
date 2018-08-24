@@ -1,12 +1,14 @@
-package cz.xtf.radanalytics.util.configuration;
+package cz.xtf.radanalytics.configuration;
 
 import cz.xtf.XTFConfiguration;
 
 public class RadanalyticsConfiguration extends XTFConfiguration {
+	private static final String IMAGE_OPENSHIFT_SPARK = "rad.openshift.spark.image";
 	private static final String IMAGE_PY_SPARK = "rad.driver.python";
 	private static final String IMAGE_JAVA_SPARK = "rad.driver.java";
 	private static final String IMAGE_SCALA_SPARK = "rad.driver.scala";
 	private static final String IMAGE_OSHINKO_CLI = "rad.oshinko.cli";
+
 	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_CHROME = "rad.web-driver.docker.image.chrome";
 	private static final String IMAGE_DOCKER_WEBDRIVER_HEADLESS_FIREFOX = "rad.web-driver.docker.image.firefox";
 	private static final String IMAGE_DOCKER_WEBDRIVER_VERSION = "rad.web-driver.docker.image.version";
@@ -22,8 +24,9 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 	private static final String TEMPLATE_OSHINKO_PYTHON_SPARK_JSON="rad.oshinko.python.spark.template.json";
 	private static final String TEMPLATE_OSHINKO_JAVA_SPARK_JSON="rad.oshinko.java.spark.template.json";
 	private static final String TEMPLATE_OSHINKO_SCALA_SPARK_JSON="rad.oshinko.scala.spark.template.json";
+
 	private static final String OPENSHIFT_INSTANCE_HOSTNAME_SUFFIX = "rad.openshift.instance.hostname.suffix";
-	private static final String OPENSHIFT_SPARK_IMAGE = "rad.openshift.spark.image";
+
 
 	private RadanalyticsConfiguration() {
 		super();
@@ -31,6 +34,10 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 
 	public static String getWebDriverBrowserName() {
 		return get().readValue(WEBDRIVER_BROWSER_NAME);
+	}
+
+	public static String imageOpenshiftSpark() {
+		return get().readValue(IMAGE_OPENSHIFT_SPARK);
 	}
 
 	public static String imagePySpark() {
@@ -101,8 +108,5 @@ public class RadanalyticsConfiguration extends XTFConfiguration {
 		return get().readValue(OPENSHIFT_INSTANCE_HOSTNAME_SUFFIX);
 	}
 
-	public static String openshiftSparkImage() {
-		return get().readValue(OPENSHIFT_SPARK_IMAGE);
-	}
 }
 
