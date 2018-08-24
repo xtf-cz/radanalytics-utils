@@ -6,7 +6,7 @@ import cz.xtf.radanalytics.util.TestHelper;
 
 import cz.xtf.git.GitProject;
 import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import io.fabric8.openshift.api.model.BuildConfig;
 import io.fabric8.openshift.api.model.ImageStream;
 import lombok.Getter;

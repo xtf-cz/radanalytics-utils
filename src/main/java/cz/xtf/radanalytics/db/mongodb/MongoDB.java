@@ -5,7 +5,7 @@ import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.db.BaseDBDeployment;
 import cz.xtf.radanalytics.db.entity.OpenshiftDB;
 import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;

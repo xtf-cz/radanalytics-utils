@@ -1,7 +1,7 @@
 package cz.xtf.radanalytics.oshinko.deployment.template.python;
 
 import cz.xtf.radanalytics.oshinko.deployment.template.BaseTemplateDeployment;
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 
 import java.util.Map;
 

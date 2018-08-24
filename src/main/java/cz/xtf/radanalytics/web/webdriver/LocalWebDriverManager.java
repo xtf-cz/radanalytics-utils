@@ -1,6 +1,6 @@
 package cz.xtf.radanalytics.web.webdriver;
 
-import cz.xtf.radanalytics.util.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
