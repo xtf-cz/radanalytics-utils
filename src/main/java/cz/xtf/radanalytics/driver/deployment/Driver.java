@@ -1,26 +1,26 @@
 package cz.xtf.radanalytics.driver.deployment;
 
-import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.waiters.SparkWaiters;
-import cz.xtf.TestConfiguration;
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.openshift.logs.LogCheckerUtils;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.Service;
-import io.fabric8.openshift.api.model.Build;
-import io.fabric8.openshift.api.model.BuildConfig;
-import io.fabric8.openshift.api.model.DeploymentConfig;
-import io.fabric8.openshift.api.model.ImageStream;
-import lombok.extern.slf4j.Slf4j;
+		import cz.xtf.TestConfiguration;
+		import cz.xtf.openshift.OpenShiftUtil;
+		import cz.xtf.openshift.OpenShiftUtils;
+		import cz.xtf.openshift.logs.LogCheckerUtils;
+		import cz.xtf.radanalytics.util.TestHelper;
+		import cz.xtf.radanalytics.waiters.SparkWaiters;
+		import io.fabric8.kubernetes.api.model.Pod;
+		import io.fabric8.kubernetes.api.model.Service;
+		import io.fabric8.openshift.api.model.Build;
+		import io.fabric8.openshift.api.model.BuildConfig;
+		import io.fabric8.openshift.api.model.DeploymentConfig;
+		import io.fabric8.openshift.api.model.ImageStream;
+		import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+		import java.io.IOException;
+		import java.util.concurrent.TimeUnit;
+		import java.util.concurrent.TimeoutException;
+		import java.util.regex.Matcher;
+		import java.util.regex.Pattern;
 
-import static java.lang.StrictMath.toIntExact;
+		import static java.lang.StrictMath.toIntExact;
 
 @Slf4j
 public class Driver {
@@ -154,20 +154,38 @@ public class Driver {
 
 	public Driver waitForCurrentBuildCompletion() {
 		log.debug("Start waiting for build completion.");
+		String name = getCurrentBuild().getMetadata().getName();
 		try {
 			if (fromDriverBuildDefinition) {
 				log.debug("Waiting to prepare build. Namespace : '{}'.", TestConfiguration.buildNamespace());
-				openshiftBuildsProject.waiters().hasBuildCompleted(getCurrentBuild().getMetadata().getName()).timeout(TimeUnit.MINUTES, 15).execute();
+				hasBuildCompleted(name, 15);
+				retryBuild(name);
 			} else {
 				log.debug("Waiting to prepare build in default namespace.", TestConfiguration.masterNamespace());
-				openshift.waiters().hasBuildCompleted(getCurrentBuild().getMetadata().getName()).timeout(TimeUnit.MINUTES, 15).execute();
+				hasBuildCompleted(name, 15);
+				retryBuild(name);
 			}
 		} catch (TimeoutException e) {
 			log.error("Timeout expired while waiting for Driver build to be built", e.getMessage());
-			throw new IllegalStateException("Timeout expired while waiting for Driver build to be built", e);
+			try {
+				startNewBuild();
+				hasBuildCompleted(name, 15);
+			} catch (TimeoutException e1) {
+				throw new IllegalStateException("Timeout expired while waiting for Driver build to be built", e);
+			}
 		}
-
 		return this;
+	}
+
+	private void retryBuild(String name) throws TimeoutException {
+		if (getCurrentBuild().getStatus().getPhase().equals("Failed")) {
+			startNewBuild();
+			hasBuildCompleted(name, 10);
+		}
+	}
+
+	private void hasBuildCompleted(String name, int timeout) throws TimeoutException {
+		openshiftBuildsProject.waiters().hasBuildCompleted(name).timeout(TimeUnit.MINUTES, timeout).execute();
 	}
 
 	public Driver waitForDriverDeployed() {
