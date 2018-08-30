@@ -2,6 +2,7 @@ package cz.xtf.radanalytics.oshinko.web.page.objects;
 
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
+import cz.xtf.radanalytics.web.extended.elements.elements.SelectElement;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,30 @@ public class SparkClustersPage extends AbstractPage {
 	@FindBy(id = "cancelbutton")
 	private Button cancellButton;
 	//</editor-fold>
+
+	private String advancedClusterConrfigurationfield = "//*[@id=\"toggle-adv\"]";
+
+	@FindBy(id = "cluster-adv-workers")
+	private TextField workersCountField;
+
+
+	@FindBy(id = "cluster-config-name")
+	private TextField storedClusterConfigurationField;
+
+	@FindBy(id = "cluster-masterconfig-name")
+	private TextField masterConrfigField;
+
+	@FindBy(id = "cluster-workerconfig-name")
+	private TextField workerConfigurationField;
+
+	@FindBy(id = "cluster-spark-image")
+	private TextField sparkImageField;
+
+	@FindBy(id = "exposewebui")
+	private SelectElement exposeWebui;
+
+	@FindBy(id = "enablemetrics")
+	private SelectElement enableSparkMetrics;
 
 	public SparkClustersPage(WebDriver webDriver, String hostname, boolean navigateToPage) {
 		super(webDriver, hostname, navigateToPage, hostname + "/#/clusters");
@@ -154,5 +179,45 @@ public class SparkClustersPage extends AbstractPage {
 			log.error(e.getMessage());
 		}
 		return successCondition.getAsBoolean();
+	}
+
+	public SparkClustersPage clickOnAdvancedClusterConfiguration() {
+		WebWaiters.waitUntilJSReady();
+		WebWaiters.waitUntilElementIsPresent(advancedClusterConrfigurationfield, webDriver);
+		webDriver.findElement(By.xpath(advancedClusterConrfigurationfield)).click();
+		WebWaiters.waitUntilJSReady();
+		return this;
+	}
+
+	public SparkClustersPage fillNumberOfWorkersAdvanced(int workersCount) {
+		if (workersCount >= 0) {
+			workersCountField.clear();
+			workersCountField.sendKeys(String.valueOf(workersCount));
+		}
+		return this;
+	}
+
+	public SparkClustersPage fillStoredClusterConfigurationAdvanced(String clusterConfigName) {
+		storedClusterConfigurationField.clear();
+		storedClusterConfigurationField.sendKeys(clusterConfigName);
+		return this;
+	}
+
+	public SparkClustersPage fillMasterConfigAdvanced(String masterConfigName) {
+		masterConrfigField.clear();
+		masterConrfigField.sendKeys(masterConfigName);
+		return this;
+	}
+
+	public SparkClustersPage fillWorkerConfigAdvanced(String workerConfigName) {
+		workerConfigurationField.clear();
+		workerConfigurationField.sendKeys(workerConfigName);
+		return this;
+	}
+
+	public SparkClustersPage fillSparkImageAdvanced(String apacheSparkImageName) {
+		sparkImageField.clear();
+		sparkImageField.sendKeys(apacheSparkImageName);
+		return this;
 	}
 }

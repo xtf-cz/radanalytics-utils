@@ -1,6 +1,7 @@
 package cz.xtf.radanalytics.oshinko.api;
 
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
+import cz.xtf.radanalytics.oshinko.entity.SparkConfig;
 
 import java.util.List;
 
@@ -22,5 +23,13 @@ public interface OshinkoAPI {
 
 	default String checkClusterStatus(String status, String clusterName) {
 		return "";
+	}
+
+	default boolean createCluster(String clusterName, int workersCount, String imageSpark) {
+		return false;
+	}
+
+	default SparkConfig getClusterConfig(String clusterName) {
+		return new SparkConfig();
 	}
 }

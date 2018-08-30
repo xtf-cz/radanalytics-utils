@@ -2,9 +2,9 @@ package cz.xtf.radanalytics.oshinko.web;
 
 import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
+import cz.xtf.radanalytics.oshinko.entity.SparkConfig;
 import cz.xtf.radanalytics.oshinko.web.page.objects.ClusterDetailsPage;
 import cz.xtf.radanalytics.oshinko.web.page.objects.SparkClustersPage;
-import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.web.webdriver.AbstractWebDriver;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +33,20 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 
 	@Override
 	public boolean createCluster(String clusterName, int workersCount) {
-		return createCluster("", "", clusterName, workersCount, DEFAULT_CLUSTER_COUNT, null, null, null, RadanalyticsConfiguration.imageOpenshiftSpark());
+		log.info("OshinkoPoddedWebUI create cluster with name :{}, workers count : {}",
+				clusterName, workersCount);
+
+		return new SparkClustersPage(webDriver, hostname, true)
+				.clickOnDeployButton()
+				.fillDeployClusterName(clusterName)
+				.fillNumberOfWorkers(workersCount)
+				.submitDeployClusterForm()
+				.isClusterSuccessfullyCreated(clusterName);
+	}
+
+	@Override
+	public boolean createCluster(String clusterName, int workersCount, String imageSpark) {
+		return createCluster("", "", clusterName, workersCount, DEFAULT_CLUSTER_COUNT, "", "", "", imageSpark);
 	}
 
 	@Override
@@ -43,8 +56,13 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 
 		return new SparkClustersPage(webDriver, hostname, true)
 				.clickOnDeployButton()
+				.clickOnAdvancedClusterConfiguration()
 				.fillDeployClusterName(clusterName)
-				.fillNumberOfWorkers(workersCount)
+				.fillNumberOfWorkersAdvanced(workersCount)
+				.fillStoredClusterConfigurationAdvanced(storedConfig)
+				.fillMasterConfigAdvanced(masterConfig)
+				.fillWorkerConfigAdvanced(workerConfig)
+				.fillSparkImageAdvanced(sparkImage)
 				.submitDeployClusterForm()
 				.isClusterSuccessfullyCreated(clusterName);
 	}
@@ -106,5 +124,13 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 		} else {
 			return "Current cluster does not exist";
 		}
+	}
+
+	@Override
+	public SparkConfig getClusterConfig(String clusterName) {
+		log.info("OshinkoPoddedWebUI get cluster configuration with the cluster name : {}", clusterName);
+
+		ClusterDetailsPage clusterDetailsPage = new ClusterDetailsPage(webDriver, hostname, clusterName, true);
+		return clusterDetailsPage.getClusterConfigFromJson();
 	}
 }

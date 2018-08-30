@@ -23,5 +23,8 @@ public class SparkConfig {
 	private String sparkWorkerConfig;
 	@JsonProperty("SparkImage")
 	private String sparkImage;
-
+	@JsonProperty("ExposeWebUI")
+	private String exposeWebUI;
+	@JsonProperty("Metrics")
+	private String metrics;
 }
