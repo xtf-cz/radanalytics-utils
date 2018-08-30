@@ -1,6 +1,9 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
+import cz.xtf.radanalytics.oshinko.entity.SparkConfig;
 import cz.xtf.radanalytics.oshinko.entity.SparkPod;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
@@ -11,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +63,9 @@ public class ClusterDetailsPage  extends AbstractPage {
 	private WebElement thead;
 
 	private By podsTable = By.xpath("//tbody[@class='ng-scope']");
+
+	@FindBy(xpath = "//pre[@class=\"ng-binding\"]")
+	private WebElement clusterConfigData;
 
 	public ClusterDetailsPage(WebDriver webDriver, String hostname, String clusterName, boolean navigateToPage) {
 		super(webDriver, hostname, navigateToPage, hostname + "/#/clusters/" + clusterName);
@@ -130,5 +137,20 @@ public class ClusterDetailsPage  extends AbstractPage {
 		cluster.setSparkPods(sparkPods);
 //		cluster.setMasterCount(((int) sparkPods.stream().filter(x -> x.getType().equals("master")).count()));
 		return cluster;
+	}
+
+	public SparkConfig getClusterConfigFromJson() {
+		WebWaiters.waitUntilElementIsVisible(clusterConfigData, webDriver);
+		String clusterConfig = clusterConfigData.getText();
+		SparkConfig sparkConfig = null;
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		try {
+			log.info("Search Spark Config in file : {}", clusterConfig);
+			sparkConfig = mapper.readValue(clusterConfig, SparkConfig.class);
+		} catch (IOException e) {
+			log.error("Can't parse {} file to data of SparkConfig : {}", clusterConfig, e.getMessage());
+		}
+		return sparkConfig;
 	}
 }
