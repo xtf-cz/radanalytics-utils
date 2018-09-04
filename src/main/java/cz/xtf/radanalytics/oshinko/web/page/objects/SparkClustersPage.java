@@ -2,14 +2,10 @@ package cz.xtf.radanalytics.oshinko.web.page.objects;
 
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
-import cz.xtf.radanalytics.web.extended.elements.elements.SelectElement;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -73,10 +69,10 @@ public class SparkClustersPage extends AbstractPage {
 	private TextField sparkImageField;
 
 	@FindBy(id = "exposewebui")
-	private SelectElement exposeWebui;
+	private WebElement exposeWebui;
 
 	@FindBy(id = "enablemetrics")
-	private SelectElement enableSparkMetrics;
+	private WebElement enableSparkMetrics;
 
 	public SparkClustersPage(WebDriver webDriver, String hostname, boolean navigateToPage) {
 		super(webDriver, hostname, navigateToPage, hostname + "/#/clusters");
@@ -218,6 +214,28 @@ public class SparkClustersPage extends AbstractPage {
 	public SparkClustersPage fillSparkImageAdvanced(String apacheSparkImageName) {
 		sparkImageField.clear();
 		sparkImageField.sendKeys(apacheSparkImageName);
+		return this;
+	}
+
+	public SparkClustersPage exposeSparkWebUI(String doExpose) {
+		if (Boolean.valueOf(doExpose)) {
+			if (exposeWebui.isSelected()) {
+				return this;
+			} else exposeWebui.click();
+		} else if (exposeWebui.isSelected()) {
+			exposeWebui.click();
+		}
+		return this;
+	}
+
+	public SparkClustersPage enableSparkMetrics(String doEnable) {
+		if (Boolean.valueOf(doEnable)) {
+			if (enableSparkMetrics.isSelected()) {
+				return this;
+			} else enableSparkMetrics.click();
+		} else if (enableSparkMetrics.isSelected()) {
+			enableSparkMetrics.click();
+		}
 		return this;
 	}
 }

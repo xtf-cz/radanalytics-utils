@@ -33,6 +33,8 @@ public class SparkCluster {
 	private String masterWebUrl;
 	@JsonProperty("status")
 	private String status;
+	@JsonProperty("masterWebRoute")
+	private String masterWebRoute;
 
 	@JsonProperty("Config")
 	private SparkConfig sparkConfig;

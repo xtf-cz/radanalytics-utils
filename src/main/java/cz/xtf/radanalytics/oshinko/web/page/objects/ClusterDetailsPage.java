@@ -6,6 +6,7 @@ import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.entity.SparkConfig;
 import cz.xtf.radanalytics.oshinko.entity.SparkPod;
 import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -67,6 +68,9 @@ public class ClusterDetailsPage  extends AbstractPage {
 	@FindBy(xpath = "//pre[@class=\"ng-binding\"]")
 	private WebElement clusterConfigData;
 
+	@FindBy(xpath = "//a[@class=\"ng-binding\" and contains(@href,\"ui-route\")]")
+	private Button exposedSparkWebUi;
+
 	public ClusterDetailsPage(WebDriver webDriver, String hostname, String clusterName, boolean navigateToPage) {
 		super(webDriver, hostname, navigateToPage, hostname + "/#/clusters/" + clusterName);
 		this.clusterName = clusterName;
@@ -106,11 +110,14 @@ public class ClusterDetailsPage  extends AbstractPage {
 
 	public SparkCluster setClusterProperties() {
 		cluster = new SparkCluster();
+		WebWaiters.waitUntilElementIsVisible(clusterDetailsName, webDriver);
 		cluster.setClusterName(clusterDetailsName.getText());
 		cluster.setStatus(clusterDetailsStatus.getText());
 		cluster.setMasterUrl(clusterDetailsMaster.getText());
 		cluster.setMasterCount(Integer.parseInt(clusterDetailsMasterCount.getText()));
 		cluster.setWorkerCount(Integer.parseInt(clusterDetailsWorkersCount.getText()));
+		cluster.setMasterWebRoute(exposedSparkWebUi.getElement().getText());
+		cluster.setSparkConfig(getClusterConfigFromJson());
 		return cluster;
 	}
 
