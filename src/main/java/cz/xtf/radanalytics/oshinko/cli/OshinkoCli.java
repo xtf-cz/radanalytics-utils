@@ -3,10 +3,10 @@ package cz.xtf.radanalytics.oshinko.cli;
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.cli.service.SparkClusterService;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
-import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -111,6 +111,11 @@ public class OshinkoCli implements OshinkoAPI {
 			sparkCluster = sparkClusters.get(0);
 		}
 		return sparkCluster;
+	}
+
+	@Override
+	public SparkCluster getClusterConfig(String clusterName) {
+		return getCluster(clusterName);
 	}
 
 	@Override

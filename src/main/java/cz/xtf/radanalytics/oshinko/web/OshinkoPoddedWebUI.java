@@ -2,7 +2,6 @@ package cz.xtf.radanalytics.oshinko.web;
 
 import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
-import cz.xtf.radanalytics.oshinko.entity.SparkConfig;
 import cz.xtf.radanalytics.oshinko.web.page.objects.ClusterDetailsPage;
 import cz.xtf.radanalytics.oshinko.web.page.objects.SparkClustersPage;
 import cz.xtf.radanalytics.web.webdriver.AbstractWebDriver;
@@ -45,11 +44,6 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 	}
 
 	@Override
-	public boolean createCluster(String clusterName, int workersCount, String imageSpark) {
-		return createCluster("", "", clusterName, workersCount, DEFAULT_CLUSTER_COUNT, "", "", "", imageSpark);
-	}
-
-	@Override
 	public boolean createCluster(String metrics, String exposeUi, String clusterName, int workersCount, int mastersCount, String masterConfig, String workerConfig, String storedConfig, String sparkImage) {
 		log.info("OshinkoPoddedWebUI create cluster with name :{}, worker count : {},  master config : {}, worker config : {}, stored config: {}, spark image : {}",
 				clusterName, workersCount, masterConfig, workerConfig, storedConfig, sparkImage);
@@ -63,6 +57,8 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 				.fillMasterConfigAdvanced(masterConfig)
 				.fillWorkerConfigAdvanced(workerConfig)
 				.fillSparkImageAdvanced(sparkImage)
+				.exposeSparkWebUI(exposeUi)
+				.enableSparkMetrics(metrics)
 				.submitDeployClusterForm()
 				.isClusterSuccessfullyCreated(clusterName);
 	}
@@ -127,10 +123,12 @@ public class OshinkoPoddedWebUI extends AbstractWebDriver implements OshinkoAPI 
 	}
 
 	@Override
-	public SparkConfig getClusterConfig(String clusterName) {
+	public SparkCluster getClusterConfig(String clusterName) {
 		log.info("OshinkoPoddedWebUI get cluster configuration with the cluster name : {}", clusterName);
 
 		ClusterDetailsPage clusterDetailsPage = new ClusterDetailsPage(webDriver, hostname, clusterName, true);
-		return clusterDetailsPage.getClusterConfigFromJson();
+		return clusterDetailsPage.setClusterProperties();
 	}
+
+
 }
