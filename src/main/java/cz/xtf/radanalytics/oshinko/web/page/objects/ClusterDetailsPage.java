@@ -68,7 +68,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 	@FindBy(xpath = "//pre[@class=\"ng-binding\"]")
 	private WebElement clusterConfigData;
 
-	@FindBy(xpath = "//a[@class=\"ng-binding\" and contains(@href,\"ui-route\")]")
+	@FindBy(xpath = "//dd[@class=\"ng-scope\" and contains(@ng-if,\"getSparkWebUi\")]")
 	private Button exposedSparkWebUi;
 
 	public ClusterDetailsPage(WebDriver webDriver, String hostname, String clusterName, boolean navigateToPage) {
@@ -109,6 +109,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 	}
 
 	public SparkCluster setClusterProperties() {
+		log.debug("Setup cluster properties");
 		cluster = new SparkCluster();
 		WebWaiters.waitUntilElementIsVisible(clusterDetailsName, webDriver);
 		cluster.setClusterName(clusterDetailsName.getText());
