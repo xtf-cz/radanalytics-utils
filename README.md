@@ -9,7 +9,7 @@
 * Commit your changes by next rule:\
 ** each commit should include only its changes scope\
 ** don't use \#.1 or 1. in commit message 
-* use next command to combine commits by changes scope:\
+* use next command to combine commits by changes scope:
   ```
   $ git fetch upstream
   $ git checkout local_development_branch_name 
