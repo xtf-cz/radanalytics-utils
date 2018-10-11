@@ -7,7 +7,7 @@
 * Rebase local development branch on upstream/master\
 ``git checkout -b local_development_branch_name && git rebase upstream/master``
 * Commit your changes by next rule:\
-** each commit should include only his changes scope\
+** each commit should include only its changes scope\
 ** don't use \#.1 or 1. in commit message 
 * use next command to combine commits by changes scope:\
   ```
