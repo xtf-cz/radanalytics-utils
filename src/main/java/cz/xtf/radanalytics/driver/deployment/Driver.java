@@ -1,26 +1,26 @@
 package cz.xtf.radanalytics.driver.deployment;
 
-		import cz.xtf.TestConfiguration;
-		import cz.xtf.openshift.OpenShiftUtil;
-		import cz.xtf.openshift.OpenShiftUtils;
-		import cz.xtf.openshift.logs.LogCheckerUtils;
-		import cz.xtf.radanalytics.util.TestHelper;
-		import cz.xtf.radanalytics.waiters.SparkWaiters;
-		import io.fabric8.kubernetes.api.model.Pod;
-		import io.fabric8.kubernetes.api.model.Service;
-		import io.fabric8.openshift.api.model.Build;
-		import io.fabric8.openshift.api.model.BuildConfig;
-		import io.fabric8.openshift.api.model.DeploymentConfig;
-		import io.fabric8.openshift.api.model.ImageStream;
-		import lombok.extern.slf4j.Slf4j;
+import static java.lang.StrictMath.toIntExact;
 
-		import java.io.IOException;
-		import java.util.concurrent.TimeUnit;
-		import java.util.concurrent.TimeoutException;
-		import java.util.regex.Matcher;
-		import java.util.regex.Pattern;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-		import static java.lang.StrictMath.toIntExact;
+import cz.xtf.TestConfiguration;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.openshift.logs.LogCheckerUtils;
+import cz.xtf.radanalytics.util.TestHelper;
+import cz.xtf.radanalytics.waiters.SparkWaiters;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.Service;
+import io.fabric8.openshift.api.model.Build;
+import io.fabric8.openshift.api.model.BuildConfig;
+import io.fabric8.openshift.api.model.DeploymentConfig;
+import io.fabric8.openshift.api.model.ImageStream;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Driver {

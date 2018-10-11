@@ -23,5 +23,4 @@ public interface CodeCell {
 	boolean addBelowCellAndInsertCode(String code);
 
 	boolean mergeCellAbove();
-
 }

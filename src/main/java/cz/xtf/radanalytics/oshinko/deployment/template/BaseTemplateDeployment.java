@@ -1,5 +1,13 @@
 package cz.xtf.radanalytics.oshinko.deployment.template;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.util.TestHelper;
@@ -9,15 +17,6 @@ import io.fabric8.kubernetes.api.model.KubernetesList;
 import io.fabric8.openshift.api.model.DeploymentConfig;
 import io.fabric8.openshift.api.model.Template;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 
 @Slf4j
 public class BaseTemplateDeployment {
@@ -32,13 +31,13 @@ public class BaseTemplateDeployment {
 	 * Creates the Openshift application from template and specified parameters
 	 * Similar way it is done via: oc new-app --template=[your template] -p [one or multiple parameters]
 	 *
-	 * @param templateResourcePath     path or url to template file
+	 * @param templateResourcePath path or url to template file
 	 * @param templateResourceFileName file name with extension like: pythonbuilddc.json
-	 * @param params                   parameters for application instance like: -p APPLICATION_NAME=winemap etc.
+	 * @param params parameters for application instance like: -p APPLICATION_NAME=winemap etc.
 	 */
 	public static void deploy(String templateResourcePath,
-				String templateResourceFileName,
-				Map<String, String> params) {
+			String templateResourceFileName,
+			Map<String, String> params) {
 
 		if (WORK_DIR.isEmpty()) {
 			WORK_DIR = "template";
@@ -52,39 +51,37 @@ public class BaseTemplateDeployment {
 		log.info("{} - deployed", oshinkoSparkTemplate.getMetadata().getName());
 	}
 
-
 	/**
 	 * Creates the Openshift application from template and specified parameters
 	 * Similar way it is done via: oc new-app --template=[your template] -p [one or multiple parameters]
 	 *
-	 * @param workDir                  Folder where will be saved template file
-	 * @param templateResourcePath     path or url to template file
+	 * @param workDir Folder where will be saved template file
+	 * @param templateResourcePath path or url to template file
 	 * @param templateResourceFileName file name with extension like: pythonbuilddc.json
-	 * @param params                   parameters for application instance like: -p APPLICATION_NAME=winemap etc.
+	 * @param params parameters for application instance like: -p APPLICATION_NAME=winemap etc.
 	 */
 	public static void deploy(String workDir, String templateResourcePath,
-				String templateResourceFileName,
-				Map<String, String> params) {
+			String templateResourceFileName,
+			Map<String, String> params) {
 
 		WORK_DIR = workDir;
 		deploy(templateResourcePath, templateResourceFileName, params);
 	}
 
-
 	/**
 	 * Creates the Openshift application from template with specified parameters and environment variables for container
-	 *
+	 * <p>
 	 * Similar way it is done via:
 	 * oc new-app --template=[your template] -p [one or multiple parameters] -e [one or multiple environment variables]
 	 *
-	 * @param templateResourcePath     path or url to template file
+	 * @param templateResourcePath path or url to template file
 	 * @param templateResourceFileName file name with extension like: pythonbuilddc.json
-	 * @param params                   parameters for application instance like: -p APPLICATION_NAME=winemap etc.
-	 * @param envars                   environment variable for application instance like: -e SERVER=postgesql etc.
+	 * @param params parameters for application instance like: -p APPLICATION_NAME=winemap etc.
+	 * @param envars environment variable for application instance like: -e SERVER=postgesql etc.
 	 */
 	public static void deploy(String templateResourcePath,
-				String templateResourceFileName,
-				Map<String, String> params, Map<String, String> envars) {
+			String templateResourceFileName,
+			Map<String, String> params, Map<String, String> envars) {
 
 		Template applicationTemplate = createTemplate(templateResourcePath, templateResourceFileName);
 		KubernetesList objects = openshift.processTemplate(applicationTemplate.getMetadata().getName(), params);

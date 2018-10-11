@@ -1,6 +1,7 @@
 package cz.xtf.radanalytics.oshinko.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,5 +18,4 @@ public class SparkPod {
 	private String status;
 	@JsonProperty("Type")
 	private String type;
-	
 }

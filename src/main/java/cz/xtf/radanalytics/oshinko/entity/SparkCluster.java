@@ -1,11 +1,12 @@
 package cz.xtf.radanalytics.oshinko.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 /**
  * Java object representing Oshinko JSON object

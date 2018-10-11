@@ -1,12 +1,13 @@
 package cz.xtf.radanalytics.web.extended.elements.impl;
 
-import cz.xtf.radanalytics.web.extended.elements.ElementFactory;
-import cz.xtf.radanalytics.web.extended.elements.elements.Element;
+import static java.text.MessageFormat.format;
+
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static java.text.MessageFormat.format;
+import cz.xtf.radanalytics.web.extended.elements.ElementFactory;
+import cz.xtf.radanalytics.web.extended.elements.elements.Element;
 
 public class DefaultElementFactory implements ElementFactory {
 	@Override

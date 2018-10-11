@@ -1,15 +1,15 @@
 package cz.xtf.radanalytics.db.mongodb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.db.BaseDBDeployment;
 import cz.xtf.radanalytics.db.entity.OpenshiftDB;
 import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 public class MongoDB extends BaseDBDeployment {
@@ -34,14 +34,14 @@ public class MongoDB extends BaseDBDeployment {
 	}
 
 	private static OpenshiftDB deployMongoDB(String templatePath,
-							String memoryLimit,
-							String namespace,
-							String databaseServiceName,
-							String mongoDbUser,
-							String mongoDbPassword,
-							String mongoDbDatabase,
-							String mongoDbAdminPassword,
-							String mongoDbVersion) {
+			String memoryLimit,
+			String namespace,
+			String databaseServiceName,
+			String mongoDbUser,
+			String mongoDbPassword,
+			String mongoDbDatabase,
+			String mongoDbAdminPassword,
+			String mongoDbVersion) {
 
 		Map<String, String> params = new HashMap<>();
 		params.put("MEMORY_LIMIT", memoryLimit);

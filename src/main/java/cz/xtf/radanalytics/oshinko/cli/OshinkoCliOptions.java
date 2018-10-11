@@ -27,22 +27,22 @@ public class OshinkoCliOptions {
 
 	@Builder
 	public OshinkoCliOptions(String as,
-				String certificateAuthority,
-				String clientCertificate,
-				String clientKey,
-				String cluster,
-				String config,
-				String context,
-				boolean insecureSkipTlsVerify,
-				String logFlushFrequency,
-				int logLevel,
-				String logspec,
-				boolean matchServerVersion,
-				String namespace,
-				String requestTimeout,
-				String server,
-				String token,
-				String user) {
+			String certificateAuthority,
+			String clientCertificate,
+			String clientKey,
+			String cluster,
+			String config,
+			String context,
+			boolean insecureSkipTlsVerify,
+			String logFlushFrequency,
+			int logLevel,
+			String logspec,
+			boolean matchServerVersion,
+			String namespace,
+			String requestTimeout,
+			String server,
+			String token,
+			String user) {
 		this.as = "--as=" + as;
 		this.certificateAuthority = "--certificate-authority=" + certificateAuthority;
 		this.clientCertificate = "--client-certificate=" + clientCertificate;

@@ -1,7 +1,18 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import cz.xtf.radanalytics.oshinko.entity.SparkConfig;
 import cz.xtf.radanalytics.oshinko.entity.SparkPod;
@@ -9,18 +20,9 @@ import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
-public class ClusterDetailsPage  extends AbstractPage {
+public class ClusterDetailsPage extends AbstractPage {
 	private String clusterName;
 	private SparkCluster cluster;
 
@@ -102,7 +104,7 @@ public class ClusterDetailsPage  extends AbstractPage {
 		try {
 			nonExistingCluster.isDisplayed();
 			return false;
-		} catch (NoSuchElementException e){
+		} catch (NoSuchElementException e) {
 			log.error("The cluster \"{}\" does not exist: {}", clusterName, e.getMessage());
 			return true;
 		}

@@ -1,5 +1,11 @@
 package cz.xtf.radanalytics.openshift;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
@@ -7,14 +13,13 @@ import io.fabric8.kubernetes.api.model.ContainerPort;
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
-import io.fabric8.openshift.api.model.*;
+import io.fabric8.openshift.api.model.BuildConfig;
+import io.fabric8.openshift.api.model.BuildConfigBuilder;
+import io.fabric8.openshift.api.model.DeploymentConfig;
+import io.fabric8.openshift.api.model.DeploymentConfigBuilder;
+import io.fabric8.openshift.api.model.ImageStream;
+import io.fabric8.openshift.api.model.ImageStreamBuilder;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class OpenshiftApp {
@@ -37,13 +42,12 @@ public class OpenshiftApp {
 
 	private String baseImageStreamName;
 
-
 	/**
 	 * Creates the Openshift application from base image and container environment variables
 	 * Similar way it is done via: oc new-app [baseimage] -e [VARIABLE=value]
 	 *
-	 * @param appName          name of the application to be created
-	 * @param imageName        base image name which should be used to create this application
+	 * @param appName name of the application to be created
+	 * @param imageName base image name which should be used to create this application
 	 * @param containerEnvVars environment variables for the container
 	 */
 	public OpenshiftApp(String appName, String imageName, Map<String, String> containerEnvVars) {
@@ -54,9 +58,9 @@ public class OpenshiftApp {
 	 * Creates the Openshift application from base image, Git repository and container environment variables
 	 * Similar way it is done via: oc new-app [baseimage]~[https://git.repo.url] -e [VARIABLE=value]
 	 *
-	 * @param appName          name of the application to be created
-	 * @param imageName        base image name which should be used to build and create this application
-	 * @param gitUrl           repository with sources to be used by the build
+	 * @param appName name of the application to be created
+	 * @param imageName base image name which should be used to build and create this application
+	 * @param gitUrl repository with sources to be used by the build
 	 * @param containerEnvVars environment variables for the container
 	 */
 	public OpenshiftApp(String appName, String imageName, String gitUrl, Map<String, String> containerEnvVars) {
@@ -74,12 +78,12 @@ public class OpenshiftApp {
 	 * Creates the Openshift application from base image and container environment variables
 	 * Similar way it is done via: oc new-app [baseimage]~[https://git.repo.url] -e [VARIABLE=value]
 	 *
-	 * @param appName          name of the application to be created
-	 * @param imageName        base image name which should be used to create this application
-	 * @param gitUrl           repository with sources to be used by the build
+	 * @param appName name of the application to be created
+	 * @param imageName base image name which should be used to create this application
+	 * @param gitUrl repository with sources to be used by the build
 	 * @param containerEnvVars environment variables for the container
-	 * @param containerPort    environment variables for specifying container port (by default it is 8080)
-	 * @param exposedPort      environment variables for specifying exposing port
+	 * @param containerPort environment variables for specifying container port (by default it is 8080)
+	 * @param exposedPort environment variables for specifying exposing port
 	 */
 	public OpenshiftApp(String appName, String imageName, String gitUrl, Map<String, String> containerEnvVars, int containerPort, int exposedPort) {
 		this.containerPort = containerPort;
@@ -106,9 +110,9 @@ public class OpenshiftApp {
 	 * Creates the Openshift application from base image and container environment variables
 	 * Similar way it is done via: oc new-app [baseimage] -e [VARIABLE=value]
 	 *
-	 * @param appName                 name of the application to be created
-	 * @param imageName               base image name which should be used to create this application
-	 * @param containerEnvVars        environment variables for the container
+	 * @param appName name of the application to be created
+	 * @param imageName base image name which should be used to create this application
+	 * @param containerEnvVars environment variables for the container
 	 * @param containerAndExposedPort environment variables for specifying container port (exposed port will be the same as container port)
 	 */
 	public OpenshiftApp(String appName, String imageName, Map<String, String> containerEnvVars, int containerAndExposedPort) {
@@ -119,11 +123,11 @@ public class OpenshiftApp {
 	 * Creates the Openshift application from base image and container environment variables
 	 * Similar way it is done via: oc new-app [baseimage] -e [VARIABLE=value]
 	 *
-	 * @param appName          name of the application to be created
-	 * @param imageName        base image name which should be used to create this application
+	 * @param appName name of the application to be created
+	 * @param imageName base image name which should be used to create this application
 	 * @param containerEnvVars environment variables for the container
-	 * @param containerPort    environment variables for specifying container port (by default it is 8080)
-	 * @param exposedPort      environment variables for specifying exposing port
+	 * @param containerPort environment variables for specifying container port (by default it is 8080)
+	 * @param exposedPort environment variables for specifying exposing port
 	 */
 	public OpenshiftApp(String appName, String imageName, Map<String, String> containerEnvVars, int containerPort, int exposedPort) {
 		this.containerPort = containerPort;
@@ -250,7 +254,7 @@ public class OpenshiftApp {
 		return containerPortList;
 	}
 
-	public OpenshiftApp addPort(int newPort){
+	public OpenshiftApp addPort(int newPort) {
 		addPortToList(newPort);
 		generateDeploymentConfig();
 		return this;

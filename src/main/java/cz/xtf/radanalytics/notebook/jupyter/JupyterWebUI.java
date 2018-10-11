@@ -1,16 +1,17 @@
 package cz.xtf.radanalytics.notebook.jupyter;
 
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+
 import cz.xtf.radanalytics.notebook.jupyter.entity.CodeCell;
 import cz.xtf.radanalytics.notebook.jupyter.entity.CodeCellWeb;
 import cz.xtf.radanalytics.notebook.jupyter.page.objects.JupiterTreePage;
 import cz.xtf.radanalytics.notebook.jupyter.page.objects.LoginPage;
 import cz.xtf.radanalytics.notebook.jupyter.page.objects.ProjectPage;
 import cz.xtf.radanalytics.web.WebHelpers;
-import org.assertj.core.api.Assertions;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 public class JupyterWebUI implements JupyterAPI {
 	private final WebDriver webDriver;
@@ -58,14 +59,14 @@ public class JupyterWebUI implements JupyterAPI {
 	}
 
 	@Override
-	public void assertCodeCell(int cellIndex){
+	public void assertCodeCell(int cellIndex) {
 		assertCodeCellRange(cellIndex, cellIndex);
 	}
 
 	@Override
-	public void assertCodeCellRange(int start, int end){
+	public void assertCodeCellRange(int start, int end) {
 		boolean outputHasErrors;
-		for(int n = start; n <= end; n++){
+		for (int n = start; n <= end; n++) {
 			try {
 				outputHasErrors = this.getNthCodeCell(n).runCell().outputHasErrors();
 				Assertions.assertThat(outputHasErrors).as("Check output status of cell %s", n).isFalse();
@@ -83,5 +84,4 @@ public class JupyterWebUI implements JupyterAPI {
 	private List<WebElement> getAllCodeCells() {
 		return new ProjectPage(webDriver, false).getAllCodeCells();
 	}
-
 }

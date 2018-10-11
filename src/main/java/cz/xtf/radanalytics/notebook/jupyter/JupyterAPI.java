@@ -1,6 +1,5 @@
 package cz.xtf.radanalytics.notebook.jupyter;
 
-
 import cz.xtf.radanalytics.notebook.jupyter.entity.CodeCell;
 
 public interface JupyterAPI {

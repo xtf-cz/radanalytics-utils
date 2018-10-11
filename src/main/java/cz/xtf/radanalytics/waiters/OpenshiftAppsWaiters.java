@@ -1,15 +1,15 @@
 package cz.xtf.radanalytics.waiters;
 
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import lombok.extern.slf4j.Slf4j;
+import static java.lang.StrictMath.toIntExact;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 
-import static java.lang.StrictMath.toIntExact;
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class OpenshiftAppsWaiters {

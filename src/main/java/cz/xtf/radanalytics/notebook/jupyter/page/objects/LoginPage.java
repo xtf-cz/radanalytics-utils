@@ -1,12 +1,13 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+
 import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.FindBy;
 
 @WebUITests
 public class LoginPage extends AbstractPage {
@@ -29,6 +30,4 @@ public class LoginPage extends AbstractPage {
 		loginButton.click();
 		return new JupiterTreePage(webDriver, hostname, false);
 	}
-
-
 }

@@ -26,7 +26,6 @@ public class WebWaiters {
 	private static final long DEFAULT_WAIT_TIMEOUT = 15 * 60 * 1000L;
 	private static Integer timeForWaiting = 30;
 
-
 	public static void waitUntilElementIsVisible(WebElement webElement, WebDriver webDriver, int timeOutInSeconds) {
 		new WebDriverWait(webDriver, timeOutInSeconds).until(ExpectedConditions.visibilityOf(webElement));
 	}
@@ -147,7 +146,7 @@ public class WebWaiters {
 		}
 	}
 
-	public static void waitUntilAlertPresent(WebDriver driver){
+	public static void waitUntilAlertPresent(WebDriver driver) {
 		new WebDriverWait(driver, timeForWaiting).until(ExpectedConditions.alertIsPresent());
 	}
 }

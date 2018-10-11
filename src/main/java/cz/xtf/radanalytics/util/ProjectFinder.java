@@ -1,14 +1,14 @@
 package cz.xtf.radanalytics.util;
 
-import cz.xtf.io.IOUtils;
-import lombok.extern.slf4j.Slf4j;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import cz.xtf.io.IOUtils;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class ProjectFinder {
-	
+
 	public static Path findApplicationDirectory(String appName) {
 		return findApplicationDirectory(null, appName, null);
 	}
@@ -23,7 +23,7 @@ public class ProjectFinder {
 
 		Path testApp = basePath.resolve("src/test/resources/apps").resolve(relativePath);
 		Path mainApp = basePath.resolve("src/main/resources/apps").resolve(relativePath);
-		
+
 		if (testApp.toFile().exists()) {
 			log.info("Found project {} at the path: {}", appName, testApp.toAbsolutePath().toString());
 			return testApp;

@@ -1,15 +1,15 @@
 package cz.xtf.radanalytics.waiters;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+
 import cz.xtf.openshift.logs.LogCheckerUtils;
 import cz.xtf.wait.SimpleWaiter;
 import cz.xtf.wait.Waiter;
 import io.fabric8.kubernetes.api.model.Pod;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.util.Collection;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 @Slf4j
 public class SparkWaiters {

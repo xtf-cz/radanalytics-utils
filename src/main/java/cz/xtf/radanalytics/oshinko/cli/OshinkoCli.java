@@ -1,5 +1,9 @@
 package cz.xtf.radanalytics.oshinko.cli;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
 import cz.xtf.openshift.PodService;
@@ -8,10 +12,6 @@ import cz.xtf.radanalytics.oshinko.api.OshinkoAPI;
 import cz.xtf.radanalytics.oshinko.cli.service.SparkClusterService;
 import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Oshinko CLI based implementation of Oshinko API. Performs calls to pre-deployed pod, which should contain Oshinko CLI.

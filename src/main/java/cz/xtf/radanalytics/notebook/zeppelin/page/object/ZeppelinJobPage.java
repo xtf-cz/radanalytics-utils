@@ -1,10 +1,5 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
-import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
-import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,6 +7,12 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
+import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 
 @WebUITests
 public class ZeppelinJobPage extends AbstractPage {
@@ -71,10 +72,8 @@ public class ZeppelinJobPage extends AbstractPage {
 				.collect(Collectors.toList());
 	}
 
-	public Long getTotalJobAmount(){
+	public Long getTotalJobAmount() {
 		WebWaiters.waitForAngularLoad();
 		return Long.parseLong(totalJobsOnPage.getText());
 	}
-
-
 }

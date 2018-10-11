@@ -2,12 +2,13 @@ package cz.xtf.radanalytics.oshinko.cli.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SparkClusterService {

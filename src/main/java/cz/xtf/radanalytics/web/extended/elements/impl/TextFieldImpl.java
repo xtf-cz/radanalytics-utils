@@ -1,7 +1,8 @@
 package cz.xtf.radanalytics.web.extended.elements.impl;
 
-import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import org.openqa.selenium.WebElement;
+
+import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 
 class TextFieldImpl extends AbstractElement implements TextField {
 	protected TextFieldImpl(final WebElement wrappedElement) {

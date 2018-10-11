@@ -1,7 +1,8 @@
 package cz.xtf.radanalytics.web.extended.elements.impl;
 
-import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import org.openqa.selenium.WebElement;
+
+import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 
 class ButtonImpl extends AbstractElement implements Button {
 	protected ButtonImpl(final WebElement wrappedElement) {

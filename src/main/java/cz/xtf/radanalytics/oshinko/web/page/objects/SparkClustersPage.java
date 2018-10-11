@@ -1,20 +1,24 @@
 package cz.xtf.radanalytics.oshinko.web.page.objects;
 
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.extended.elements.elements.Button;
-import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.extended.elements.elements.Button;
+import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public class SparkClustersPage extends AbstractPage {
-
 
 	private String deployButton = "//button[@id='startbutton']";
 	private String actionsButton = "//button[@id=\"%s-actions\"]";
@@ -54,7 +58,6 @@ public class SparkClustersPage extends AbstractPage {
 
 	@FindBy(id = "cluster-adv-workers")
 	private TextField workersCountField;
-
 
 	@FindBy(id = "cluster-config-name")
 	private TextField storedClusterConfigurationField;

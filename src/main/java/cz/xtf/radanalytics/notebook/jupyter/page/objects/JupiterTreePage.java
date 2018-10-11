@@ -1,13 +1,14 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
-import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @WebUITests
@@ -66,5 +67,4 @@ public class JupiterTreePage extends AbstractPage {
 		}
 		return new ProjectPage(webDriver, false);
 	}
-
 }
