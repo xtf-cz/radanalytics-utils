@@ -7,5 +7,4 @@ public interface CodeCell {
 	String getOutput();
 
 	boolean outputHasErrors();
-
 }

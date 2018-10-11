@@ -1,8 +1,9 @@
 package cz.xtf.radanalytics.web.extended.elements.impl;
 
+import org.openqa.selenium.WebElement;
+
 import cz.xtf.radanalytics.web.extended.elements.ContainerFactory;
 import cz.xtf.radanalytics.web.extended.elements.elements.Container;
-import org.openqa.selenium.WebElement;
 
 public class DefaultContainerFactory implements ContainerFactory {
 	@Override

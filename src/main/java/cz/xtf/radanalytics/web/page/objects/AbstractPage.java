@@ -1,21 +1,23 @@
 package cz.xtf.radanalytics.web.page.objects;
 
-import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.WebHelpers;
-import cz.xtf.radanalytics.web.extended.elements.ExtendedFieldDecorator;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 import javax.net.ssl.HttpsURLConnection;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
+
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.WebHelpers;
+import cz.xtf.radanalytics.web.extended.elements.ExtendedFieldDecorator;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @WebUITests
@@ -52,7 +54,7 @@ public abstract class AbstractPage {
 		BooleanSupplier successConditionForConnection = () -> {
 			try {
 				HttpURLConnection connection;
-				if (finalConn instanceof HttpsURLConnection){
+				if (finalConn instanceof HttpsURLConnection) {
 					connection = (HttpsURLConnection) finalLink.openConnection();
 				} else {
 					connection = (HttpURLConnection) finalLink.openConnection();

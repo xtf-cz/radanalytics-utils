@@ -1,5 +1,15 @@
 package cz.xtf.radanalytics.notebook.jupyter.page.objects;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
+import java.util.concurrent.TimeoutException;
+import java.util.function.BooleanSupplier;
+
 import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.MainPage;
 import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
@@ -10,15 +20,6 @@ import cz.xtf.radanalytics.web.extended.elements.elements.SelectElement;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
-import java.util.concurrent.TimeoutException;
-import java.util.function.BooleanSupplier;
 
 @Slf4j
 @WebUITests
@@ -74,7 +75,6 @@ public class ProjectPage extends AbstractPage {
 	private By codeLine = By.xpath(".//pre[@class=\" CodeMirror-line \"]");
 	private By textAreaCell = By.xpath(".//div[@class='input_area']//textarea");
 	private String inputPrompt = "//div[@id=\"notebook-container\"]//div[contains(@class, \"code_cell\")]";
-
 
 	public ProjectPage(WebDriver webDriver, boolean navigateToPage) {
 		super(webDriver, "", navigateToPage, "");

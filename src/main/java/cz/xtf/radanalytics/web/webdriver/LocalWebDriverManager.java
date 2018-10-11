@@ -1,8 +1,5 @@
 package cz.xtf.radanalytics.web.webdriver;
 
-import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -18,8 +15,11 @@ import java.util.function.BooleanSupplier;
 
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
+import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.webdriver.GhostDriverService;
 import cz.xtf.webdriver.WebDriverService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LocalWebDriverManager {

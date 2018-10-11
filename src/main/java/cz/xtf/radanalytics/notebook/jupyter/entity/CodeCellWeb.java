@@ -1,13 +1,14 @@
 package cz.xtf.radanalytics.notebook.jupyter.entity;
 
-import cz.xtf.radanalytics.notebook.jupyter.page.objects.ProjectPage;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
+
+import cz.xtf.radanalytics.notebook.jupyter.page.objects.ProjectPage;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CodeCellWeb implements CodeCell {
@@ -115,7 +116,6 @@ public class CodeCellWeb implements CodeCell {
 					.fillFindFieldInFindAndReplaceModal(find)
 					.fillReplaceFieldInFindAndReplaceModal(replace)
 					.clickOnReplaceAllButton();
-
 		} catch (Exception e) {
 			return false;
 		}
@@ -151,5 +151,4 @@ public class CodeCellWeb implements CodeCell {
 
 		return true;
 	}
-
 }

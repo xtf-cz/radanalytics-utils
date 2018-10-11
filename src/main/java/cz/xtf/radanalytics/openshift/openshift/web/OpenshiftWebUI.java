@@ -34,6 +34,4 @@ public class OpenshiftWebUI extends AbstractWebDriver implements OpenshiftWebApi
 		return new AuthorizeAccessPage(webDriver, hostname, false)
 				.allowPermissions();
 	}
-
-
 }

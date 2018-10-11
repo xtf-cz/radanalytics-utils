@@ -1,15 +1,15 @@
 package cz.xtf.radanalytics.db.postgresdb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cz.xtf.openshift.OpenShiftUtil;
 import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import cz.xtf.radanalytics.db.BaseDBDeployment;
 import cz.xtf.radanalytics.db.entity.OpenshiftDB;
 import cz.xtf.radanalytics.util.TestHelper;
-import cz.xtf.radanalytics.configuration.RadanalyticsConfiguration;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 public class PostgresDB extends BaseDBDeployment {
@@ -40,14 +40,14 @@ public class PostgresDB extends BaseDBDeployment {
 	}
 
 	private static OpenshiftDB deployPostgresDB(String templatePath,
-				String postgresqlUser,
-				String postgresqlPassword,
-				String postgresqlDatabase,
-				String postgresServiceName,
-				String namespace,
-				String voluemCapacity,
-				String memoryLimit,
-				String postgresqlVersion) {
+			String postgresqlUser,
+			String postgresqlPassword,
+			String postgresqlDatabase,
+			String postgresServiceName,
+			String namespace,
+			String voluemCapacity,
+			String memoryLimit,
+			String postgresqlVersion) {
 		Map<String, String> params = new HashMap();
 		params.put("POSTGRESQL_USER", postgresqlUser);
 		params.put("POSTGRESQL_PASSWORD", postgresqlPassword);
@@ -63,7 +63,6 @@ public class PostgresDB extends BaseDBDeployment {
 		}
 
 		deploy(DEFAULT_POSTGRE_SERVICE_NAME, templatePath, params);
-
 
 		OpenshiftDB db = new OpenshiftDB();
 		db.setUsername(postgresqlUser);

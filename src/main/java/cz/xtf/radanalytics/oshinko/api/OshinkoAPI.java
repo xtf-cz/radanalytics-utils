@@ -1,8 +1,8 @@
 package cz.xtf.radanalytics.oshinko.api;
 
-import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
-
 import java.util.List;
+
+import cz.xtf.radanalytics.oshinko.entity.SparkCluster;
 
 public interface OshinkoAPI {
 

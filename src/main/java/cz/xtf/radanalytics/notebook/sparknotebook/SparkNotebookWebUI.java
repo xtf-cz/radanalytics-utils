@@ -1,14 +1,15 @@
 package cz.xtf.radanalytics.notebook.sparknotebook;
 
-import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCell;
-import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCellWeb;
-import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.ApplicationPage;
-import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.MainPage;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+
+import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCell;
+import cz.xtf.radanalytics.notebook.sparknotebook.entity.CodeCellWeb;
+import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.ApplicationPage;
+import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.MainPage;
 
 public class SparkNotebookWebUI implements SparkNotebookAPI {
 	private final WebDriver webDriver;
@@ -54,7 +55,7 @@ public class SparkNotebookWebUI implements SparkNotebookAPI {
 	public void assertCodeCellRangeSpark(int start, int end) {
 		boolean outputHasErrors;
 		CodeCell cell;
-		for(int n = start; n <= end; n++){
+		for (int n = start; n <= end; n++) {
 			cell = this.getNthCodeCell(n);
 			try {
 				outputHasErrors = cell.runCell().outputHasErrors();
@@ -69,5 +70,4 @@ public class SparkNotebookWebUI implements SparkNotebookAPI {
 	private List<WebElement> getAllCodeCells() {
 		return new ApplicationPage(webDriver, false).getAllCodeCells();
 	}
-
 }

@@ -1,5 +1,9 @@
 package cz.xtf.radanalytics.driver.deployment;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import cz.xtf.TestConfiguration;
 import cz.xtf.radanalytics.driver.build.DriverBuild;
 import cz.xtf.radanalytics.driver.build.DriverBuildDefinition;
@@ -7,12 +11,13 @@ import cz.xtf.radanalytics.oshinko.deployment.Oshinko;
 import io.fabric8.kubernetes.api.model.EnvVar;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
-import io.fabric8.openshift.api.model.*;
+import io.fabric8.openshift.api.model.BuildConfig;
+import io.fabric8.openshift.api.model.BuildConfigBuilder;
+import io.fabric8.openshift.api.model.DeploymentConfig;
+import io.fabric8.openshift.api.model.DeploymentConfigBuilder;
+import io.fabric8.openshift.api.model.ImageStream;
+import io.fabric8.openshift.api.model.ImageStreamBuilder;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 // TODO configuring dc x jobs
 @Slf4j

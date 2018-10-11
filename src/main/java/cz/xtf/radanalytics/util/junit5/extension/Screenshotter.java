@@ -1,16 +1,19 @@
 package cz.xtf.radanalytics.util.junit5.extension;
 
-import cz.xtf.radanalytics.web.webdriver.LocalWebDriverManager;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.io.IOException;
+
+import cz.xtf.radanalytics.web.webdriver.LocalWebDriverManager;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Screenshotter implements AfterTestExecutionCallback {
@@ -33,7 +36,7 @@ public class Screenshotter implements AfterTestExecutionCallback {
 				File scrFile = ((TakesScreenshot) LocalWebDriverManager.getWebDriver()).getScreenshotAs(OutputType.FILE);
 				try {
 					FileUtils.copyFile(scrFile, new File(new File("log"), testId + ".png"));
-					log.info("*** Screenshot taken: {}.png ", testId );
+					log.info("*** Screenshot taken: {}.png ", testId);
 				} catch (IOException e1) {
 					log.error(e1.getMessage());
 				}

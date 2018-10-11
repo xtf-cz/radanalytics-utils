@@ -1,10 +1,5 @@
 package cz.xtf.radanalytics.notebook.sparknotebook.page.objects;
 
-import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.WebHelpers;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +9,12 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
+
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.WebHelpers;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @WebUITests
@@ -82,7 +83,7 @@ public class ApplicationPage extends AbstractPage {
 		};
 
 		try {
-			WebWaiters.waitFor(successCondition, null, 1000L,  10*60*1000L);
+			WebWaiters.waitFor(successCondition, null, 1000L, 10 * 60 * 1000L);
 		} catch (InterruptedException | TimeoutException e) {
 			log.error(e.getMessage());
 		}

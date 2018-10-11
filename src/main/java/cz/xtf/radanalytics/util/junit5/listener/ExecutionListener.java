@@ -1,8 +1,5 @@
 package cz.xtf.radanalytics.util.junit5.listener;
 
-import cz.xtf.time.TimeUtil;
-import lombok.extern.slf4j.Slf4j;
-
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
@@ -10,6 +7,9 @@ import org.junit.platform.launcher.TestPlan;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import cz.xtf.time.TimeUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ExecutionListener implements TestExecutionListener {
@@ -74,7 +74,7 @@ public class ExecutionListener implements TestExecutionListener {
 				.replaceAll(".*\\.", "");                    // cut of everyting before dot (output: class name)
 		String methodName = testIdentifier.getLegacyReportingName()
 				.replaceAll("\\(.*", "");                    // cut of method params (usually just ())
-		
+
 		String baseName = String.format("%s::%s", className, methodName);
 		String displayName = testIdentifier.getDisplayName();
 		if (!displayName.isEmpty() && !displayName.equals(testIdentifier.getLegacyReportingName())) {

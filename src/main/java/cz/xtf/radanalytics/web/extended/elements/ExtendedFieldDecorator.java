@@ -1,9 +1,5 @@
 package cz.xtf.radanalytics.web.extended.elements;
 
-import cz.xtf.radanalytics.web.extended.elements.elements.Container;
-import cz.xtf.radanalytics.web.extended.elements.elements.Element;
-import cz.xtf.radanalytics.web.extended.elements.impl.DefaultContainerFactory;
-import cz.xtf.radanalytics.web.extended.elements.impl.DefaultElementFactory;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -12,6 +8,11 @@ import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.Field;
+
+import cz.xtf.radanalytics.web.extended.elements.elements.Container;
+import cz.xtf.radanalytics.web.extended.elements.elements.Element;
+import cz.xtf.radanalytics.web.extended.elements.impl.DefaultContainerFactory;
+import cz.xtf.radanalytics.web.extended.elements.impl.DefaultElementFactory;
 
 public class ExtendedFieldDecorator extends DefaultFieldDecorator {
 	private ElementFactory elementFactory = new DefaultElementFactory();

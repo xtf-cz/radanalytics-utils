@@ -4,5 +4,4 @@ import org.openqa.selenium.WebElement;
 
 public interface Container {
 	void init(WebElement wrappedElement);
-
 }

@@ -1,6 +1,6 @@
 package cz.xtf.radanalytics.web.extended.elements.elements;
 
-public interface TextField extends Element{
+public interface TextField extends Element {
 	void type(String text);
 
 	void clear();

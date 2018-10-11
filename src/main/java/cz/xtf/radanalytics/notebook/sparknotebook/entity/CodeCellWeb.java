@@ -1,11 +1,12 @@
 package cz.xtf.radanalytics.notebook.sparknotebook.entity;
 
-import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.ApplicationPage;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.regex.Pattern;
+
+import cz.xtf.radanalytics.notebook.sparknotebook.page.objects.ApplicationPage;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CodeCellWeb implements CodeCell {
@@ -47,5 +48,4 @@ public class CodeCellWeb implements CodeCell {
 		String output = getOutput();
 		return !Pattern.compile("Took:.*at").matcher(output).find();
 	}
-
 }

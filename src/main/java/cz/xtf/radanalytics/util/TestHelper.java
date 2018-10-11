@@ -122,7 +122,7 @@ public class TestHelper {
 
 			File resourcesFile = new File(WORKDIR, rescourceFileName);
 
-			if(resourcesFile.exists()){
+			if (resourcesFile.exists()) {
 				FileUtils.forceDelete(resourcesFile);
 			}
 

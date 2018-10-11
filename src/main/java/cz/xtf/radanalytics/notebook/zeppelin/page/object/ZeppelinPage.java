@@ -1,13 +1,14 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+
 import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
 import cz.xtf.radanalytics.waiters.WebWaiters;
 import cz.xtf.radanalytics.web.extended.elements.elements.Button;
 import cz.xtf.radanalytics.web.extended.elements.elements.DropDownMenu;
 import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
 import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.FindBy;
 
 @WebUITests
 public class ZeppelinPage extends AbstractPage {
@@ -69,7 +70,6 @@ public class ZeppelinPage extends AbstractPage {
 
 	@FindBy(xpath = "//*[text()=\" Create new note\"]")
 	private Button createNewNotebookHomeController;
-
 
 	public ZeppelinPage(WebDriver webDriver, String hostname, boolean navigateToPage, String navigateToPageUrl) {
 		super(webDriver, hostname, navigateToPage, new StringBuilder().append("http://").append(navigateToPageUrl).toString());

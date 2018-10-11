@@ -1,16 +1,16 @@
 package cz.xtf.radanalytics.db;
 
-import cz.xtf.openshift.OpenShiftUtil;
-import cz.xtf.openshift.OpenShiftUtils;
-import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
-import io.fabric8.openshift.api.model.Template;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+
+import cz.xtf.openshift.OpenShiftUtil;
+import cz.xtf.openshift.OpenShiftUtils;
+import cz.xtf.radanalytics.waiters.OpenshiftAppsWaiters;
+import io.fabric8.openshift.api.model.Template;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BaseDBDeployment {
@@ -34,7 +34,6 @@ public class BaseDBDeployment {
 		OpenshiftAppsWaiters.waitForAppDeployment(serviceName);
 
 		log.debug("{}- deployed", serviceName);
-
 	}
 
 	protected static void restartPod(String name) {

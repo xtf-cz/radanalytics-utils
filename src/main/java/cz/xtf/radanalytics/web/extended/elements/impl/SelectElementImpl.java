@@ -1,9 +1,9 @@
 package cz.xtf.radanalytics.web.extended.elements.impl;
 
-import cz.xtf.radanalytics.web.extended.elements.elements.SelectElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import cz.xtf.radanalytics.web.extended.elements.elements.SelectElement;
 
 public class SelectElementImpl extends AbstractElement implements SelectElement {
 	protected SelectElementImpl(WebElement wrappedElement) {

@@ -5,5 +5,4 @@ public interface ZeppelinAPI {
 	void runAllParagraphs();
 
 	boolean outputHasErrors();
-
 }

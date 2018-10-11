@@ -1,11 +1,5 @@
 package cz.xtf.radanalytics.notebook.zeppelin.page.object;
 
-import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import cz.xtf.radanalytics.web.extended.elements.elements.Button;
-import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
-import cz.xtf.radanalytics.web.page.objects.AbstractPage;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +7,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+
+import cz.xtf.radanalytics.util.junit5.annotation.WebUITests;
+import cz.xtf.radanalytics.waiters.WebWaiters;
+import cz.xtf.radanalytics.web.extended.elements.elements.Button;
+import cz.xtf.radanalytics.web.extended.elements.elements.TextField;
+import cz.xtf.radanalytics.web.page.objects.AbstractPage;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @WebUITests
@@ -51,7 +52,6 @@ public class ZeppelinNotebookPage extends AbstractPage {
 	private Button compareRevisionBtn;
 	@FindBy(id = "revisionsDropdown")
 	private Button revisionDDl;
-
 
 	//Run all paragraphs modal pup-up $x('//*[text()="Run all paragraphs?"]/../../../..')
 	@FindBy(xpath = "//div[contains(text(),\"Run all paragraphs?\")]")
@@ -176,16 +176,15 @@ public class ZeppelinNotebookPage extends AbstractPage {
 		return this;
 	}
 
-
 	public boolean areErrorMessageEnabled() {
 		WebWaiters.waitForAngularLoad();
 		boolean result = false;
 		try {
 			result = errorMessage.isEnabled() && errorMessage.isDisplayed();
 			return result;
-		}catch (NoSuchElementException e){
+		} catch (NoSuchElementException e) {
 			log.error(e.getMessage());
 		}
-			return result;
+		return result;
 	}
 }

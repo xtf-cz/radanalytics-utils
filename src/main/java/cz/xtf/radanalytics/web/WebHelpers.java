@@ -1,10 +1,14 @@
 package cz.xtf.radanalytics.web;
 
-import cz.xtf.radanalytics.waiters.WebWaiters;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.xtf.radanalytics.waiters.WebWaiters;
 
 public class WebHelpers {
 
@@ -42,6 +46,6 @@ public class WebHelpers {
 	}
 
 	public static void openNewBlankBrowserTab(WebDriver driver) {
-		((JavascriptExecutor)driver).executeScript("window.open();");
+		((JavascriptExecutor) driver).executeScript("window.open();");
 	}
 }

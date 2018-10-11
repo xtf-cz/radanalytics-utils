@@ -4,13 +4,11 @@ import cz.xtf.radanalytics.notebook.zeppelin.page.object.ZeppelinJobPage;
 import cz.xtf.radanalytics.notebook.zeppelin.page.object.ZeppelinNotebookPage;
 import cz.xtf.radanalytics.notebook.zeppelin.page.object.ZeppelinPage;
 
-
-public class ZeppelinWebImpl implements ZeppelinAPI{
+public class ZeppelinWebImpl implements ZeppelinAPI {
 
 	private ZeppelinNotebookPage notebookPage;
 	private ZeppelinJobPage jobPage;
 	private ZeppelinPage mainPage;
-
 
 	public ZeppelinWebImpl(ZeppelinNotebookPage notebookPage) {
 		this.notebookPage = notebookPage;
